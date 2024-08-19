@@ -41,6 +41,7 @@ const LoginScreen = () => {
           placeholder="비밀번호"
           error={'비밀번호를 입력해주세요.'}
           touched={touched.password}
+          secureTextEntry // 비밀번호 입력 시 암호화
         />
       </View>
     </SafeAreaView>
