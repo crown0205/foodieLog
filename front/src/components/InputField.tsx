@@ -39,18 +39,17 @@ const InputField = ({
           disabled && styles.disabled,
           touched && Boolean(error) && styles.inputError,
         ]}>
-        <View style={styles.innerContainer}>
-          <TextInput
-            ref={innerRef}
-            style={[styles.input, disabled && styles.disabled]}
-            placeholderTextColor={colors.GREY_500}
-            autoCapitalize="none" // 자동 대문자 변환 기능 해제
-            editable={!disabled} // 편집 가능 여부
-            autoCorrect={false} // 자동완성 기능 해제
-            spellCheck={false} // 맞춤법 검사
-            {...props}
-          />
-        </View>
+        <TextInput
+          ref={innerRef}
+          style={[styles.input, disabled && styles.disabled]}
+          placeholderTextColor={colors.GREY_500}
+          autoCapitalize="none" // 자동 대문자 변환 기능 해제
+          editable={!disabled} // 편집 가능 여부
+          autoCorrect={false} // 자동완성 기능 해제
+          spellCheck={false} // 맞춤법 검사
+          {...props}
+        />
+
         {touched && Boolean(error) && <Text style={styles.error}>{error}</Text>}
       </View>
     </Pressable>
@@ -63,15 +62,12 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
     borderColor: colors.GREY_200,
-    paddingVertical: deviceHeight > 640 ? 15 : 10,
+    paddingVertical: deviceHeight > 640 ? 12 : 10,
     paddingHorizontal: deviceHeight > 640 ? 15 : 10,
     borderRadius: 5,
   },
-  multiLine: {},
-  innerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
+  multiLine: {
+    // paddingBottom: deviceHeight > 640 ? 45 : 30,
   },
   input: {
     padding: 0,
