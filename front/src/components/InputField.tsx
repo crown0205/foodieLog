@@ -13,11 +13,17 @@ import {colors} from '../constants';
 interface InputFieldProps extends TextInputProps {
   disabled?: boolean;
   error?: string;
+  touched?: boolean;
 }
 
 const deviceHeight = Dimensions.get('screen').height;
 
-const InputField = ({error, disabled = false, ...props}: InputFieldProps) => {
+const InputField = ({
+  touched,
+  error,
+  disabled = false,
+  ...props
+}: InputFieldProps) => {
   const innerRef = React.useRef<TextInput | null>(null);
 
   const handlePressInput = () => {
@@ -31,7 +37,7 @@ const InputField = ({error, disabled = false, ...props}: InputFieldProps) => {
           styles.container,
           props.multiline && styles.multiLine,
           disabled && styles.disabled,
-          Boolean(error) && styles.inputError,
+          touched && Boolean(error) && styles.inputError,
         ]}>
         <View style={styles.innerContainer}>
           <TextInput
@@ -45,7 +51,7 @@ const InputField = ({error, disabled = false, ...props}: InputFieldProps) => {
             {...props}
           />
         </View>
-        {Boolean(error) && <Text style={styles.error}>{error}</Text>}
+        {touched && Boolean(error) && <Text style={styles.error}>{error}</Text>}
       </View>
     </Pressable>
   );
@@ -59,6 +65,7 @@ const styles = StyleSheet.create({
     borderColor: colors.GREY_200,
     paddingVertical: deviceHeight > 640 ? 15 : 10,
     paddingHorizontal: deviceHeight > 640 ? 15 : 10,
+    borderRadius: 5,
   },
   multiLine: {},
   innerContainer: {
