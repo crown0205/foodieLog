@@ -8,40 +8,44 @@ import {
   View,
 } from 'react-native';
 import InputField from '../../components/InputField';
+import CustomButton from '../../components/CustomButton';
+import useForm from '../../hooks/useForm';
+import {validateLogin} from '../../utils';
 
 const LoginScreen = () => {
-  const [value, setValues] = useState({
-    email: '',
-    password: '',
+  const login = useForm({
+    initialValues: {email: '', password: ''},
+    validate: validateLogin,
   });
-
-  const [touched, setTouched] = useState({
-    email: false,
-    password: false,
-  });
+  const handleSubmit = () => {
+    console.log('submit', login.values);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inputContainer}>
         <InputField
           inputMode="email"
-          value={value.email}
-          onChangeText={text => setValues({...value, email: text})}
-          onBlur={() => setTouched({...touched, email: true})}
+          {...login.getTextInputProps('email')}
           returnKeyType="next"
           placeholder="이메일"
-          error={'이메일 형식이 아닙니다.'}
-          touched={touched.email}
+          error={login.errors.email}
+          touched={login.touched.email}
         />
         <InputField
-          value={value.password}
-          onChangeText={text => setValues({...value, password: text})}
-          onBlur={() => setTouched({...touched, password: true})}
+          {...login.getTextInputProps('password')}
           returnKeyType="done"
           placeholder="비밀번호"
-          error={'비밀번호를 입력해주세요.'}
-          touched={touched.password}
+          error={login.errors.password}
+          touched={login.touched.password}
           secureTextEntry // 비밀번호 입력 시 암호화
+        />
+
+        <CustomButton
+          label="로그인"
+          variant="filled"
+          size="large"
+          onPress={handleSubmit}
         />
       </View>
     </SafeAreaView>
