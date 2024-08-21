@@ -46,7 +46,8 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     flex: 1,
-    width: Dimensions.get('screen').width / 2,
+    marginTop: 50,
+    width: Dimensions.get('screen').width / 1.8,
   },
   logo: {
     width: '100%',
@@ -57,6 +58,6 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     gap: 10,
-    marginBottom: 20,
+    marginBottom: 40,
   },
 });
