@@ -3,7 +3,6 @@ import React from 'react';
 import {useColorScheme} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import AuthStackNavigator from './src/navigations/stack/AuthStackNavigator';
 import RootNavigator from './src/navigations/root/RootNavigator';
 
 function App(): JSX.Element {
