@@ -87,4 +87,26 @@ export class PostService {
 
     return post;
   }
+
+  async deletePost(id: number) {
+    try {
+      const result = await this.postRepository
+        .createQueryBuilder('post') // Note: post라는 별칭을 사용한다.
+        .delete()
+        .from(Post) // Note: Post 엔티티를 대상으로 한다. 엔티티란 DB 테이블을 의미한다.
+        .where('id = :id', { id }) // Note: id가 일치하는 post를 삭제한다.
+        .execute(); // Note: 결과를 반환한다.
+
+      if (result.affected === 0) {
+        throw new NotFoundException('해당하는 게시물이 없습니다.'); // Note: NotFoundException는 404 에러를 의미하고, 해당하는 게시물이 없다는 메시지를 반환한다.
+      }
+
+      return { id, message: '게시물이 삭제되었습니다.' };
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(
+        '게시물을 삭제하는 도중 에러가 발생했어요.',
+      );
+    }
+  }
 }

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -29,8 +30,14 @@ export class PostController {
   }
 
   @Post('/posts')
+  @UsePipes(ValidationPipe) // NOTE : ValidationPipe는 요청의 유효성을 검사하는 파이프이다.
   createPost(@Body() createPostDto: CreatePostDto) {
     console.log({ createPostDto });
     return this.postService.createPost(createPostDto);
+  }
+
+  @Delete('/posts/:id')
+  deletePost(@Param('id', ParseIntPipe) id: number) {
+    return this.postService.deletePost(id);
   }
 }
