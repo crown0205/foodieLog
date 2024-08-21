@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UsePipes,
@@ -34,6 +35,16 @@ export class PostController {
   createPost(@Body() createPostDto: CreatePostDto) {
     console.log({ createPostDto });
     return this.postService.createPost(createPostDto);
+  }
+
+  @Patch('/posts/:id')
+  @UsePipes(ValidationPipe)
+  updatePost(
+    @Param('id', ParseIntPipe) id: number,
+    @Body()
+    updatePostDto: Omit<CreatePostDto, 'latitude' | 'longitude' | 'address'>,
+  ) {
+    return this.postService.updatePost(id, updatePostDto);
   }
 
   @Delete('/posts/:id')

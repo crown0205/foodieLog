@@ -88,6 +88,33 @@ export class PostService {
     return post;
   }
 
+  async updatePost(
+    id: number,
+    updatePostDto: Omit<CreatePostDto, 'latitude' | 'longitude' | 'address'>,
+  ) {
+    const post = await this.getPostById(id);
+    const { color, title, description, date, score, imageUrls } = updatePostDto;
+
+    post.color = color || post.color;
+    post.title = title || post.title;
+    post.description = description || post.description;
+    post.date = date || post.date;
+    post.score = score || post.score;
+
+    // TODO : image module 추가 후 수정 필요
+
+    try {
+      await this.postRepository.save(post);
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(
+        '게시물을 수정하는 도중 에러가 발생했어요.',
+      );
+    }
+
+    return { post, message: '게시물이 수정되었습니다.' };
+  }
+
   async deletePost(id: number) {
     try {
       const result = await this.postRepository
