@@ -1,11 +1,11 @@
-import React, {ForwardedRef, forwardRef} from 'react';
+import React, {ForwardedRef, LegacyRef, forwardRef, useRef} from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TextInputProps,
-  Pressable,
   Dimensions,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInputProps,
+  View,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {colors} from '../constants';
@@ -20,11 +20,8 @@ interface InputFieldProps extends TextInputProps {
 const deviceHeight = Dimensions.get('screen').height;
 
 const InputField = forwardRef(
-  (
-    {touched, error, disabled = false, ...props}: InputFieldProps,
-    ref: ForwardedRef<TextInput>,
-  ) => {
-    const innerRef = React.useRef<TextInput | null>(null);
+  ({touched, error, disabled = false, ...props}: InputFieldProps, ref) => {
+    const innerRef = useRef<TextInput | null>(null);
 
     const handlePressInput = () => {
       innerRef.current?.focus();
@@ -40,7 +37,7 @@ const InputField = forwardRef(
             touched && Boolean(error) && styles.inputError,
           ]}>
           <TextInput
-            ref={ref ? mergeRefs(ref, innerRef) : innerRef} // ref가 있을 경우 mergeRefs로 합침
+            ref={ref ? mergeRefs(innerRef, ref) : innerRef} // ref가 있을 경우 mergeRefs로 합침
             style={[styles.input, disabled && styles.disabled]}
             placeholderTextColor={colors.GREY_500}
             autoCapitalize="none" // 자동 대문자 변환 기능 해제
