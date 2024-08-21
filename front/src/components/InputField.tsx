@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ForwardedRef, forwardRef} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {colors} from '../constants';
+import {mergeRefs} from '../utils/common';
 
 interface InputFieldProps extends TextInputProps {
   disabled?: boolean;
@@ -18,43 +19,42 @@ interface InputFieldProps extends TextInputProps {
 
 const deviceHeight = Dimensions.get('screen').height;
 
-const InputField = ({
-  touched,
-  error,
-  disabled = false,
-  ...props
-}: InputFieldProps) => {
-  const innerRef = React.useRef<TextInput | null>(null);
+const InputField = forwardRef(
+  (
+    {touched, error, disabled = false, ...props}: InputFieldProps,
+    ref: ForwardedRef<TextInput>,
+  ) => {
+    const innerRef = React.useRef<TextInput | null>(null);
 
-  const handlePressInput = () => {
-    innerRef.current?.focus();
-  };
+    const handlePressInput = () => {
+      innerRef.current?.focus();
+    };
 
-  return (
-    <Pressable onPress={handlePressInput}>
-      <View
-        style={[
-          styles.container,
-          props.multiline && styles.multiLine,
-          disabled && styles.disabled,
-          touched && Boolean(error) && styles.inputError,
-        ]}>
-        <TextInput
-          ref={innerRef}
-          style={[styles.input, disabled && styles.disabled]}
-          placeholderTextColor={colors.GREY_500}
-          autoCapitalize="none" // 자동 대문자 변환 기능 해제
-          editable={!disabled} // 편집 가능 여부
-          autoCorrect={false} // 자동완성 기능 해제
-          spellCheck={false} // 맞춤법 검사
-          {...props}
-        />
-
+    return (
+      <Pressable onPress={handlePressInput}>
+        <View
+          style={[
+            styles.container,
+            props.multiline && styles.multiLine,
+            disabled && styles.disabled,
+            touched && Boolean(error) && styles.inputError,
+          ]}>
+          <TextInput
+            ref={ref ? mergeRefs(ref, innerRef) : innerRef} // ref가 있을 경우 mergeRefs로 합침
+            style={[styles.input, disabled && styles.disabled]}
+            placeholderTextColor={colors.GREY_500}
+            autoCapitalize="none" // 자동 대문자 변환 기능 해제
+            editable={!disabled} // 편집 가능 여부
+            autoCorrect={false} // 자동완성 기능 해제
+            spellCheck={false} // 맞춤법 검사
+            {...props}
+          />
+        </View>
         {touched && Boolean(error) && <Text style={styles.error}>{error}</Text>}
-      </View>
-    </Pressable>
-  );
-};
+      </Pressable>
+    );
+  },
+);
 
 export default InputField;
 
