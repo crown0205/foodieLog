@@ -1,11 +1,14 @@
-import React from 'react';
-import {View, Text, SafeAreaView, StyleSheet} from 'react-native';
+import React, {LegacyRef, useRef} from 'react';
+import {SafeAreaView, StyleSheet, TextInput, View} from 'react-native';
+import CustomButton from '../../components/CustomButton';
 import InputField from '../../components/InputField';
 import useForm from '../../hooks/useForm';
-import CustomButton from '../../components/CustomButton';
 import {validateSignUp} from '../../utils';
 
 const SignUpScreen = () => {
+  const passwordRef = useRef<TextInput | null>(null);
+  const passwordConfirmRef = useRef<TextInput | null>(null);
+
   const signup = useForm({
     initialValues: {email: '', password: '', passwordConfirm: ''},
     validate: validateSignUp,
@@ -26,22 +29,29 @@ const SignUpScreen = () => {
           placeholder="이메일"
           error={signup.errors.email}
           touched={signup.touched.email}
+          blurOnSubmit={false} // NOTE : 확인 버튼 클릭 시 키보드 사라지지 않도록 설정
+          onSubmitEditing={() => passwordRef.current?.focus()}
         />
         <InputField
+          ref={passwordRef}
           {...signup.getTextInputProps('password')}
           returnKeyType="next"
           placeholder="비밀번호"
           error={signup.errors.password}
           touched={signup.touched.password}
           secureTextEntry
+          blurOnSubmit={false}
+          onSubmitEditing={() => passwordConfirmRef.current?.focus()}
         />
         <InputField
+          ref={passwordConfirmRef}
           {...signup.getTextInputProps('passwordConfirm')}
           returnKeyType="done"
           placeholder="비밀번호 확인"
           error={signup.errors.passwordConfirm}
           touched={signup.touched.passwordConfirm}
           secureTextEntry
+          onSubmitEditing={handleSubmit}
         />
       </View>
       <CustomButton label="회원가입" onPress={handleSubmit} />
