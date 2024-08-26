@@ -5,10 +5,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { MarkerColor } from './marker-color.enum';
+import { User } from 'src/auth/user.entity';
 
 @Entity()
 export class Post extends BaseEntity {
@@ -56,4 +58,7 @@ export class Post extends BaseEntity {
 
   @DeleteDateColumn()
   deleteAt: Date | null;
+
+  @ManyToOne(() => User, (user) => user.post, { eager: false })
+  user: User;
 }
