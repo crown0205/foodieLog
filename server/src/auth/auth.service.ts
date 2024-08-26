@@ -137,15 +137,21 @@ export class AuthService {
 
     return { ...rest };
   }
+
   async editProfile(editProfileDto: EditProfileDto, user: User) {
     const profile = await this.userRepository
       .createQueryBuilder('user')
-      .where('user.id = "user.id', { userId: user.id })
+      .where('user.id = :userId', { userId: user.id })
       .getOne();
 
     if (!profile) {
       throw new NotFoundException('프로필을 찾을 수 없습니다.');
     }
+
+    if (user.nickname === editProfileDto.nickname) {
+      throw new BadRequestException('이미 사용중인 닉네임입니다.');
+    }
+
     const { nickname, imageUrl } = editProfileDto;
     profile.nickname = nickname;
     profile.imageUrl = imageUrl;
