@@ -18,6 +18,28 @@ export class PostService {
     private postRepository: Repository<Post>,
   ) {}
 
+  async getAllMarkers() {
+    try {
+      const makers = await this.postRepository
+        .createQueryBuilder('post') // Note : post라는 별칭을 사용한다
+        .select([
+          'post.id',
+          'post.latitude',
+          'post.longitude',
+          'post.color',
+          'post.score',
+        ]) // Note : post의 id, latitude, longitude, color, score를 선택한다.
+        .getMany(); // Note : 결과를 배열로 반환한다.
+
+      return makers;
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(
+        '마커를 불러오는 도중 에러가 발생했어요.',
+      );
+    }
+  }
+
   async getPosts(page: number) {
     const perPage = 10;
     const offset = (page - 1) * perPage;

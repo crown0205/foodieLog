@@ -20,7 +20,12 @@ import { PostService } from './post.service';
 export class PostController {
   constructor(private postService: PostService) {}
 
-  @Get('posts')
+  @Get('/markers')
+  getAllMarkers() {
+    return this.postService.getAllMarkers();
+  }
+
+  @Get('/posts')
   getPosts(@Query('page') page: number) {
     return this.postService.getPosts(page);
   }
