@@ -11,6 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
+import { MarkerColor } from 'src/post/marker-color.enum';
 import { Repository } from 'typeorm';
 import { AuthDto } from './dto/auth.dto';
 import { EditProfileDto } from './dto/edit-profile.dto';
@@ -177,5 +178,39 @@ export class AuthService {
     }
 
     return { message: '계정 삭제 성공' };
+  }
+
+  async updateCategory(
+    categories: Record<keyof MarkerColor, string>,
+    user: User,
+  ) {
+    const { BLUE, GREEN, PURPLE, RED, YELLOW } = MarkerColor;
+
+    if (
+      !Object.keys(categories).every((color: MarkerColor) =>
+        [RED, YELLOW, GREEN, BLUE, PURPLE].includes(color),
+      )
+    ) {
+      throw new BadRequestException('유효하지 않은 카테고리입니다.');
+    }
+
+    user[RED] = categories[RED];
+    user[YELLOW] = categories[YELLOW];
+    user[BLUE] = categories[BLUE];
+    user[GREEN] = categories[GREEN];
+    user[PURPLE] = categories[PURPLE];
+
+    try {
+      await this.userRepository.save(user);
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(
+        '카테고리 업데이트 도중 에러가 발생했습니다.',
+      );
+    }
+
+    const { password, hashedRefreshToken, ...rest } = user;
+
+    return { ...rest };
   }
 }
