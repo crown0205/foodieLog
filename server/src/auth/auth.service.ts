@@ -113,4 +113,15 @@ export class AuthService {
 
     return { accessToken, refreshToken };
   }
+
+  async deleteRefreshToken(user: User) {
+    try {
+      await this.userRepository.update(user.id, { hashedRefreshToken: null });
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(
+        '로그아웃 도중 에러가 발생했습니다.',
+      );
+    }
+  }
 }

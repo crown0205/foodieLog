@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Patch,
   Post,
   UseGuards,
   ValidationPipe,
@@ -10,6 +11,7 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { User } from './user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/@common/decorators/get-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -23,6 +25,12 @@ export class AuthController {
   @Post('/signin')
   signin(@Body(ValidationPipe) authDto: AuthDto) {
     return this.authService.signin(authDto);
+  }
+
+  @Patch('/logout')
+  @UseGuards(AuthGuard())
+  logout(@GetUser() user: User) {
+    return this.authService.deleteRefreshToken(user);
   }
 
   @Get('/refresh')
