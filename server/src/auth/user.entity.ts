@@ -31,10 +31,10 @@ export class User extends BaseEntity {
   nickname: string;
 
   @Column({ nullable: true })
-  profileImage: string;
+  imageUrl: string;
 
   @Column({ nullable: true })
-  kakaoProfileImage: string;
+  kakaoProfileImageUrl: string;
 
   @Column({ nullable: true, default: '' })
   [MarkerColor.RED]: string;

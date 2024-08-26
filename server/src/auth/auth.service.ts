@@ -1,8 +1,10 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -11,6 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Repository } from 'typeorm';
 import { AuthDto } from './dto/auth.dto';
+import { EditProfileDto } from './dto/edit-profile.dto';
 import { User } from './user.entity';
 
 @Injectable()
@@ -123,5 +126,55 @@ export class AuthService {
         '로그아웃 도중 에러가 발생했습니다.',
       );
     }
+  }
+
+  // note : getProfile 함수는 사용자의 정보를 받아서 password와 hashedRefreshToken을 제외한 정보를 반환하는 함수이다.
+  // TODO : async를 안붙여도 되는 이유는?
+  // => async를 붙이지 않아도 되는 이유는 해당 함수가 비동기 함수가 아니기 때문이다.
+  getProfile(user: User) {
+    console.log('getProfile server console', { user });
+    const { password, hashedRefreshToken, ...rest } = user;
+
+    return { ...rest };
+  }
+  async editProfile(editProfileDto: EditProfileDto, user: User) {
+    const profile = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.id = "user.id', { userId: user.id })
+      .getOne();
+
+    if (!profile) {
+      throw new NotFoundException('프로필을 찾을 수 없습니다.');
+    }
+    const { nickname, imageUrl } = editProfileDto;
+    profile.nickname = nickname;
+    profile.imageUrl = imageUrl;
+
+    try {
+      await this.userRepository.save(profile);
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(
+        '프로필 업데이트 도중 에러가 발생했습니다.',
+      );
+    }
+
+    return { message: '프로필 업데이트 성공' };
+  }
+
+  async deleteAccount(user: User) {
+    try {
+      await this.userRepository
+        .createQueryBuilder('user')
+        .delete()
+        .from(User)
+        .where('id = :id', { id: user.id })
+        .execute(); // NOTE : execute() 함수를 호출해야 실제로 쿼리가 실행된다.
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException('계정 삭제 도중 에러가 발생했습니다.');
+    }
+
+    return { message: '계정 삭제 성공' };
   }
 }
