@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
@@ -39,5 +40,20 @@ export class AuthService {
         '회원가입 도중 에거가 발생했습니다.',
       );
     }
+  }
+
+  async signin(authDto: AuthDto) {
+    const { email, password } = authDto;
+    const user = await this.userRepository.findOneBy({ email }); // note : fineOneBy의 역활은 DB에서 해당하는 데이터를 찾아오는 역활을 한다.
+
+    console.log('singin server console', { user });
+
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      throw new UnauthorizedException(
+        '이메일 또는 비밀번호가 일치하지 않습니다.',
+      );
+    }
+
+    return { user, message: '로그인 성공' };
   }
 }
