@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { MarkerColor } from './marker-color.enum';
 import { Post } from './post.entity';
+import { User } from 'src/auth/user.entity';
 
 // NOTE : 각 컨트롤러 매서드에 따라 해당하는 DB 작업등의 로직이 들어간다.
 
@@ -18,7 +19,30 @@ export class PostService {
     private postRepository: Repository<Post>,
   ) {}
 
-  async getPosts(page: number) {
+  async getAllMarkers(user: User) {
+    try {
+      const makers = await this.postRepository
+        .createQueryBuilder('post') // Note : post라는 별칭을 사용한다
+        .where('post.userId = :userId', { userId: user.id }) // Note : userId가 일치하는 post를 찾는다.
+        .select([
+          'post.id',
+          'post.latitude',
+          'post.longitude',
+          'post.color',
+          'post.score',
+        ]) // Note : post의 id, latitude, longitude, color, score를 선택한다.
+        .getMany(); // Note : 결과를 배열로 반환한다.
+
+      return makers;
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(
+        '마커를 불러오는 도중 에러가 발생했어요.',
+      );
+    }
+  }
+
+  async getPosts(page: number, user: User) {
     const perPage = 10;
     const offset = (page - 1) * perPage;
 
@@ -26,17 +50,19 @@ export class PostService {
 
     return this.postRepository
       .createQueryBuilder('post') // Note : post라는 별칭을 사용한다
+      .where('post.userId = :userId', { userId: user.id })
       .orderBy('post.date', 'DESC') // Note : post.date를 기준으로 내림차순 정렬한다.
       .take(perPage) // Note : perPage만큼 가져온다.
       .skip(offset) // Note : offset만큼 건너뛴다.
       .getMany(); // Note : 결과를 배열로 반환한다.
   }
 
-  async getPostById(id: number) {
+  async getPostById(id: number, user: User) {
     try {
       const foundPost = await this.postRepository
         .createQueryBuilder('post') // Note: post라는 별칭을 사용한다.
-        .where('post.id = :id', { id }) // Note: id가 일치하는 post를 찾는다.
+        .where('post.userId = :userId', { userId: user.id })
+        .andWhere('post.id = :id', { id }) // Note: id가 일치하는 post를 찾는다.
         .getOne(); // Note: 결과를 반환한다.
 
       if (!foundPost) {
@@ -52,7 +78,7 @@ export class PostService {
     }
   }
 
-  async createPost(createPostDto: CreatePostDto) {
+  async createPost(createPostDto: CreatePostDto, user: User) {
     const {
       latitude,
       longitude,
@@ -74,6 +100,7 @@ export class PostService {
       description,
       date,
       score,
+      user,
     });
 
     try {
@@ -85,14 +112,17 @@ export class PostService {
       );
     }
 
-    return post;
+    const { user: _, ...postWithoutUser } = post;
+
+    return { post: postWithoutUser, message: '게시물이 추가되었습니다.' };
   }
 
   async updatePost(
     id: number,
     updatePostDto: Omit<CreatePostDto, 'latitude' | 'longitude' | 'address'>,
+    user: User,
   ) {
-    const post = await this.getPostById(id);
+    const post = await this.getPostById(id, user);
     const { color, title, description, date, score, imageUrls } = updatePostDto;
 
     post.color = color || post.color;
@@ -115,13 +145,14 @@ export class PostService {
     return { post, message: '게시물이 수정되었습니다.' };
   }
 
-  async deletePost(id: number) {
+  async deletePost(id: number, user: User) {
     try {
       const result = await this.postRepository
         .createQueryBuilder('post') // Note: post라는 별칭을 사용한다.
         .delete()
         .from(Post) // Note: Post 엔티티를 대상으로 한다. 엔티티란 DB 테이블을 의미한다.
-        .where('id = :id', { id }) // Note: id가 일치하는 post를 삭제한다.
+        .where('post.userId = :userId', { userId: user.id })
+        .andWhere('id = :id', { id }) // Note: id가 일치하는 post를 삭제한다.
         .execute(); // Note: 결과를 반환한다.
 
       if (result.affected === 0) {
