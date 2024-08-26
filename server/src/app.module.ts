@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostController } from './post/post.controller';
 import { PostModule } from './post/post.module';
 import { PostService } from './post/post.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PostService } from './post/post.service';
       synchronize: true,
     }),
     PostModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
