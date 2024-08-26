@@ -89,8 +89,6 @@ export class AuthService {
     const { email, password } = authDto;
     const user = await this.userRepository.findOneBy({ email }); // note : fineOneBy의 역활은 DB에서 해당하는 데이터를 찾아오는 역활을 한다.
 
-    console.log('signin server console', { user });
-
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException(
         '이메일 또는 비밀번호가 일치하지 않습니다.',
@@ -129,10 +127,7 @@ export class AuthService {
   }
 
   // note : getProfile 함수는 사용자의 정보를 받아서 password와 hashedRefreshToken을 제외한 정보를 반환하는 함수이다.
-  // TODO : async를 안붙여도 되는 이유는?
-  // => async를 붙이지 않아도 되는 이유는 해당 함수가 비동기 함수가 아니기 때문이다.
   getProfile(user: User) {
-    console.log('getProfile server console', { user });
     const { password, hashedRefreshToken, ...rest } = user;
 
     return { ...rest };

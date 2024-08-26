@@ -6,6 +6,7 @@ import { PostService } from './post/post.service';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ImageModule } from './image/image.module';
+import { FavoriteModule } from './favorite/favorite.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ImageModule } from './image/image.module';
     PostModule,
     AuthModule,
     ImageModule,
+    FavoriteModule,
   ],
   controllers: [],
   providers: [ConfigModule], // NOTE : ConfigModule을 providers에 추가하면 다른 모듈에서 ConfigService를 주입받을 수 있다.
