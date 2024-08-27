@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostController } from './post/post.controller';
-import { PostModule } from './post/post.module';
-import { PostService } from './post/post.service';
-import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { ImageModule } from './image/image.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
+import { AuthModule } from './auth/auth.module';
 import { FavoriteModule } from './favorite/favorite.module';
+import { ImageModule } from './image/image.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -20,6 +20,9 @@ import { FavoriteModule } from './favorite/favorite.module';
       database: 'foodielog-app',
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
     }),
     PostModule,
     AuthModule,

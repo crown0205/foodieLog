@@ -9,6 +9,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { MarkerColor } from './marker-color.enum';
 import { Post } from './post.entity';
 import { User } from 'src/auth/user.entity';
+import { Image } from 'src/image/image.entity';
 
 // NOTE : 각 컨트롤러 매서드에 따라 해당하는 DB 작업등의 로직이 들어간다.
 
@@ -17,7 +18,18 @@ export class PostService {
   constructor(
     @InjectRepository(Post)
     private postRepository: Repository<Post>,
+    @InjectRepository(Image)
+    private imageRepository: Repository<Image>,
   ) {}
+
+  // NOTE : 게시물 이미지를 가져오는 메서드이다.
+  private getPostsWithOrderImages(posts: Post[]) {
+    return posts.map((post) => {
+      const { images, ...rest } = post;
+      const newImages = [...images].sort((a, b) => a.id - b.id);
+      return { ...rest, images: newImages };
+    });
+  }
 
   async getAllMarkers(user: User) {
     try {
@@ -48,19 +60,23 @@ export class PostService {
 
     console.log({ page, offset });
 
-    return this.postRepository
+    const posts = await this.postRepository
       .createQueryBuilder('post') // Note : post라는 별칭을 사용한다
+      .leftJoinAndSelect('post.images', 'image') // Note : post와 image를 조인한다.
       .where('post.userId = :userId', { userId: user.id })
       .orderBy('post.date', 'DESC') // Note : post.date를 기준으로 내림차순 정렬한다.
       .take(perPage) // Note : perPage만큼 가져온다.
       .skip(offset) // Note : offset만큼 건너뛴다.
       .getMany(); // Note : 결과를 배열로 반환한다.
+
+    return this.getPostsWithOrderImages(posts);
   }
 
   async getPostById(id: number, user: User) {
     try {
       const foundPost = await this.postRepository
         .createQueryBuilder('post') // Note: post라는 별칭을 사용한다.
+        .leftJoinAndSelect('post.images', 'image') // Note: post와 image를 조인한다.
         .where('post.userId = :userId', { userId: user.id })
         .andWhere('post.id = :id', { id }) // Note: id가 일치하는 post를 찾는다.
         .getOne(); // Note: 결과를 반환한다.
@@ -102,8 +118,11 @@ export class PostService {
       score,
       user,
     });
+    const images = imageUrls.map((url) => this.imageRepository.create(url));
+    post.images = images;
 
     try {
+      await this.imageRepository.save(images);
       await this.postRepository.save(post);
     } catch (error) {
       console.log(error);
@@ -131,9 +150,11 @@ export class PostService {
     post.date = date || post.date;
     post.score = score || post.score;
 
-    // TODO : image module 추가 후 수정 필요
+    const images = imageUrls.map((url) => this.imageRepository.create(url));
+    post.images = images;
 
     try {
+      await this.imageRepository.save(images);
       await this.postRepository.save(post);
     } catch (error) {
       console.log(error);
