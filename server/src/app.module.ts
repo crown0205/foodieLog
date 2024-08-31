@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostController } from './post/post.controller';
-import { PostModule } from './post/post.module';
-import { PostService } from './post/post.service';
-import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
+import { AuthModule } from './auth/auth.module';
+import { FavoriteModule } from './favorite/favorite.module';
+import { ImageModule } from './image/image.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -19,8 +21,13 @@ import { ConfigModule } from '@nestjs/config';
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: true,
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+    }),
     PostModule,
     AuthModule,
+    ImageModule,
+    FavoriteModule,
   ],
   controllers: [],
   providers: [ConfigModule], // NOTE : ConfigModule을 providers에 추가하면 다른 모듈에서 ConfigService를 주입받을 수 있다.

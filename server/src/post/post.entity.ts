@@ -1,4 +1,5 @@
 import { ColumnNumericTransformer } from 'src/@common/transformers/numeric.transformer';
+import { User } from 'src/auth/user.entity';
 import {
   BaseEntity,
   Column,
@@ -6,11 +7,12 @@ import {
   DeleteDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { MarkerColor } from './marker-color.enum';
-import { User } from 'src/auth/user.entity';
+import { Image } from 'src/image/image.entity';
 
 @Entity()
 export class Post extends BaseEntity {
@@ -61,4 +63,7 @@ export class Post extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.post, { eager: false })
   user: User;
+
+  @OneToMany(() => Image, (image) => image.post)
+  images: Image[];
 }
