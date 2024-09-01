@@ -2,7 +2,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import {useColorScheme} from 'react-native';
 
+import {QueryClientProvider} from '@tanstack/react-query';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import queryClient from './src/api/queryClient';
 import RootNavigator from './src/navigations/root/RootNavigator';
 
 function App(): JSX.Element {
@@ -13,9 +15,11 @@ function App(): JSX.Element {
   };
 
   return (
-    <NavigationContainer>
-      <RootNavigator />
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 }
 
