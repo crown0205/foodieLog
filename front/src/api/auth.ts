@@ -65,10 +65,8 @@ const getAccessToken = async (): Promise<ResponseToken> => {
   return data;
 };
 
-const logout = async (): Promise<CommonResponse> => {
-  const {data} = await axiosInstance.post('/auth/logout');
-
-  return data;
+const logout = async (): Promise<void> => {
+  await axiosInstance.post('/auth/logout');
 };
 
 export {postSignup, postLogin, getProfile, getAccessToken, logout};
