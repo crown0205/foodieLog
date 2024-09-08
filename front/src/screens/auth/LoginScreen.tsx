@@ -2,10 +2,12 @@ import React, {useRef} from 'react';
 import {SafeAreaView, StyleSheet, TextInput, View} from 'react-native';
 import CustomButton from '../../components/CustomButton';
 import InputField from '../../components/InputField';
+import useAuth from '../../hooks/queries/useAuth';
 import useForm from '../../hooks/useForm';
 import {validateLogin} from '../../utils';
 
 const LoginScreen = () => {
+  const {loginMutation} = useAuth();
   const passwordRef = useRef<TextInput | null>(null);
 
   const login = useForm({
@@ -13,7 +15,8 @@ const LoginScreen = () => {
     validate: validateLogin,
   });
   const handleSubmit = () => {
-    console.log('submit', login.values);
+    console.log('로그인 버튼 클릭 ', login.values);
+    loginMutation.mutate(login.values);
   };
 
   return (
