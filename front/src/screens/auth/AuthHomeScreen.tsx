@@ -1,9 +1,9 @@
+import CustomButton from '@/components/CustomButton';
+import {authNavigations} from '@/constants/navigations';
+import {AuthStackParamList} from '@/navigations/stack/AuthStackNavigator';
 import {StackScreenProps} from '@react-navigation/stack';
 import React from 'react';
 import {Dimensions, Image, SafeAreaView, StyleSheet, View} from 'react-native';
-import CustomButton from '../../components/CustomButton';
-import {authNavigations} from '../../constants/navigations';
-import {AuthStackParamList} from '../../navigations/stack/AuthStackNavigator';
 
 type AuthHomeScreenProps = StackScreenProps<
   AuthStackParamList,
@@ -17,7 +17,7 @@ const AuthHomeScreen = ({navigation}: AuthHomeScreenProps) => {
         <Image
           resizeMode="contain"
           style={styles.logo}
-          source={require('../../assets/foodiLog.png')}
+          source={require('@/assets/foodiLog.png')}
         />
       </View>
       <View style={styles.buttonContainer}>

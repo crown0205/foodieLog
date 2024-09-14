@@ -1,7 +1,7 @@
+import CustomButton from '@/components/CustomButton';
+import useAuth from '@/hooks/queries/useAuth';
 import React from 'react';
-import {View, Text} from 'react-native';
-import CustomButton from '../../components/CustomButton';
-import useAuth from '../../hooks/queries/useAuth';
+import {Text, View} from 'react-native';
 
 const MapHomeScreen = () => {
   const {logoutMutation} = useAuth();

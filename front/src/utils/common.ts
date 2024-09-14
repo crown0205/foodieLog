@@ -1,4 +1,5 @@
 import {ForwardedRef} from 'react';
+import {Platform} from 'react-native';
 
 // NOTE : ref를 합치는 함수
 function mergeRefs<T>(...ref: ForwardedRef<T>[]) {
@@ -13,4 +14,6 @@ function mergeRefs<T>(...ref: ForwardedRef<T>[]) {
   };
 }
 
-export {mergeRefs};
+const deviceType = Platform.OS;
+
+export {deviceType, mergeRefs};

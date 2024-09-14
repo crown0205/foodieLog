@@ -1,10 +1,10 @@
+import CustomButton from '@/components/CustomButton';
+import InputField from '@/components/InputField';
+import useAuth from '@/hooks/queries/useAuth';
+import useForm from '@/hooks/useForm';
+import {validateSignUp} from '@/utils';
 import React, {useRef} from 'react';
 import {SafeAreaView, StyleSheet, TextInput, View} from 'react-native';
-import CustomButton from '../../components/CustomButton';
-import InputField from '../../components/InputField';
-import useAuth from '../../hooks/queries/useAuth';
-import useForm from '../../hooks/useForm';
-import {validateSignUp} from '../../utils';
 
 const SignUpScreen = () => {
   const {signupMutation, loginMutation} = useAuth();
