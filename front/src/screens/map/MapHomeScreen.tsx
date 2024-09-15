@@ -1,5 +1,6 @@
 import { colors } from '@/constants';
 import useAuth from '@/hooks/queries/useAuth';
+import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
@@ -26,6 +27,7 @@ const MapHomeScreen = () => {
   const navigation = useNavigation<Navigation>();
   const { userLocation, isUserLocationError } = useUserLocation();
   const mapRef = React.useRef<MapView | null>(null);
+  usePermission();
 
   const handlePressUserLocation = () => {
     if (isUserLocationError) {
