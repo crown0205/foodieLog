@@ -2,12 +2,13 @@ import {colors} from '@/constants';
 import useAuth from '@/hooks/queries/useAuth';
 import {MainDrawerParamList} from '@/navigations/drawer/MainDrawerNavigator';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
+import Geolocation from '@react-native-community/geolocation';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React from 'react';
-import {Pressable, StyleSheet, Text} from 'react-native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import React, {useEffect, useState} from 'react';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
+import MapView, {LatLng, PROVIDER_GOOGLE} from 'react-native-maps';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Navigation = CompositeNavigationProp<
@@ -19,10 +20,46 @@ const MapHomeScreen = () => {
   const {logoutMutation} = useAuth();
   const inset = useSafeAreaInsets(); // NOTE : 상단의 상태바 높이를 가져옴
   const navigation = useNavigation<Navigation>();
+  const [userLocation, setUserLocation] = useState<LatLng>({
+    // 기본은 서울로 설정
+    latitude: 37.5665,
+    longitude: 126.978,
+  });
+  const [isUserLocationError, setIsUserLocationError] = useState(false);
+  const mapRef = React.useRef<MapView | null>(null);
 
+  const handlePressUserLocation = () => {
+    if (isUserLocationError) {
+      // NOTE : 유저의 위치를 가져오는데 실패했을 때
+    }
+
+    mapRef.current?.animateToRegion({
+      latitude: userLocation.latitude,
+      longitude: userLocation.longitude,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    });
+  };
+
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      info => {
+        const {longitude, latitude} = info.coords;
+        setUserLocation({longitude, latitude});
+        setIsUserLocationError(false);
+      },
+      error => {
+        setIsUserLocationError(true);
+      },
+      {
+        enableHighAccuracy: true, // NOTE : 높은 정확도로 위치를 가져옴
+      },
+    );
+  }, []);
   return (
     <>
       <MapView
+        ref={mapRef}
         style={styles.container}
         provider={PROVIDER_GOOGLE}
         showsUserLocation // NOTE : 유저의 위치를 보여줌
@@ -34,6 +71,11 @@ const MapHomeScreen = () => {
         onPress={() => navigation.openDrawer()}>
         <Text>서랍</Text>
       </Pressable>
+      <View style={styles.buttonList}>
+        <Pressable style={styles.mapButton} onPress={handlePressUserLocation}>
+          <Text>내위치</Text>
+        </Pressable>
+      </View>
     </>
   );
 };
@@ -57,6 +99,27 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5, // NOTE : 안드로이드에서는 적용되지 않음
     elevation: 5, // NOTE : 안드로이드에서만 그림자 표현
+  },
+  buttonList: {
+    position: 'absolute',
+    bottom: 30,
+    right: 15,
+  },
+  mapButton: {
+    backgroundColor: colors.WHITE,
+    marginVertical: 5,
+    width: 45,
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,
+    shadowColor: colors.BLACK,
+    shadowOffset: {
+      width: 1,
+      height: 2,
+    },
+    shadowOpacity: 0.5, // NOTE : 안드로이드에서는 적용되지 않음
+    elevation: 2, // NOTE : 안드로이드
   },
 });
 

@@ -6,8 +6,6 @@ import AuthStackNavigator from '../stack/AuthStackNavigator';
 const RootNavigator = () => {
   const {isLogin} = useAuth();
 
-  console.log({'Device Type': deviceType, isLogin});
-
   return <>{isLogin ? <MainDrawerNavigator /> : <AuthStackNavigator />}</>;
 };
 

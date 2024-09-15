@@ -46,7 +46,6 @@ function useLogin(mutationOptions?: UseMutationCustomOptions) {
 }
 
 function useGetRefreshToken() {
-  console.log('리프래시 토큰 훅 실행');
   const {data, isSuccess, isError} = useQuery({
     queryKey: ['auth', 'getAccessToken'],
     queryFn: getAccessToken,
