@@ -1,15 +1,19 @@
-import {colors} from '@/constants';
+import { colors } from '@/constants';
 import useAuth from '@/hooks/queries/useAuth';
-import {MainDrawerParamList} from '@/navigations/drawer/MainDrawerNavigator';
-import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
-import Geolocation from '@react-native-community/geolocation';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useEffect, useState} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
-import MapView, {LatLng, PROVIDER_GOOGLE} from 'react-native-maps';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import useUserLocation from '@/hooks/useUserLocation';
+import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
+import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import {
+  CompositeNavigationProp,
+  useNavigation,
+} from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+import React from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
@@ -17,15 +21,10 @@ type Navigation = CompositeNavigationProp<
 >;
 
 const MapHomeScreen = () => {
-  const {logoutMutation} = useAuth();
+  const { logoutMutation } = useAuth();
   const inset = useSafeAreaInsets(); // NOTE : 상단의 상태바 높이를 가져옴
   const navigation = useNavigation<Navigation>();
-  const [userLocation, setUserLocation] = useState<LatLng>({
-    // 기본은 서울로 설정
-    latitude: 37.5665,
-    longitude: 126.978,
-  });
-  const [isUserLocationError, setIsUserLocationError] = useState(false);
+  const { userLocation, isUserLocationError } = useUserLocation();
   const mapRef = React.useRef<MapView | null>(null);
 
   const handlePressUserLocation = () => {
@@ -41,21 +40,6 @@ const MapHomeScreen = () => {
     });
   };
 
-  useEffect(() => {
-    Geolocation.getCurrentPosition(
-      info => {
-        const {longitude, latitude} = info.coords;
-        setUserLocation({longitude, latitude});
-        setIsUserLocationError(false);
-      },
-      error => {
-        setIsUserLocationError(true);
-      },
-      {
-        enableHighAccuracy: true, // NOTE : 높은 정확도로 위치를 가져옴
-      },
-    );
-  }, []);
   return (
     <>
       <MapView
@@ -67,7 +51,7 @@ const MapHomeScreen = () => {
         showsMyLocationButton={false} // NOTE : 내 위치 버튼
       />
       <Pressable
-        style={[styles.drawerButton, {top: inset.top || 20}]}
+        style={[styles.drawerButton, { top: inset.top || 20 }]}
         onPress={() => navigation.openDrawer()}>
         <Text>서랍</Text>
       </Pressable>
