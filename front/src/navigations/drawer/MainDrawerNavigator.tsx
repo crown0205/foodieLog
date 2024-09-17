@@ -9,6 +9,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MapStackNavigator, {
   MapStackParamList,
 } from '../stack/MapStackNavigator';
+import CustomDrawerContent from './CustomDrawerContent';
 
 export type MainDrawerParamList = {
   [mainNavigations.HOME]: NavigatorScreenParams<MapStackParamList>;
@@ -45,11 +46,12 @@ function DrawerIcons(route: RouteProp<MainDrawerParamList>, focused: boolean) {
 const MainDrawerNavigator = () => {
   return (
     <Drawer.Navigator
+      drawerContent={CustomDrawerContent}
       screenOptions={({ route }) => ({
         headerShown: false,
         drawerType: 'front',
         drawerStyle: {
-          width: Dimensions.get('window').width * 0.6,
+          width: Dimensions.get('screen').width * 0.6,
           backgroundColor: colors.WHITE,
         },
         drawerActiveBackgroundColor: colors.BLUE_50,
