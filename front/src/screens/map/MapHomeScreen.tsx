@@ -27,7 +27,7 @@ const MapHomeScreen = () => {
   const navigation = useNavigation<Navigation>();
   const { userLocation, isUserLocationError } = useUserLocation();
   const mapRef = React.useRef<MapView | null>(null);
-  usePermission();
+  usePermission('LOCATION');
 
   const handlePressUserLocation = () => {
     if (isUserLocationError) {

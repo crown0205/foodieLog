@@ -24,15 +24,17 @@ function useAppState() {
         }
 
         appState.current = nextAppState;
+        setAppStateVisible(appState.current);
       },
     );
 
     return () => {
-      subscription.remove(); // NOTE : 이벤트 리스너 제거
+      // NOTE : 이벤트 리스너 제거를 해주는 이유는 메모리 누수를 방지하기 위함과 불필요한 이벤트 리스너가 동작하지 않도록 하기 위함
+      subscription.remove();
     };
   }, []);
 
-  return { appStateVisible, isComeback };
+  return { isComeback, appStateVisible };
 }
 
 export default useAppState;
