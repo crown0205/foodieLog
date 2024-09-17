@@ -68,7 +68,10 @@ const MainDrawerNavigator = () => {
       <Drawer.Screen
         name={mainNavigations.HOME}
         component={MapStackNavigator}
-        options={{ title: '홈' }}
+        options={{
+          title: '홈',
+          swipeEnabled: false,
+        }}
       />
       <Drawer.Screen
         name={mainNavigations.FEED}
