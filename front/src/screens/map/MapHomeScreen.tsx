@@ -4,6 +4,7 @@ import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
+import mapStyle from '@/style/mapStyle';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import {
   CompositeNavigationProp,
@@ -12,7 +13,7 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -53,6 +54,7 @@ const MapHomeScreen = () => {
         showsUserLocation // NOTE : 유저의 위치를 보여줌
         followsUserLocation // NOTE : 위치가 변경되면 따라가게
         showsMyLocationButton={false} // NOTE : 내 위치 버튼
+        customMapStyle={mapStyle}
       />
       <Pressable
         style={[styles.drawerButton, { top: inset.top || 20 }]}
