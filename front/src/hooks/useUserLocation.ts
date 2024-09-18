@@ -16,7 +16,8 @@ function useUserLocation() {
     Geolocation.getCurrentPosition(
       info => {
         const { longitude, latitude } = info.coords;
-        setUserLocation({ longitude, latitude });
+        // NOTE : 임시로 주석처리
+        // setUserLocation({ longitude, latitude });
         setIsUserLocationError(false);
       },
       error => {

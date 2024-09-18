@@ -12,9 +12,14 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, {
+  LatLng,
+  LongPressEvent,
+  Marker,
+  PROVIDER_GOOGLE,
+} from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -31,6 +36,11 @@ const MapHomeScreen = () => {
   const { userLocation, isUserLocationError } = useUserLocation();
   const mapRef = React.useRef<MapView | null>(null);
   usePermission('LOCATION');
+  const [selectLocation, setSelectLocation] = useState<LatLng>();
+
+  const handleLongPressMapView = ({ nativeEvent }: LongPressEvent) => {
+    setSelectLocation(nativeEvent.coordinate);
+  };
 
   const handlePressUserLocation = () => {
     if (isUserLocationError) {
@@ -55,10 +65,15 @@ const MapHomeScreen = () => {
         followsUserLocation // NOTE : 위치가 변경되면 따라가게
         showsMyLocationButton={false} // NOTE : 내 위치 버튼
         customMapStyle={mapStyle}
-      />
+        onLongPress={handleLongPressMapView}
+      >
+        <Marker coordinate={userLocation} />
+        {selectLocation && <Marker coordinate={selectLocation} />}
+      </MapView>
       <Pressable
         style={[styles.drawerButton, { top: inset.top || 20 }]}
-        onPress={() => navigation.openDrawer()}>
+        onPress={() => navigation.openDrawer()}
+      >
         <Ionicons name="menu" color={colors.BLACK} size={25} />
       </Pressable>
       <View style={styles.buttonList}>
