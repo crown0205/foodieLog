@@ -1,3 +1,4 @@
+import CustomMarker from '@/components/CustomMarker';
 import { colors } from '@/constants';
 import useAuth from '@/hooks/queries/useAuth';
 import usePermission from '@/hooks/usePermission';
@@ -17,7 +18,6 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import MapView, {
   LatLng,
   LongPressEvent,
-  Marker,
   PROVIDER_GOOGLE,
 } from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -67,8 +67,16 @@ const MapHomeScreen = () => {
         customMapStyle={mapStyle}
         onLongPress={handleLongPressMapView}
       >
-        <Marker coordinate={userLocation} />
-        {selectLocation && <Marker coordinate={selectLocation} />}
+        <CustomMarker color="RED" score={5} coordinate={userLocation} />
+        <CustomMarker
+          color="BLUE"
+          score={1}
+          coordinate={{ latitude: 37.5662, longitude: 126.978 }}
+        />
+
+        {selectLocation && (
+          <CustomMarker color="GREEN" score={3} coordinate={selectLocation} />
+        )}
       </MapView>
       <Pressable
         style={[styles.drawerButton, { top: inset.top || 20 }]}
