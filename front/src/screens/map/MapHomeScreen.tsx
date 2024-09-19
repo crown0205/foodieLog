@@ -1,18 +1,17 @@
 import CustomMarker from '@/components/CustomMarker';
 import { colors } from '@/constants';
-import useAuth from '@/hooks/queries/useAuth';
 import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
 import mapStyle from '@/style/mapStyle';
+
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import {
   CompositeNavigationProp,
   useNavigation,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import MapView, {
@@ -31,7 +30,6 @@ type Navigation = CompositeNavigationProp<
 >;
 
 const MapHomeScreen = () => {
-  const { logoutMutation } = useAuth();
   const inset = useSafeAreaInsets(); // NOTE : 상단의 상태바 높이를 가져옴
   const navigation = useNavigation<Navigation>();
   const { userLocation, isUserLocationError } = useUserLocation();
@@ -71,7 +69,7 @@ const MapHomeScreen = () => {
         <CustomMarker color="RED" score={5} coordinate={userLocation} />
         <CustomMarker
           color="BLUE"
-          score={1}
+          score={3}
           coordinate={{ latitude: 37.562, longitude: 126.978 }}
         />
         <CustomMarker

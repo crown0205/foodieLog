@@ -17,9 +17,13 @@ import {
 } from 'react-native';
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
-  const { getProfileQuery } = useAuth();
+  const { getProfileQuery, logoutMutation } = useAuth();
   const { email, nickname, imageUrl, kakaoImageUrl } =
     getProfileQuery.data || {};
+
+  const handleLogout = () => {
+    logoutMutation.mutate(null);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -34,7 +38,8 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
                 ? Dimensions.get('screen').height * 0.1
                 : 0,
           },
-        ]}>
+        ]}
+      >
         <View style={styles.userInfoContainer}>
           <Pressable style={styles.userImageContainer}>
             {imageUrl === null &&
@@ -57,6 +62,9 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
 
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
+      <Pressable style={styles.logoutButton} onPress={handleLogout}>
+        <Text>로그아웃</Text>
+      </Pressable>
     </SafeAreaView>
   );
 }
@@ -87,6 +95,11 @@ const styles = StyleSheet.create({
   },
   nameText: {
     color: colors.BLACK,
+  },
+  // 로그아웃 버튼
+  logoutButton: {
+    alignItems: 'flex-end',
+    padding: 15,
   },
 });
 
