@@ -1,5 +1,5 @@
 import CustomMarker from '@/components/CustomMarker';
-import { colors } from '@/constants';
+import { MapNavigations, alerts, colors } from '@/constants';
 import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
@@ -13,7 +13,7 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import MapView, {
   LatLng,
   LongPressEvent,
@@ -35,10 +35,24 @@ const MapHomeScreen = () => {
   const { userLocation, isUserLocationError } = useUserLocation();
   const mapRef = React.useRef<MapView | null>(null);
   usePermission('LOCATION');
-  const [selectLocation, setSelectLocation] = useState<LatLng>();
+  const [selectLocation, setSelectLocation] = useState<LatLng | null>();
 
   const handleLongPressMapView = ({ nativeEvent }: LongPressEvent) => {
     setSelectLocation(nativeEvent.coordinate);
+  };
+
+  const handlePressAddPost = () => {
+    if (!selectLocation) {
+      return Alert.alert(
+        alerts.NOT_SELECTED_LOCATION.TITLE,
+        alerts.NOT_SELECTED_LOCATION.DESCRIPTION,
+      );
+    }
+
+    navigation.navigate(MapNavigations.ADD_POST, {
+      location: selectLocation,
+    });
+    setSelectLocation(null);
   };
 
   const handlePressUserLocation = () => {
@@ -87,6 +101,9 @@ const MapHomeScreen = () => {
         <Ionicons name="menu" color={colors.BLACK} size={25} />
       </Pressable>
       <View style={styles.buttonList}>
+        <Pressable style={styles.mapButton} onPress={handlePressAddPost}>
+          <MaterialIcons name="add" color={colors.BLACK} size={25} />
+        </Pressable>
         <Pressable style={styles.mapButton} onPress={handlePressUserLocation}>
           <MaterialIcons name="my-location" color={colors.BLACK} size={25} />
         </Pressable>

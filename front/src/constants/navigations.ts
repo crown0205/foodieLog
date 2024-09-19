@@ -12,6 +12,7 @@ const authNavigations = {
 
 const MapNavigations = {
   MAP_HOME: 'MapHome',
+  ADD_POST: 'AddPost',
 } as const;
 
-export {authNavigations, MapNavigations, mainNavigations};
+export { authNavigations, MapNavigations, mainNavigations };
