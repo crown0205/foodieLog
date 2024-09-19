@@ -18,6 +18,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import MapView, {
   LatLng,
   LongPressEvent,
+  Marker,
   PROVIDER_GOOGLE,
 } from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -71,12 +72,15 @@ const MapHomeScreen = () => {
         <CustomMarker
           color="BLUE"
           score={1}
-          coordinate={{ latitude: 37.5662, longitude: 126.978 }}
+          coordinate={{ latitude: 37.562, longitude: 126.978 }}
+        />
+        <CustomMarker
+          color="YELLOW"
+          score={1}
+          coordinate={{ latitude: 37.552, longitude: 126.978 }}
         />
 
-        {selectLocation && (
-          <CustomMarker color="GREEN" score={3} coordinate={selectLocation} />
-        )}
+        {selectLocation && <Marker coordinate={selectLocation} />}
       </MapView>
       <Pressable
         style={[styles.drawerButton, { top: inset.top || 20 }]}

@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
   marker: {
     transform: [{ rotate: '45deg' }],
-    borderColor: colors.WHITE,
+    borderColor: colors.BLACK,
     width: 27,
     height: 27,
     borderRadius: 27,
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   eye: {
     position: 'absolute',
-    backgroundColor: colors.WHITE,
+    backgroundColor: colors.BLACK,
     width: 4,
     height: 4,
     borderRadius: 4,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginTop: 5,
     borderRightColor: colors.TRANSPARENT,
-    borderLeftColor: colors.WHITE,
+    borderLeftColor: colors.BLACK,
   },
   soso: {
     marginLeft: 14,
@@ -90,14 +90,14 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 0,
-    borderLeftColor: colors.WHITE,
+    borderLeftColor: colors.BLACK,
     borderRightColor: colors.TRANSPARENT,
   },
   bad: {
     marginLeft: 12,
     marginTop: 12,
     borderRightColor: colors.TRANSPARENT,
-    borderLeftColor: colors.WHITE,
+    borderLeftColor: colors.BLACK,
   },
 });
 
