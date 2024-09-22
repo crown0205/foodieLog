@@ -29,9 +29,9 @@ function validateLogin(values: UseInformation) {
   return validateUser(values);
 }
 
-function validateSignUp(values: UseInformation & {passwordConfirm: string}) {
+function validateSignUp(values: UseInformation & { passwordConfirm: string }) {
   const errors = validateUser(values);
-  const signupErrors = {...errors, passwordConfirm: ''};
+  const signupErrors = { ...errors, passwordConfirm: '' };
 
   if (!values.passwordConfirm) {
     signupErrors.passwordConfirm = '비밀번호를 한 번 더 입력해주세요.';
@@ -44,4 +44,17 @@ function validateSignUp(values: UseInformation & {passwordConfirm: string}) {
   return signupErrors;
 }
 
-export {validateLogin, validateSignUp};
+function validateAddPost(value: { title: string; description: string }) {
+  const errors = {
+    title: '',
+    description: '',
+  };
+
+  if (value.title.trim() === '') {
+    errors.title = '제목은 1~30자 이내로 입력해주세요.';
+  }
+
+  return errors;
+}
+
+export { validateLogin, validateSignUp, validateAddPost };

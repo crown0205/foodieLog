@@ -1,4 +1,4 @@
-import React, {forwardRef, useLayoutEffect, useRef} from 'react';
+import React, { ReactNode, forwardRef, useLayoutEffect, useRef } from 'react';
 import {
   Dimensions,
   LayoutAnimation,
@@ -8,20 +8,30 @@ import {
   TextInputProps,
   View,
 } from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
-import {colors} from '../constants';
-import {mergeRefs} from '../utils/common';
+import { TextInput } from 'react-native-gesture-handler';
+import { colors } from '../constants';
+import { mergeRefs } from '../utils/common';
 
 interface InputFieldProps extends TextInputProps {
   disabled?: boolean;
   error?: string;
   touched?: boolean;
+  icon?: ReactNode;
 }
 
 const deviceHeight = Dimensions.get('screen').height;
 
 const InputField = forwardRef(
-  ({touched, error, disabled = false, ...props}: InputFieldProps, ref) => {
+  (
+    {
+      touched,
+      error,
+      disabled = false,
+      icon = null,
+      ...props
+    }: InputFieldProps,
+    ref,
+  ) => {
     const innerRef = useRef<TextInput | null>(null);
 
     const handlePressInput = () => {
@@ -41,19 +51,25 @@ const InputField = forwardRef(
             props.multiline && styles.multiLine,
             disabled && styles.disabled,
             touched && Boolean(error) && styles.inputError,
-          ]}>
-          <TextInput
-            ref={ref ? mergeRefs(innerRef, ref) : innerRef} // ref가 있을 경우 mergeRefs로 합침
-            style={[styles.input, disabled && styles.disabled]}
-            placeholderTextColor={colors.GREY_500}
-            autoCapitalize="none" // 자동 대문자 변환 기능 해제
-            editable={!disabled} // 편집 가능 여부
-            autoCorrect={false} // 자동완성 기능 해제
-            spellCheck={false} // 맞춤법 검사
-            {...props}
-          />
+          ]}
+        >
+          <View style={Boolean(icon) && styles.innerContainer}>
+            {icon}
+            <TextInput
+              ref={ref ? mergeRefs(innerRef, ref) : innerRef} // ref가 있을 경우 mergeRefs로 합침
+              style={[styles.input, disabled && styles.disabled]}
+              placeholderTextColor={colors.GREY_500}
+              autoCapitalize="none" // 자동 대문자 변환 기능 해제
+              editable={!disabled} // 편집 가능 여부
+              autoCorrect={false} // 자동완성 기능 해제
+              spellCheck={false} // 맞춤법 검사
+              {...props}
+            />
+          </View>
+          {touched && Boolean(error) && (
+            <Text style={styles.error}>{error}</Text>
+          )}
         </View>
-        {touched && Boolean(error) && <Text style={styles.error}>{error}</Text>}
       </Pressable>
     );
   },
@@ -70,12 +86,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   multiLine: {
-    // paddingBottom: deviceHeight > 640 ? 45 : 30,
+    paddingBottom: deviceHeight > 640 ? 45 : 30,
   },
   input: {
     padding: 0,
     fontSize: 16,
     color: colors.GREY_900,
+  },
+  innerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
   },
   disabled: {
     backgroundColor: colors.GREY_100,
