@@ -7,15 +7,19 @@ import {
   postSignup,
 } from '@/api/auth';
 import queryClient from '@/api/queryClient';
-import {UseMutationCustomOptions, UseQueryCustomOptions} from '@/types/common';
+import { queryKeys, storageKeys } from '@/constants';
+import {
+  UseMutationCustomOptions,
+  UseQueryCustomOptions,
+} from '@/types/common';
 import {
   removeEncryptStorage,
   removerHeader,
   setEncryptStorage,
   setHeader,
 } from '@/utils';
-import {useMutation, useQuery} from '@tanstack/react-query';
-import {useEffect} from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 function useSignup(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
@@ -27,18 +31,18 @@ function useSignup(mutationOptions?: UseMutationCustomOptions) {
 function useLogin(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
     mutationFn: postLogin,
-    onSuccess: ({accessToken, refreshToken}) => {
+    onSuccess: ({ accessToken, refreshToken }) => {
       setHeader('Authorization', `Bearer ${accessToken}`);
-      setEncryptStorage('refreshToken', refreshToken);
+      setEncryptStorage(storageKeys.REFRESH_TOKEN, refreshToken);
     },
     onSettled: () => {
       // NOTE : invalidateQueries를 사용하여 캐시된 데이터를 제거합니다.
       queryClient.invalidateQueries({
-        queryKey: ['auth', 'getProfile'],
+        queryKey: [queryKeys.AUTH, queryKeys.GET_PROFILE],
       });
       // NOTE : refetchQueries를 사용하여 캐시된 데이터를 다시 불러옵니다.
       queryClient.refetchQueries({
-        queryKey: ['auth', 'getAccessToken'],
+        queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
       });
     },
     ...mutationOptions,
@@ -46,8 +50,8 @@ function useLogin(mutationOptions?: UseMutationCustomOptions) {
 }
 
 function useGetRefreshToken() {
-  const {data, isSuccess, isError} = useQuery({
-    queryKey: ['auth', 'getAccessToken'],
+  const { data, isSuccess, isError } = useQuery({
+    queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
     queryFn: getAccessToken,
     staleTime: 1000 * 60 * 30 - 1000 * 60 * 3, // NOTE : staleTime의 역할은 캐시된 데이터를 얼마나 오래 사용할 것인지를 결정하는 옵션입니다. 이 값을 설정하면 캐시된 데이터를 사용하고, 이 시간이 지나면 새로운 데이터를 가져옵니다.
     refetchInterval: 1000 * 60 * 30, // NOTE : refetchInterval의 역할은 캐시된 데이터를 얼마나 자주 갱신할 것인지를 결정하는 옵션입니다. 이 값을 설정하면 캐시된 데이터를 사용하고, 이 시간이 지나면 새로운 데이터를 가져옵니다.
@@ -58,23 +62,23 @@ function useGetRefreshToken() {
   useEffect(() => {
     if (isSuccess) {
       setHeader('Authorization', `Bearer ${data?.accessToken}`);
-      setEncryptStorage('refreshToken', data?.refreshToken);
+      setEncryptStorage(storageKeys.REFRESH_TOKEN, data?.refreshToken);
     }
   }, [isSuccess]);
 
   useEffect(() => {
     if (isError) {
       removerHeader('Authorization');
-      removeEncryptStorage('refreshToken');
+      removeEncryptStorage(storageKeys.REFRESH_TOKEN);
     }
   }, [isError]);
 
-  return {isSuccess, isError};
+  return { isSuccess, isError };
 }
 
 function useGetProfile(queryOptions?: UseQueryCustomOptions<ResponseProfile>) {
   return useQuery({
-    queryKey: ['auth', 'getProfile'],
+    queryKey: [queryKeys.AUTH, queryKeys.GET_PROFILE],
     queryFn: getProfile,
     ...queryOptions,
   });
@@ -85,8 +89,8 @@ function useLogout(mutationOptions?: UseMutationCustomOptions) {
     mutationFn: logout,
     onSuccess: () => {
       removerHeader('Authorization');
-      removeEncryptStorage('refreshToken');
-      queryClient.resetQueries({queryKey: ['auth']});
+      removeEncryptStorage(storageKeys.REFRESH_TOKEN);
+      queryClient.resetQueries({ queryKey: [queryKeys.AUTH] });
     },
     ...mutationOptions,
   });
