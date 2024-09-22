@@ -4,6 +4,26 @@ type Category = {
   [key in MarkerColor]: string;
 };
 
+interface ImageUrl {
+  id?: number;
+  url: string;
+}
+
+interface Marker {
+  id: number;
+  latitude: number;
+  longitude: number;
+  color: MarkerColor;
+  score: number;
+}
+
+interface Post extends Marker {
+  title: string;
+  address: string;
+  date: Date | string;
+  description: string;
+}
+
 interface Profile {
   id: number;
   email: string;
@@ -13,4 +33,4 @@ interface Profile {
   loginType: 'email' | 'kakao' | 'apple';
 }
 
-export type {Profile, Category, MarkerColor};
+export type { Category, ImageUrl, Marker, MarkerColor, Post, Profile };
