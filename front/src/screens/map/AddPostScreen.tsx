@@ -1,5 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
 
+import AddPostHeaderRight from '@/components/AddPostHeaderRight';
 import CustomButton from '@/components/CustomButton';
 import InputField from '@/components/InputField';
 import { colors } from '@/constants';
@@ -18,13 +19,23 @@ import { validateAddPost } from '@/utils';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, 'AddPost'>;
 
-const AddPostScreen = ({ route }: AddPostScreenProps) => {
+const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
   const { location } = route.params;
   const descriptionRef = useRef<TextInput | null>(null);
   const addPost = useForm({
     initialValues: { title: '', description: '' },
     validate: validateAddPost,
   });
+
+  const handleSubmit = () => {
+    console.log('등록 버튼 클릭 ', addPost.values);
+  };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => AddPostHeaderRight(handleSubmit),
+    });
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
