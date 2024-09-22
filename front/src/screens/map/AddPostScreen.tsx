@@ -1,5 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,12 +9,15 @@ import {
 } from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
 
+import { RequestCreatePost } from '@/api';
 import AddPostHeaderRight from '@/components/AddPostHeaderRight';
 import CustomButton from '@/components/CustomButton';
 import InputField from '@/components/InputField';
 import { colors } from '@/constants';
+import useMutateCreatePost from '@/hooks/queries/useMutateCreatePost';
 import useForm from '@/hooks/useForm';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
+import { MarkerColor } from '@/types/domain';
 import { validateAddPost } from '@/utils';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, 'AddPost'>;
@@ -22,20 +25,38 @@ type AddPostScreenProps = StackScreenProps<MapStackParamList, 'AddPost'>;
 const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
   const { location } = route.params;
   const descriptionRef = useRef<TextInput | null>(null);
+  const createPost = useMutateCreatePost();
   const addPost = useForm({
     initialValues: { title: '', description: '' },
     validate: validateAddPost,
   });
+  const [markerColor, setMarkerColor] = useState<MarkerColor>('RED');
+  const [score, serScore] = useState<number>(0);
+  const [address, setAddress] = useState<string>('');
 
   const handleSubmit = () => {
-    console.log('등록 버튼 클릭 ', addPost.values);
+    const body: RequestCreatePost = {
+      title: addPost.values.title,
+      description: addPost.values.description,
+      color: markerColor,
+      score,
+      imageUrls: [],
+      address,
+      date: new Date(),
+      ...location,
+    };
+
+    createPost.mutate(body, {
+      onSuccess: () => navigation.goBack(),
+      onError: error => console.log(error.response?.data.message),
+    });
   };
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => AddPostHeaderRight(handleSubmit),
     });
-  }, []);
+  });
 
   return (
     <SafeAreaView style={styles.container}>
