@@ -7,6 +7,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [GMSServices provideAPIKey:@"AIzaSyAbhxERRZlh3JnXHtndIR5sWBgEJZdoN2U"];
   self.moduleName = @"FoodieLog";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
