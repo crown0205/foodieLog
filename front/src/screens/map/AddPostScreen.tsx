@@ -19,6 +19,7 @@ import useForm from '@/hooks/useForm';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
 import { MarkerColor } from '@/types/domain';
 import { validateAddPost } from '@/utils';
+import useGetAddress from '@/hooks/useGetAddress';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, 'AddPost'>;
 
@@ -31,8 +32,8 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
     validate: validateAddPost,
   });
   const [markerColor, setMarkerColor] = useState<MarkerColor>('RED');
-  const [score, serScore] = useState<number>(0);
-  const [address, setAddress] = useState<string>('');
+  const [score, serScore] = useState<number>(4);
+  const address = useGetAddress(location);
 
   const handleSubmit = () => {
     const body: RequestCreatePost = {
@@ -66,7 +67,7 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
       >
         <View style={styles.inputContainer}>
           <InputField
-            value=""
+            value={address}
             disabled
             icon={
               <Octicons name="location" size={16} color={colors.GREY_500} />
