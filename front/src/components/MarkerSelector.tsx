@@ -33,7 +33,7 @@ const MarkerSelector = ({
   return (
     <View style={styles.markerInputContainer}>
       <Text style={styles.markerLabel}>마커 선택</Text>
-      <ScrollView>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.markerInputScroll}>
           {categoryList.map(color => (
             <Pressable
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
   markerLabel: {
     marginBottom: 15,
     color: colors.GREY_700,
+    fontSize: 14,
   },
   markerInputScroll: {
     flexDirection: 'row',
@@ -74,11 +75,11 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.GREY_200,
+    backgroundColor: colors.GREY_OPACITY_100,
   },
   pressedMarker: {
     borderWidth: 2,
-    borderColor: colors.BLUE_400,
+    borderColor: colors.BLUE_200,
   },
 });
 
