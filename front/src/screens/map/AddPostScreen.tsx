@@ -21,6 +21,7 @@ import { MarkerColor } from '@/types/domain';
 import { validateAddPost } from '@/utils';
 import useGetAddress from '@/hooks/useGetAddress';
 import MarkerSelector from '@/components/MarkerSelector';
+import ScoreInputSlider from '@/components/ScoreInputSlider';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, 'AddPost'>;
 
@@ -38,6 +39,10 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
 
   const handleSelectMarker = (name: MarkerColor) => {
     setMarkerColor(name);
+  };
+
+  const handleChangeScore = (score: number) => {
+    serScore(score);
   };
 
   const handleSubmit = () => {
@@ -103,7 +108,9 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
           <MarkerSelector
             markerColor={markerColor}
             onPressMarker={handleSelectMarker}
+            score={score}
           />
+          <ScoreInputSlider score={score} onChangeScore={handleChangeScore} />
         </View>
       </ScrollView>
     </SafeAreaView>

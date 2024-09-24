@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   markerInputContainer: {
     padding: 15,
     borderWidth: 1,
-    borderColor: colors.GREY_300,
+    borderColor: colors.GREY_200,
     borderRadius: 6,
   },
   markerLabel: {
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   pressedMarker: {
     borderWidth: 2,
-    borderColor: colors.BLUE_200,
+    borderColor: colors.BLUE_300,
   },
 });
 
