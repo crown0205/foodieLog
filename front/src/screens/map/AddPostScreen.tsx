@@ -12,16 +12,18 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import { RequestCreatePost } from '@/api';
 import AddPostHeaderRight from '@/components/AddPostHeaderRight';
 import CustomButton from '@/components/CustomButton';
+import DatePickerOption from '@/components/DatePickerOption';
 import InputField from '@/components/InputField';
+import MarkerSelector from '@/components/MarkerSelector';
+import ScoreInputSlider from '@/components/ScoreInputSlider';
 import { colors } from '@/constants';
 import useMutateCreatePost from '@/hooks/queries/useMutateCreatePost';
 import useForm from '@/hooks/useForm';
+import useGetAddress from '@/hooks/useGetAddress';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
 import { MarkerColor } from '@/types/domain';
 import { validateAddPost } from '@/utils';
-import useGetAddress from '@/hooks/useGetAddress';
-import MarkerSelector from '@/components/MarkerSelector';
-import ScoreInputSlider from '@/components/ScoreInputSlider';
+import { getDateWithSeparator } from '@/utils/date';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, 'AddPost'>;
 
@@ -36,6 +38,28 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
   });
   const [markerColor, setMarkerColor] = useState<MarkerColor>('RED');
   const [score, serScore] = useState<number>(4);
+
+  const [date, setDate] = useState<Date>(new Date());
+  const [isDatePickerVisible, setIsDatePickerVisible] =
+    useState<boolean>(false);
+  const [isDatePicked, setIsDatePicked] = useState<boolean>(false);
+
+  const hide = () => {
+    setIsDatePickerVisible(false);
+  };
+
+  const show = () => {
+    setIsDatePickerVisible(true);
+  };
+
+  const handleDateChange = (pickedDate: Date) => {
+    setDate(pickedDate);
+  };
+
+  const handleConfirmDate = () => {
+    setIsDatePicked(true);
+    hide();
+  };
 
   const handleSelectMarker = (name: MarkerColor) => {
     setMarkerColor(name);
@@ -83,7 +107,14 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
               <Octicons name="location" size={16} color={colors.GREY_500} />
             }
           />
-          <CustomButton size="large" variant="outlined" label="날짜 선택" />
+          <CustomButton
+            size="large"
+            variant="outlined"
+            label={
+              isDatePicked ? `${getDateWithSeparator(date, '. ')}` : '날짜 선택'
+            }
+            onPress={show}
+          />
           <InputField
             {...addPost.getTextInputProps('title')}
             error={addPost.errors.title}
@@ -111,6 +142,13 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
             score={score}
           />
           <ScoreInputSlider score={score} onChangeScore={handleChangeScore} />
+
+          <DatePickerOption
+            date={date}
+            isVisible={isDatePickerVisible}
+            onChangeDate={handleDateChange}
+            onConfirmDate={handleConfirmDate}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
