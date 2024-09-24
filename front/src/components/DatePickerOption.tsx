@@ -1,12 +1,12 @@
 import { colors } from '@/constants';
 import React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
   Modal,
-  SafeAreaView,
   Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 

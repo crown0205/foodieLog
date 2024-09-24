@@ -20,6 +20,7 @@ import { colors } from '@/constants';
 import useMutateCreatePost from '@/hooks/queries/useMutateCreatePost';
 import useForm from '@/hooks/useForm';
 import useGetAddress from '@/hooks/useGetAddress';
+import useModal from '@/hooks/useModal';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
 import { MarkerColor } from '@/types/domain';
 import { validateAddPost } from '@/utils';
@@ -40,17 +41,8 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
   const [score, serScore] = useState<number>(4);
 
   const [date, setDate] = useState<Date>(new Date());
-  const [isDatePickerVisible, setIsDatePickerVisible] =
-    useState<boolean>(false);
+  const datePickerModal = useModal();
   const [isDatePicked, setIsDatePicked] = useState<boolean>(false);
-
-  const hide = () => {
-    setIsDatePickerVisible(false);
-  };
-
-  const show = () => {
-    setIsDatePickerVisible(true);
-  };
 
   const handleDateChange = (pickedDate: Date) => {
     setDate(pickedDate);
@@ -58,7 +50,7 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
 
   const handleConfirmDate = () => {
     setIsDatePicked(true);
-    hide();
+    datePickerModal.hide();
   };
 
   const handleSelectMarker = (name: MarkerColor) => {
@@ -113,7 +105,7 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
             label={
               isDatePicked ? `${getDateWithSeparator(date, '. ')}` : '날짜 선택'
             }
-            onPress={show}
+            onPress={datePickerModal.show}
           />
           <InputField
             {...addPost.getTextInputProps('title')}
@@ -145,7 +137,7 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
 
           <DatePickerOption
             date={date}
-            isVisible={isDatePickerVisible}
+            isVisible={datePickerModal.isVisible}
             onChangeDate={handleDateChange}
             onConfirmDate={handleConfirmDate}
           />
