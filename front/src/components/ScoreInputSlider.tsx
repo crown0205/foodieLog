@@ -13,7 +13,7 @@ const ScoreInputSlider = ({ score, onChangeScore }: ScoreInputSliderProps) => {
     <View style={styles.container}>
       <View style={styles.labelContainer}>
         <Text style={styles.labelText}>평점</Text>
-        <Text style={styles.labelText}>{score}평점</Text>
+        <Text style={styles.labelText}>{score} 점</Text>
       </View>
       <Slider
         value={score}
