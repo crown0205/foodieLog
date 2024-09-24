@@ -31,7 +31,7 @@ const MarkerSelector = ({
   onPressMarker,
 }: MarkerSelectorProps) => {
   return (
-    <View style={styles.markerInputContainer}>
+    <View style={styles.container}>
       <Text style={styles.markerLabel}>마커 선택</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.markerInputScroll}>
@@ -54,7 +54,7 @@ const MarkerSelector = ({
 };
 
 const styles = StyleSheet.create({
-  markerInputContainer: {
+  container: {
     padding: 15,
     borderWidth: 1,
     borderColor: colors.GREY_200,

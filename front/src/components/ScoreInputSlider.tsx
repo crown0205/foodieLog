@@ -21,7 +21,7 @@ const ScoreInputSlider = ({ score, onChangeScore }: ScoreInputSliderProps) => {
         step={1}
         minimumValue={1}
         maximumValue={5}
-        minimumTrackTintColor={colors.BLUE_500}
+        minimumTrackTintColor={colors.BLUE_400}
         maximumTrackTintColor={colors.GREY_300}
         thumbTintColor={colors.BLUE_500}
       />
