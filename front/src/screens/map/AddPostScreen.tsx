@@ -20,6 +20,7 @@ import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
 import { MarkerColor } from '@/types/domain';
 import { validateAddPost } from '@/utils';
 import useGetAddress from '@/hooks/useGetAddress';
+import MarkerSelector from '@/components/MarkerSelector';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, 'AddPost'>;
 
@@ -27,13 +28,17 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
   const { location } = route.params;
   const descriptionRef = useRef<TextInput | null>(null);
   const createPost = useMutateCreatePost();
+  const address = useGetAddress(location);
   const addPost = useForm({
     initialValues: { title: '', description: '' },
     validate: validateAddPost,
   });
   const [markerColor, setMarkerColor] = useState<MarkerColor>('RED');
   const [score, serScore] = useState<number>(4);
-  const address = useGetAddress(location);
+
+  const handleSelectMarker = (name: MarkerColor) => {
+    setMarkerColor(name);
+  };
 
   const handleSubmit = () => {
     const body: RequestCreatePost = {
@@ -93,6 +98,11 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
             placeholder="기록하고 싶은 내용을 입력하세요. (선택)"
             returnKeyType="next"
             multiline
+          />
+
+          <MarkerSelector
+            markerColor={markerColor}
+            onPressMarker={handleSelectMarker}
           />
         </View>
       </ScrollView>
