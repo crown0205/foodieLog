@@ -25,6 +25,7 @@ import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
 import { MarkerColor } from '@/types/domain';
 import { validateAddPost } from '@/utils';
 import { getDateWithSeparator } from '@/utils/date';
+import ImageInput from '@/components/ImageInput';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, 'AddPost'>;
 
@@ -134,6 +135,7 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
             score={score}
           />
           <ScoreInputSlider score={score} onChangeScore={handleChangeScore} />
+          <ImageInput onChange={() => {}} />
 
           <DatePickerOption
             date={date}
