@@ -1,6 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -13,6 +14,7 @@ import { RequestCreatePost } from '@/api';
 import AddPostHeaderRight from '@/components/AddPostHeaderRight';
 import CustomButton from '@/components/CustomButton';
 import DatePickerOption from '@/components/DatePickerOption';
+import ImageInput from '@/components/ImageInput';
 import InputField from '@/components/InputField';
 import MarkerSelector from '@/components/MarkerSelector';
 import ScoreInputSlider from '@/components/ScoreInputSlider';
@@ -20,12 +22,13 @@ import { colors } from '@/constants';
 import useMutateCreatePost from '@/hooks/queries/useMutateCreatePost';
 import useForm from '@/hooks/useForm';
 import useGetAddress from '@/hooks/useGetAddress';
+import useImagePicker from '@/hooks/useImagePicker';
 import useModal from '@/hooks/useModal';
+import usePermission from '@/hooks/usePermission';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
 import { MarkerColor } from '@/types/domain';
-import { validateAddPost } from '@/utils';
+import { deviceType, validateAddPost } from '@/utils';
 import { getDateWithSeparator } from '@/utils/date';
-import ImageInput from '@/components/ImageInput';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, 'AddPost'>;
 
@@ -44,6 +47,11 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
   const [date, setDate] = useState<Date>(new Date());
   const datePickerModal = useModal();
   const [isDatePicked, setIsDatePicked] = useState<boolean>(false);
+
+  const imagePicker = useImagePicker({ initialImages: [] });
+  usePermission('PHOTO');
+
+  console.log({ imagePicker: imagePicker.imageUrls });
 
   const handleDateChange = (pickedDate: Date) => {
     setDate(pickedDate);
@@ -135,7 +143,26 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
             score={score}
           />
           <ScoreInputSlider score={score} onChangeScore={handleChangeScore} />
-          <ImageInput onChange={() => {}} />
+          <View style={styles.imagesViewer}>
+            <ImageInput onChange={imagePicker.handleChange} />
+            <ScrollView horizontal>
+              <View style={styles.imageBox}>
+                {imagePicker.imageUrls.map(({ url }, index) => (
+                  <Image
+                    key={index}
+                    source={{
+                      uri: `${
+                        deviceType === 'ios'
+                          ? 'http:localhost:3030/'
+                          : 'http://10.0.2.2:3030/'
+                      }${url}`,
+                    }}
+                    style={styles.imageBox}
+                  />
+                ))}
+              </View>
+            </ScrollView>
+          </View>
 
           <DatePickerOption
             date={date}
@@ -161,6 +188,13 @@ const styles = StyleSheet.create({
   inputContainer: {
     gap: 20,
     marginBottom: 20,
+  },
+  imagesViewer: {
+    flexDirection: 'row',
+  },
+  imageBox: {
+    width: 70,
+    height: 70,
   },
 });
 
