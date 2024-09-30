@@ -1,7 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -17,6 +16,7 @@ import DatePickerOption from '@/components/DatePickerOption';
 import ImageInput from '@/components/ImageInput';
 import InputField from '@/components/InputField';
 import MarkerSelector from '@/components/MarkerSelector';
+import PreviewImageList from '@/components/PreviewImageList';
 import ScoreInputSlider from '@/components/ScoreInputSlider';
 import { colors } from '@/constants';
 import useMutateCreatePost from '@/hooks/queries/useMutateCreatePost';
@@ -27,7 +27,7 @@ import useModal from '@/hooks/useModal';
 import usePermission from '@/hooks/usePermission';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
 import { MarkerColor } from '@/types/domain';
-import { deviceType, validateAddPost } from '@/utils';
+import { validateAddPost } from '@/utils';
 import { getDateWithSeparator } from '@/utils/date';
 
 type AddPostScreenProps = StackScreenProps<MapStackParamList, 'AddPost'>;
@@ -144,24 +144,10 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
           />
           <ScoreInputSlider score={score} onChangeScore={handleChangeScore} />
           <View style={styles.imagesViewer}>
-            <ImageInput onChange={imagePicker.handleChange} />
-            <ScrollView horizontal>
-              <View style={styles.imageBox}>
-                {imagePicker.imageUrls.map(({ url }, index) => (
-                  <Image
-                    key={index}
-                    source={{
-                      uri: `${
-                        deviceType === 'ios'
-                          ? 'http:localhost:3030/'
-                          : 'http://10.0.2.2:3030/'
-                      }${url}`,
-                    }}
-                    style={styles.imageBox}
-                  />
-                ))}
-              </View>
-            </ScrollView>
+            {imagePicker.imageUrls.length !== 5 && (
+              <ImageInput onChange={imagePicker.handleChange} />
+            )}
+            <PreviewImageList imageUrls={imagePicker.imageUrls} />
           </View>
 
           <DatePickerOption
@@ -191,10 +177,7 @@ const styles = StyleSheet.create({
   },
   imagesViewer: {
     flexDirection: 'row',
-  },
-  imageBox: {
-    width: 70,
-    height: 70,
+    alignItems: 'center',
   },
 });
 
