@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
+  Text,
   TextInput,
   View,
 } from 'react-native';
@@ -147,8 +148,15 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
             {imagePicker.imageUrls.length !== 5 && (
               <ImageInput onChange={imagePicker.handleChange} />
             )}
-            <PreviewImageList imageUrls={imagePicker.imageUrls} />
+            <PreviewImageList
+              imageUrls={imagePicker.imageUrls}
+              onDelete={imagePicker.delete}
+              onChangeOrder={imagePicker.changeOrder}
+            />
           </View>
+          <Text style={styles.notice}>
+            * 이미지 클릭시 순서 변경, 삭제 가능합니다. (최대 5장)
+          </Text>
 
           <DatePickerOption
             date={date}
@@ -178,6 +186,12 @@ const styles = StyleSheet.create({
   imagesViewer: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 10,
+  },
+  notice: {
+    fontSize: 13,
+    color: colors.GREY_500,
+    textAlign: 'left',
   },
 });
 
