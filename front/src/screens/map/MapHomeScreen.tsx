@@ -1,6 +1,8 @@
 import CustomMarker from '@/components/CustomMarker';
+import MarkerModal from '@/components/MarkerModal';
 import { MapNavigations, alerts, colors } from '@/constants';
 import useGetMarkers from '@/hooks/queries/useGetMarkers';
+import useModal from '@/hooks/useModal';
 import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
@@ -36,7 +38,9 @@ const MapHomeScreen = () => {
   const mapRef = React.useRef<MapView | null>(null);
 
   const { userLocation, isUserLocationError } = useUserLocation();
+  const markerModal = useModal();
   const [selectLocation, setSelectLocation] = useState<LatLng | null>();
+  const [markerId, setMarkerId] = useState<number | null>(null);
   const { data: markers = [] } = useGetMarkers();
 
   usePermission('LOCATION');
@@ -50,6 +54,12 @@ const MapHomeScreen = () => {
       },
       300,
     );
+  };
+
+  const handlePressMarker = (id: number, coordinate: LatLng) => {
+    setMarkerId(id);
+    markerModal.show();
+    moveMapView(coordinate);
   };
 
   const handleLongPressMapView = ({ nativeEvent }: LongPressEvent) => {
@@ -101,7 +111,7 @@ const MapHomeScreen = () => {
             color={color}
             score={score}
             coordinate={coordinate}
-            onPress={() => moveMapView(coordinate)}
+            onPress={() => handlePressMarker(id, coordinate)}
           />
         ))}
         {selectLocation && <Marker coordinate={selectLocation} />}
@@ -120,6 +130,12 @@ const MapHomeScreen = () => {
           <MaterialIcons name="my-location" color={colors.BLACK} size={25} />
         </Pressable>
       </View>
+
+      <MarkerModal
+        markerId={markerId}
+        isVisible={markerModal.isVisible}
+        hide={markerModal.hide}
+      />
     </>
   );
 };

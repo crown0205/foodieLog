@@ -3,7 +3,7 @@ import axiosInstance from './axios';
 
 type RequestCreatePost = Omit<Post, 'id'> & { imageUrls: ImageUrl[] };
 
-type ResponsePost = Post & { imageUrls: ImageUrl[] };
+type ResponsePost = Post & { images: ImageUrl[] };
 
 const createPost = async (body: RequestCreatePost): Promise<ResponsePost> => {
   const { data } = await axiosInstance.post('/posts', body);
