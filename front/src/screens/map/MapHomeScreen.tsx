@@ -33,12 +33,24 @@ type Navigation = CompositeNavigationProp<
 const MapHomeScreen = () => {
   const inset = useSafeAreaInsets(); // NOTE : 상단의 상태바 높이를 가져옴
   const navigation = useNavigation<Navigation>();
-  const { userLocation, isUserLocationError } = useUserLocation();
   const mapRef = React.useRef<MapView | null>(null);
+
+  const { userLocation, isUserLocationError } = useUserLocation();
   const [selectLocation, setSelectLocation] = useState<LatLng | null>();
   const { data: markers = [] } = useGetMarkers();
 
   usePermission('LOCATION');
+
+  const moveMapView = (coordinate: LatLng) => {
+    mapRef.current?.animateToRegion(
+      {
+        ...coordinate,
+        latitudeDelta: 0.0422,
+        longitudeDelta: 0.0421,
+      },
+      300,
+    );
+  };
 
   const handleLongPressMapView = ({ nativeEvent }: LongPressEvent) => {
     setSelectLocation(nativeEvent.coordinate);
@@ -63,12 +75,7 @@ const MapHomeScreen = () => {
       // NOTE : 유저의 위치를 가져오는데 실패했을 때
     }
 
-    mapRef.current?.animateToRegion({
-      latitude: userLocation.latitude,
-      longitude: userLocation.longitude,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    });
+    moveMapView(userLocation);
   };
 
   return (
@@ -94,6 +101,7 @@ const MapHomeScreen = () => {
             color={color}
             score={score}
             coordinate={coordinate}
+            onPress={() => moveMapView(coordinate)}
           />
         ))}
         {selectLocation && <Marker coordinate={selectLocation} />}
