@@ -1,5 +1,5 @@
-import CustomMarker from '@/components/CustomMarker';
-import MarkerModal from '@/components/MarkerModal';
+import CustomMarker from '@/components/common/CustomMarker';
+import MarkerModal from '@/components/map/MarkerModal';
 import { MapNavigations, alerts, colors } from '@/constants';
 import useGetMarkers from '@/hooks/queries/useGetMarkers';
 import useModal from '@/hooks/useModal';

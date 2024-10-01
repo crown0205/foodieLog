@@ -12,9 +12,9 @@ import {
   Text,
   View,
 } from 'react-native';
-import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import CustomMarker from './CustomMarker';
+import Octicons from 'react-native-vector-icons/Octicons';
+import CustomMarker from '../common/CustomMarker';
 
 interface MarkerModalProps {
   markerId: number | null;

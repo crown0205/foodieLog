@@ -1,4 +1,4 @@
-import FeedHomeHeaderLeft from '@/components/FeedHomeHeaderLeft';
+import FeedHomeHeaderLeft from '@/components/feed/FeedHomeHeaderLeft';
 import { colors } from '@/constants';
 import { feedNavigations } from '@/constants/navigations';
 import FeedDetailScreen from '@/screens/feed/FeedDetailScreen';

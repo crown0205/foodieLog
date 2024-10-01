@@ -9,8 +9,8 @@ import {
   View,
 } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import { colors } from '../constants';
-import { mergeRefs } from '../utils/common';
+import { colors } from '../../constants';
+import { mergeRefs } from '../../utils/common';
 
 interface InputFieldProps extends TextInputProps {
   disabled?: boolean;

@@ -11,14 +11,14 @@ import {
 import Octicons from 'react-native-vector-icons/Octicons';
 
 import { RequestCreatePost } from '@/api';
-import AddPostHeaderRight from '@/components/AddPostHeaderRight';
-import CustomButton from '@/components/CustomButton';
-import DatePickerOption from '@/components/DatePickerOption';
-import ImageInput from '@/components/ImageInput';
-import InputField from '@/components/InputField';
-import MarkerSelector from '@/components/MarkerSelector';
-import PreviewImageList from '@/components/PreviewImageList';
-import ScoreInputSlider from '@/components/ScoreInputSlider';
+import CustomButton from '@/components/common/CustomButton';
+import InputField from '@/components/common/InputField';
+import PreviewImageList from '@/components/common/PreviewImageList';
+import AddPostHeaderRight from '@/components/post/AddPostHeaderRight';
+import DatePickerOption from '@/components/post/DatePickerOption';
+import ImageInput from '@/components/post/ImageInput';
+import MarkerSelector from '@/components/post/MarkerSelector';
+import ScoreInputSlider from '@/components/post/ScoreInputSlider';
 import { colors } from '@/constants';
 import useMutateCreatePost from '@/hooks/queries/useMutateCreatePost';
 import useForm from '@/hooks/useForm';

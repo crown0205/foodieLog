@@ -1,16 +1,22 @@
-import CustomButton from '@/components/CustomButton';
-import {authNavigations} from '@/constants/navigations';
-import {AuthStackParamList} from '@/navigations/stack/AuthStackNavigator';
-import {StackScreenProps} from '@react-navigation/stack';
+import CustomButton from '@/components/common/CustomButton';
+import { authNavigations } from '@/constants/navigations';
+import { AuthStackParamList } from '@/navigations/stack/AuthStackNavigator';
+import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
-import {Dimensions, Image, SafeAreaView, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 type AuthHomeScreenProps = StackScreenProps<
   AuthStackParamList,
   typeof authNavigations.AUTH_HOME
 >;
 
-const AuthHomeScreen = ({navigation}: AuthHomeScreenProps) => {
+const AuthHomeScreen = ({ navigation }: AuthHomeScreenProps) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>

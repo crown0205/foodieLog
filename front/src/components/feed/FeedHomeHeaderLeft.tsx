@@ -5,7 +5,7 @@ import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import HeaderButton from './HeaderButton';
+import HeaderButton from '../common/HeaderButton';
 
 type FeedHomeLeftProps = CompositeNavigationProp<
   StackNavigationProp<FeedStackParamList>,
