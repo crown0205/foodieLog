@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import FeedItem from './FeedItem';
 
-function FeedItemList() {
+function FeedList() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const {
     data: posts,
@@ -48,4 +48,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FeedItemList;
+export default FeedList;

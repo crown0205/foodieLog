@@ -18,7 +18,7 @@ interface FeedItemProps {
 function FeedItem({ post }: FeedItemProps) {
   return (
     <View style={styles.container}>
-      <Pressable>
+      <Pressable onPress={() => {}}>
         <View>
           {post.images.length > 0 && (
             <View key={post.id} style={styles.imageContainer}>
@@ -38,7 +38,7 @@ function FeedItem({ post }: FeedItemProps) {
 
           {post.images.length === 0 && (
             <View style={[styles.imageContainer, styles.emptyImageContainer]}>
-              <Text>NO Image</Text>
+              <Text>No Image</Text>
             </View>
           )}
 
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   emptyImageContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: colors.GREY_400,
+    borderColor: colors.GREY_200,
     borderWidth: 1,
     borderRadius: 10,
   },

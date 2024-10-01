@@ -1,11 +1,11 @@
-import FeedItemList from '@/components/FeedItemList';
+import FeedList from '@/components/FeedList';
 import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 
 const FeedHomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <FeedItemList />
+      <FeedList />
     </SafeAreaView>
   );
 };

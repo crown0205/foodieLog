@@ -39,7 +39,7 @@ const FeedStackNavigator = () => {
           },
         })}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name={feedNavigations.FEED_DETAIL}
         component={FeedDetailScreen}
         options={{
@@ -48,7 +48,7 @@ const FeedStackNavigator = () => {
             backgroundColor: colors.WHITE,
           },
         }}
-      />
+      /> */}
     </Stack.Navigator>
   );
 };
