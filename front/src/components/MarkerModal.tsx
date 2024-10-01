@@ -6,12 +6,14 @@ import {
   Dimensions,
   Image,
   Modal,
+  Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import CustomMarker from './CustomMarker';
 
 interface MarkerModalProps {
@@ -29,53 +31,72 @@ function MarkerModal({ markerId, isVisible, hide }: MarkerModalProps) {
 
   return (
     <Modal visible={isVisible} transparent animationType="slide">
-      <SafeAreaView style={[styles.optionBackground]} onTouchEnd={hide}>
-        <View style={styles.cardContainer}>
-          <View style={styles.cardInner}>
-            <View style={styles.cardAlign}>
-              {post.images.length > 0 && (
-                <View style={styles.imageContainer}>
-                  <Image
-                    style={styles.image}
-                    source={{
-                      uri: `${
-                        deviceType === 'ios'
-                          ? 'http:localhost:3030/'
-                          : 'http://10.0.2.2:3030/'
-                      }${post.images[0].url}`,
-                    }}
-                    resizeMode="cover"
-                  />
-                </View>
-              )}
-
-              {post.images.length === 0 && (
-                <View
-                  style={[styles.imageContainer, styles.emptyImageContainer]}
-                >
-                  <CustomMarker color={post.color} score={post.score} />
-                </View>
-              )}
-
-              <View style={styles.infoContainer}>
-                <View style={styles.addressContainer}>
-                  <Octicons name="location" size={16} color={colors.BLACK} />
-                  <Text
-                    style={styles.addressText}
-                    ellipsizeMode="tail" // NOTE : 글자가 길면 ...으로 표시
-                    numberOfLines={1} // NOTE : 한 줄만 표시
+      <SafeAreaView
+        style={[
+          styles.optionBackground,
+          deviceType === 'android' && { marginBottom: 20 },
+        ]}
+        onTouchEnd={hide}
+      >
+        <Pressable
+          onPress={() => {
+            console.log('CLICK');
+          }}
+        >
+          <View style={styles.cardContainer}>
+            <View style={styles.cardInner}>
+              <View style={styles.cardAlign}>
+                {post.images.length > 0 && (
+                  <View style={styles.imageContainer}>
+                    <Image
+                      style={styles.image}
+                      source={{
+                        uri: `${
+                          deviceType === 'ios'
+                            ? 'http:localhost:3030/'
+                            : 'http://10.0.2.2:3030/'
+                        }${post.images[0].url}`,
+                      }}
+                      resizeMode="cover"
+                    />
+                  </View>
+                )}
+                {post.images.length === 0 && (
+                  <View
+                    style={[styles.imageContainer, styles.emptyImageContainer]}
                   >
-                    {post.address}
+                    <CustomMarker color={post.color} score={post.score} />
+                  </View>
+                )}
+                <View style={styles.infoContainer}>
+                  <View style={styles.addressContainer}>
+                    <Octicons name="location" size={16} color={colors.BLACK} />
+                    <Text
+                      style={styles.addressText}
+                      ellipsizeMode="tail" // NOTE : 글자가 길면 ...으로 표시
+                      numberOfLines={1} // NOTE : 한 줄만 표시
+                    >
+                      {post.address}
+                    </Text>
+                  </View>
+                  <Text style={styles.titleText}>{post.title}</Text>
+                  <Text style={styles.dateText}>
+                    {getDateWithSeparator(post.date, '.')}
                   </Text>
                 </View>
-                <Text style={styles.titleText}>{post.title}</Text>
-                <Text style={styles.dateText}>
-                  {getDateWithSeparator(post.date, '.')}
-                </Text>
+
+                <View style={styles.nextButton}>
+                  <MaterialIcons
+                    name="arrow-forward-ios"
+                    size={20}
+                    color={colors.GREY_700}
+                    onPress={hide}
+                  />
+                </View>
               </View>
             </View>
           </View>
-        </View>
+        </Pressable>
       </SafeAreaView>
     </Modal>
   );
@@ -89,6 +110,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: '96%',
     alignSelf: 'center',
+    justifyContent: 'center',
     backgroundColor: colors.WHITE,
     borderRadius: 20,
     shadowOffset: { width: 1, height: 1 },
@@ -128,11 +150,10 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
     gap: 10,
   },
   infoContainer: {
-    width: Dimensions.get('screen').width / 1.7,
+    width: Dimensions.get('screen').width / 2,
     gap: 5,
   },
   addressContainer: {
@@ -153,6 +174,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     color: colors.BLUE_500,
+  },
+  nextButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    right: -10,
   },
 });
 
