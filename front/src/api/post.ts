@@ -13,11 +13,19 @@ const createPost = async (body: RequestCreatePost): Promise<ResponsePost> => {
 
 type ResponseSinglePost = ResponsePost & { isFavorite: boolean };
 
+// NOTE : 게시글 하나를 가져오는 API
 const getPost = async (id: number): Promise<ResponseSinglePost> => {
   const { data } = await axiosInstance.get(`/posts/${id}`);
 
   return data;
 };
 
-export { createPost, getPost };
+// NOTE : 게시글 목록을 가져오는 API
+const getPosts = async (page: number = 1): Promise<ResponsePost[]> => {
+  const { data } = await axiosInstance.get(`/posts/my?page=${page}`);
+
+  return data;
+};
+
+export { createPost, getPost, getPosts };
 export type { ResponsePost, RequestCreatePost, ResponseSinglePost };
