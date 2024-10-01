@@ -1,3 +1,4 @@
+import FeedHomeHeaderLeft from '@/components/FeedHomeHeaderLeft';
 import { colors } from '@/constants';
 import { feedNavigations } from '@/constants/navigations';
 import FeedDetailScreen from '@/screens/feed/FeedDetailScreen';
@@ -30,12 +31,13 @@ const FeedStackNavigator = () => {
       <Stack.Screen
         name={feedNavigations.FEED_HOME}
         component={FeedHomeScreen}
-        options={{
+        options={({ navigation }) => ({
           headerTitle: '피드',
+          headerLeft: () => FeedHomeHeaderLeft(navigation),
           cardStyle: {
             backgroundColor: colors.WHITE,
           },
-        }}
+        })}
       />
       <Stack.Screen
         name={feedNavigations.FEED_DETAIL}
