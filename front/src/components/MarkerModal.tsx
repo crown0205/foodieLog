@@ -38,11 +38,7 @@ function MarkerModal({ markerId, isVisible, hide }: MarkerModalProps) {
         ]}
         onTouchEnd={hide}
       >
-        <Pressable
-          onPress={() => {
-            console.log('CLICK');
-          }}
-        >
+        <Pressable onPress={() => {}}>
           <View style={styles.cardContainer}>
             <View style={styles.cardInner}>
               <View style={styles.cardAlign}>

@@ -16,7 +16,6 @@ const LoginScreen = () => {
   });
 
   const handleSubmit = () => {
-    console.log('로그인 버튼 클릭 ', login.values);
     loginMutation.mutate(login.values);
   };
 

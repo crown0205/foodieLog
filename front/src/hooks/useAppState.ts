@@ -14,12 +14,10 @@ function useAppState() {
           appState.current.match(/inactive|background/) &&
           nextAppState === 'active'
         ) {
-          console.log('앱으로 돌아왔다!');
           setIsComeback(true);
         }
 
         if (appState.current.match(/active/) && nextAppState === 'background') {
-          console.log('앱을 나갔다!');
           setIsComeback(false);
         }
 

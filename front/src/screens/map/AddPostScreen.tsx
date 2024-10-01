@@ -83,7 +83,8 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
 
     createPost.mutate(body, {
       onSuccess: () => navigation.goBack(),
-      onError: error => console.log(error.response?.data.message),
+      onError: error =>
+        console.log('CREATE_POST', error.response?.data.message),
     });
   };
 
