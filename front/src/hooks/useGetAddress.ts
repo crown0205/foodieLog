@@ -1,6 +1,8 @@
 import { errorMessages } from '@/constants';
+import { deviceType } from '@/utils';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import Config from 'react-native-config';
 import { LatLng } from 'react-native-maps';
 // TODO : react-native-config를 사용하여 환경 변수를 설정하면, API 키를 환경 변수로 설정하는 것이 좋습니다.
 
@@ -12,7 +14,7 @@ function useGetAddress(location: LatLng) {
     (async () => {
       try {
         const { data } = await axios.get(
-          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&result_type=street_address|route|political&key=AIzaSyAbhxERRZlh3JnXHtndIR5sWBgEJZdoN2U&language=ko`,
+          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&result_type=street_address|route|political&key=${Config.GOOGLE_MAP_API_KEY}&language=ko`,
         );
 
         const address = data.results.length
