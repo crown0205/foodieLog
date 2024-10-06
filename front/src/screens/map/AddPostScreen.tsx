@@ -151,6 +151,7 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
               imageUrls={imagePicker.imageUrls}
               onDelete={imagePicker.delete}
               onChangeOrder={imagePicker.changeOrder}
+              showOption
             />
           </View>
           <Text style={styles.notice}>

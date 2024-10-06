@@ -1,8 +1,8 @@
+import PreviewImageList from '@/components/common/PreviewImageList';
 import { colorHex, colors, feedNavigations } from '@/constants';
 import useGetPost from '@/hooks/queries/useGetPost';
 import { FeedStackParamList } from '@/navigations/stack/FeedStackNavigator';
-import { deviceType } from '@/utils';
-import { getDateLocaleFormat } from '@/utils';
+import { deviceType, getDateLocaleFormat } from '@/utils';
 import { StackScreenProps } from '@react-navigation/stack';
 import {
   Dimensions,
@@ -30,7 +30,7 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
   }
 
   return (
-    <ScrollView style={styles.relativeContainer}>
+    <ScrollView style={styles.container}>
       <SafeAreaView style={styles.header}>
         <View
           style={{
@@ -121,12 +121,18 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
         </View>
         <Text style={styles.descriptionText}>{post.description}</Text>
       </View>
+
+      {post.images.length > 0 && (
+        <View style={styles.imagePreviewContainer}>
+          <PreviewImageList imageUrls={post.images} />
+        </View>
+      )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  relativeContainer: {
+  container: {
     position: 'relative',
   },
   header: {
@@ -161,7 +167,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   contentsContainer: {
-    padding: 20,
+    padding: 16,
     backgroundColor: colors.WHITE,
     marginBottom: 10,
   },
@@ -208,6 +214,11 @@ const styles = StyleSheet.create({
   descriptionText: {
     color: colors.GREY_500,
     fontSize: 16,
+  },
+  imagePreviewContainer: {
+    padding: 16,
+    backgroundColor: colors.WHITE,
+    marginBottom: 10,
   },
 });
 
