@@ -1,7 +1,10 @@
 import { ResponsePost } from '@/api';
-import { colors } from '@/constants';
+import { colors, feedNavigations } from '@/constants';
+import { FeedStackParamList } from '@/navigations/stack/FeedStackNavigator';
 import { deviceType } from '@/utils';
 import { getDateWithSeparator } from '@/utils/date';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import {
   Dimensions,
   Image,
@@ -16,51 +19,55 @@ interface FeedItemProps {
 }
 
 function FeedItem({ post }: FeedItemProps) {
+  const navigation = useNavigation<StackNavigationProp<FeedStackParamList>>();
+
+  const handlePressFeed = () => {
+    navigation.navigate(feedNavigations.FEED_DETAIL, { id: post.id });
+  };
+
   return (
-    <View style={styles.container}>
-      <Pressable onPress={() => {}}>
-        <View>
-          {post.images.length > 0 && (
-            <View key={post.id} style={styles.imageContainer}>
-              <Image
-                style={styles.image}
-                source={{
-                  uri: `${
-                    deviceType === 'ios'
-                      ? 'http://localhost:3030/'
-                      : 'http://10.0.2.2:3030/'
-                  }${post.images[0]?.url}`,
-                }}
-                resizeMode="cover"
-              />
-            </View>
-          )}
-
-          {post.images.length === 0 && (
-            <View style={[styles.imageContainer, styles.emptyImageContainer]}>
-              <Text>No Image</Text>
-            </View>
-          )}
-
-          <View style={styles.textContainer}>
-            <Text style={styles.dateText}>
-              {getDateWithSeparator(post.date, '/')}
-            </Text>
-            <Text style={styles.titleText}>{post.title}</Text>
-
-            {post.description && (
-              <Text
-                style={styles.descriptionText}
-                ellipsizeMode="tail"
-                numberOfLines={1}
-              >
-                {post.description}
-              </Text>
-            )}
+    <Pressable style={styles.container} onPress={handlePressFeed}>
+      <View>
+        {post.images.length > 0 && (
+          <View key={post.id} style={styles.imageContainer}>
+            <Image
+              style={styles.image}
+              source={{
+                uri: `${
+                  deviceType === 'ios'
+                    ? 'http://localhost:3030/'
+                    : 'http://10.0.2.2:3030/'
+                }${post.images[0]?.url}`,
+              }}
+              resizeMode="cover"
+            />
           </View>
+        )}
+
+        {post.images.length === 0 && (
+          <View style={[styles.imageContainer, styles.emptyImageContainer]}>
+            <Text>No Image</Text>
+          </View>
+        )}
+
+        <View style={styles.textContainer}>
+          <Text style={styles.dateText}>
+            {getDateWithSeparator(post.date, '/')}
+          </Text>
+          <Text style={styles.titleText}>{post.title}</Text>
+
+          {post.description && (
+            <Text
+              style={styles.descriptionText}
+              ellipsizeMode="tail"
+              numberOfLines={1}
+            >
+              {post.description}
+            </Text>
+          )}
         </View>
-      </Pressable>
-    </View>
+      </View>
+    </Pressable>
   );
 }
 

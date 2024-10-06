@@ -1,14 +1,14 @@
 import FeedHomeHeaderLeft from '@/components/feed/FeedHomeHeaderLeft';
 import { colors } from '@/constants';
 import { feedNavigations } from '@/constants/navigations';
-import FeedDetailScreen from '@/screens/feed/FeedDetailScreen';
+// import FeedDetailScreen from '@/screens/feed/FeedDetailScreen';
 import FeedHomeScreen from '@/screens/feed/FeedHomeScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
 export type FeedStackParamList = {
   [feedNavigations.FEED_HOME]: undefined;
-  [feedNavigations.FEED_DETAIL]: undefined;
+  [feedNavigations.FEED_DETAIL]: { id: number };
 };
 
 const Stack = createStackNavigator<FeedStackParamList>();
