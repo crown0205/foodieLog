@@ -3,3 +3,4 @@ export * from './common';
 export * from './encryptStorage';
 export * from './axiosHeaderUtils';
 export * from './image';
+export * from './date';

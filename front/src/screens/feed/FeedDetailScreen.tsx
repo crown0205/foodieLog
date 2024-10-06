@@ -2,6 +2,7 @@ import { colorHex, colors, feedNavigations } from '@/constants';
 import useGetPost from '@/hooks/queries/useGetPost';
 import { FeedStackParamList } from '@/navigations/stack/FeedStackNavigator';
 import { deviceType } from '@/utils';
+import { getDateLocaleFormat } from '@/utils';
 import { StackScreenProps } from '@react-navigation/stack';
 import {
   Dimensions,
@@ -94,8 +95,7 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
             <View style={styles.infoColumn}>
               <Text style={styles.infoColumnKeyText}>방문날짜 :</Text>
               <Text style={styles.infoColumnValueText}>
-                {/* {getDateLocaleFormat(post.date)} */}
-                date
+                {getDateLocaleFormat(post.date)}
               </Text>
             </View>
             <View style={styles.infoColumn}>
@@ -185,6 +185,7 @@ const styles = StyleSheet.create({
   },
   infoRow: {
     flexDirection: 'row',
+    gap: 8,
   },
   infoColumn: {
     flex: 1,
