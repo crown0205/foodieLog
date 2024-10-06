@@ -1,7 +1,7 @@
 import FeedHomeHeaderLeft from '@/components/feed/FeedHomeHeaderLeft';
 import { colors } from '@/constants';
 import { feedNavigations } from '@/constants/navigations';
-// import FeedDetailScreen from '@/screens/feed/FeedDetailScreen';
+import FeedDetailScreen from '@/screens/feed/FeedDetailScreen';
 import FeedHomeScreen from '@/screens/feed/FeedHomeScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
@@ -39,7 +39,7 @@ const FeedStackNavigator = () => {
           },
         })}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name={feedNavigations.FEED_DETAIL}
         component={FeedDetailScreen}
         options={{
@@ -48,7 +48,7 @@ const FeedStackNavigator = () => {
             backgroundColor: colors.WHITE,
           },
         }}
-      /> */}
+      />
     </Stack.Navigator>
   );
 };

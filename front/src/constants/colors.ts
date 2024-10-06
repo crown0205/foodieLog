@@ -3,7 +3,7 @@ const GREY_100 = '#f2f4f6';
 const INVERSE_GREY_50 = '#202027';
 const INVERSE_GREY_100 = '#2c2c35';
 
-export const colors = {
+const colors = {
   GREY_50: '#f9fafb',
   GREY_100,
   GREY_200: '#e5e8eb',
@@ -126,3 +126,13 @@ export const colors = {
   DARK_FLOAT_BACKGROUND: INVERSE_GREY_100,
   TRANSPARENT: 'rgba(255,255,255,0.01)',
 };
+
+const colorHex = {
+  RED: colors.RED_400,
+  BLUE: colors.BLUE_400,
+  YELLOW: colors.YELLOW_400,
+  GREEN: colors.GREEN_400,
+  PURPLE: colors.PURPLE_400,
+} as const;
+
+export { colorHex, colors };
