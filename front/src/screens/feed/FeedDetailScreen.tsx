@@ -21,6 +21,8 @@ type FeedDetailScreenProps = StackScreenProps<
   typeof feedNavigations.FEED_DETAIL
 >;
 
+// TODO : preview 이미지 클릭시 메인 사진 변경
+
 function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
   const { id } = route.params;
   const { data: post, isPending, isError } = useGetPost(id);
