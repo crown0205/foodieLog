@@ -9,9 +9,9 @@ function useMutateCreatePost(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
     mutationFn: createPost,
     onSuccess: newPost => {
-      // queryClient.invalidateQueries({
-      //   queryKey: [queryKeys.MARKER, queryKeys.GET_MARKERS],
-      // });
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.POST, queryKeys.GET_POSTS],
+      });
 
       // NOTE : 기존의 marker 데이터를 가져와서 새로운 marker 데이터를 추가 ( 불필요한 API 요청을 줄이기 위함 )
       queryClient.setQueryData<Marker[]>(
