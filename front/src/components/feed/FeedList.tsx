@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import FeedItem from './FeedItem';
 
+// TODO : 정렬 기능 추가
 function FeedList() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const {

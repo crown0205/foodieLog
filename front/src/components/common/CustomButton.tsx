@@ -1,18 +1,17 @@
 import React from 'react';
 import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  PressableProps,
   Dimensions,
+  Pressable,
+  PressableProps,
+  StyleSheet,
+  Text,
 } from 'react-native';
 import { colors } from '../../constants';
 
 interface CustomButtonProps extends PressableProps {
   label: string;
   variant?: 'filled' | 'outlined';
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large' | 'full';
   inValid?: boolean;
 }
 
@@ -74,6 +73,12 @@ const styles = StyleSheet.create({
   },
   large: {
     width: '100%',
+    paddingVertical: deviceHeight > 700 ? 15 : 12,
+    paddingHorizontal: 20,
+  },
+  full: {
+    width: '100%',
+    height: '100%',
     paddingVertical: deviceHeight > 700 ? 15 : 12,
     paddingHorizontal: 20,
   },
