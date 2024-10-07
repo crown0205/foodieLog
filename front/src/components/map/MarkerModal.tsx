@@ -47,6 +47,7 @@ function MarkerModal({ markerId, isVisible, hide }: MarkerModalProps) {
     navigation.navigate(mainNavigations.FEED, {
       screen: feedNavigations.FEED_DETAIL,
       params: { id: post.id },
+      initial: false,
     });
   };
 
