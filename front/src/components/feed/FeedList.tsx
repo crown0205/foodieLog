@@ -33,6 +33,7 @@ function FeedList() {
       numColumns={2}
       scrollIndicatorInsets={{ right: 1 }}
       contentContainerStyle={styles.contentContainer}
+      columnWrapperStyle={styles.column}
       refreshing={isRefreshing}
       onRefresh={handleRefresh}
       onEndReached={handleEndReached}
@@ -45,6 +46,11 @@ function FeedList() {
 const styles = StyleSheet.create({
   contentContainer: {
     padding: 10,
+  },
+  column: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 5,
+    gap: 10,
   },
 });
 

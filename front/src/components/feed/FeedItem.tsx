@@ -75,17 +75,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginVertical: 8,
-    alignItems: 'center',
+    maxWidth: Dimensions.get('screen').width / 2 - 20,
   },
   imageContainer: {
     width: Dimensions.get('screen').width / 2 - 20,
     height: Dimensions.get('screen').width / 2 - 20,
     backgroundColor: colors.GREY_200,
+    borderRadius: 10,
+    overflow: 'hidden',
   },
   image: {
     width: '100%',
     height: '100%',
-    borderRadius: 10,
   },
   emptyImageContainer: {
     justifyContent: 'center',
