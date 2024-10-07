@@ -77,7 +77,7 @@ const AddPostScreen = ({ route, navigation }: AddPostScreenProps) => {
       score,
       imageUrls: imagePicker.imageUrls,
       address,
-      date: new Date(),
+      date,
       ...location,
     };
 
