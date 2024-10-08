@@ -1,5 +1,5 @@
 import { colors } from '@/constants';
-import { PropsWithChildren, ReactNode } from 'react';
+import { PropsWithChildren, ReactNode, createContext, useContext } from 'react';
 import {
   GestureResponderEvent,
   Modal,
@@ -10,6 +10,12 @@ import {
   View,
 } from 'react-native';
 import { Pressable, PressableProps } from 'react-native';
+
+interface OptionContextValue {
+  onClickOutSide: (event: GestureResponderEvent) => void;
+}
+
+const OptionContext = createContext<OptionContextValue | undefined>(undefined);
 
 interface OptionMainProps extends ModalProps {
   children: ReactNode;
@@ -39,10 +45,22 @@ function OptionMain({
       onRequestClose={hideOption}
       {...props}
     >
-      <SafeAreaView style={styles.optionBackground} onTouchEnd={onClickOutSide}>
+      <OptionContext.Provider value={{ onClickOutSide }}>
         {children}
-      </SafeAreaView>
+      </OptionContext.Provider>
     </Modal>
+  );
+}
+
+function Background({ children }: PropsWithChildren) {
+  const optionContext = useContext(OptionContext);
+  return (
+    <SafeAreaView
+      style={styles.optionBackground}
+      onTouchEnd={optionContext?.onClickOutSide}
+    >
+      {children}
+    </SafeAreaView>
   );
 }
 
@@ -86,6 +104,7 @@ function Divider() {
 }
 
 export const CompoundOption = Object.assign(OptionMain, {
+  Background,
   Container,
   Title,
   Button,
