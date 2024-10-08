@@ -4,12 +4,13 @@ import {
   GestureResponderEvent,
   Modal,
   ModalProps,
+  Pressable,
+  PressableProps,
   SafeAreaView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import { Pressable, PressableProps } from 'react-native';
 
 interface OptionContextValue {
   onClickOutSide: (event: GestureResponderEvent) => void;
