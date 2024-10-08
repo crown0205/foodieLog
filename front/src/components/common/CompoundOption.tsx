@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   optionButton: {
     padding: 15,
-    height: 50,
+    height: 'auto',
     alignItems: 'center',
     justifyContent: 'center',
     // flexDirection: 'row',
@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '500',
     color: colors.BLUE_500,
+    paddingVertical: 2,
   },
   dangerText: {
     color: colors.RED_500,
