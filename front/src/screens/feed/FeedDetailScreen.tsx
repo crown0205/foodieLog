@@ -1,5 +1,6 @@
 import CustomButton from '@/components/common/CustomButton';
 import PreviewImageList from '@/components/common/PreviewImageList';
+import FeedDetailOption from '@/components/feed/FeedDetailOption';
 import {
   MapNavigations,
   colorHex,
@@ -8,6 +9,7 @@ import {
   mainNavigations,
 } from '@/constants';
 import useGetPost from '@/hooks/queries/useGetPost';
+import useModal from '@/hooks/useModal';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { FeedStackParamList } from '@/navigations/stack/FeedStackNavigator';
 import useLocationStore from '@/store/useLocationStore';
@@ -42,6 +44,7 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
   const { data: post, isPending, isError } = useGetPost(id);
   const insets = useSafeAreaInsets(); // NOTE : 상단바 높이
   const { setMoveLocation } = useLocationStore();
+  const detailOption = useModal();
 
   if (isPending || isError) {
     return <></>;
@@ -76,9 +79,10 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
 
             <View style={styles.headerTopBarContainer}>
               <Octicons
-                name="star-fill"
+                name="heart"
+                // name="heart-fill" // NOTE : 즐겨찾기 누른 경우
                 size={28}
-                color={colors.WHITE}
+                color={colors.GREY_100}
                 style={styles.topButtonShadow}
                 onPress={() => {}}
               />
@@ -87,7 +91,7 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
                 size={30}
                 color={colors.WHITE}
                 style={styles.topButtonShadow}
-                onPress={() => {}}
+                onPress={detailOption.show}
               />
             </View>
           </View>
@@ -175,6 +179,11 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
           />
         </Pressable>
       </View>
+
+      <FeedDetailOption
+        isVisible={detailOption.isVisible}
+        hideOption={detailOption.hide}
+      />
     </>
   );
 }

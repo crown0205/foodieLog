@@ -1,6 +1,7 @@
 import { colors } from '@/constants';
 import { PropsWithChildren, ReactNode } from 'react';
 import {
+  GestureResponderEvent,
   Modal,
   ModalProps,
   SafeAreaView,
@@ -24,6 +25,12 @@ function OptionMain({
   animationType = 'fade',
   ...props
 }: OptionMainProps) {
+  const onClickOutSide = (event: GestureResponderEvent) => {
+    if (event.target === event.currentTarget) {
+      hideOption();
+    }
+  };
+
   return (
     <Modal
       visible={isVisible}
@@ -32,7 +39,9 @@ function OptionMain({
       onRequestClose={hideOption}
       {...props}
     >
-      <SafeAreaView style={styles.optionBackground}>{children}</SafeAreaView>
+      <SafeAreaView style={styles.optionBackground} onTouchEnd={onClickOutSide}>
+        {children}
+      </SafeAreaView>
     </Modal>
   );
 }
