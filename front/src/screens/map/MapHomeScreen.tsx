@@ -7,6 +7,7 @@ import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
+import useLocationStore from '@/store/useLocationStore';
 import mapStyle from '@/style/mapStyle';
 
 import { DrawerNavigationProp } from '@react-navigation/drawer';
@@ -15,7 +16,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import MapView, {
   LatLng,
@@ -42,6 +43,7 @@ const MapHomeScreen = () => {
   const [selectLocation, setSelectLocation] = useState<LatLng | null>();
   const [markerId, setMarkerId] = useState<number | null>(null);
   const { data: markers = [] } = useGetMarkers();
+  const { moveLocation } = useLocationStore();
 
   usePermission('LOCATION');
 
@@ -87,6 +89,10 @@ const MapHomeScreen = () => {
 
     moveMapView(userLocation);
   };
+
+  useEffect(() => {
+    moveLocation && moveMapView(moveLocation);
+  }, [moveLocation]);
 
   return (
     <>

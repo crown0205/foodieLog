@@ -1,9 +1,19 @@
 import CustomButton from '@/components/common/CustomButton';
 import PreviewImageList from '@/components/common/PreviewImageList';
-import { colorHex, colors, feedNavigations } from '@/constants';
+import {
+  MapNavigations,
+  colorHex,
+  colors,
+  feedNavigations,
+  mainNavigations,
+} from '@/constants';
 import useGetPost from '@/hooks/queries/useGetPost';
+import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { FeedStackParamList } from '@/navigations/stack/FeedStackNavigator';
+import useLocationStore from '@/store/useLocationStore';
 import { deviceType, getDateLocaleFormat } from '@/utils';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import { CompositeScreenProps } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import {
   Dimensions,
@@ -19,9 +29,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
 
-type FeedDetailScreenProps = StackScreenProps<
-  FeedStackParamList,
-  typeof feedNavigations.FEED_DETAIL
+type FeedDetailScreenProps = CompositeScreenProps<
+  StackScreenProps<FeedStackParamList, typeof feedNavigations.FEED_DETAIL>,
+  DrawerScreenProps<MainDrawerParamList>
 >;
 
 // TODO : preview 이미지 클릭시 메인 사진 변경
@@ -30,10 +40,20 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
   const { id } = route.params;
   const { data: post, isPending, isError } = useGetPost(id);
   const insets = useSafeAreaInsets(); // NOTE : 상단바 높이
+  const { setMoveLocation } = useLocationStore();
 
   if (isPending || isError) {
     return <></>;
   }
+
+  const handlePressLocation = () => {
+    const { latitude, longitude } = post;
+
+    setMoveLocation({ latitude, longitude });
+    navigation.navigate(mainNavigations.HOME, {
+      screen: MapNavigations.MAP_HOME,
+    });
+  };
 
   return (
     <>
@@ -150,7 +170,7 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
             label="위치보기"
             size="full"
             variant="filled"
-            onPress={() => {}}
+            onPress={handlePressLocation}
           />
         </Pressable>
       </View>
