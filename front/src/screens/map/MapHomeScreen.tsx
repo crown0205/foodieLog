@@ -3,11 +3,11 @@ import MarkerModal from '@/components/map/MarkerModal';
 import { MapNavigations, alerts, colors } from '@/constants';
 import useGetMarkers from '@/hooks/queries/useGetMarkers';
 import useModal from '@/hooks/useModal';
+import useMoveMapView from '@/hooks/useMoveMapView';
 import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
-import useLocationStore from '@/store/useLocationStore';
 import mapStyle from '@/style/mapStyle';
 
 import { DrawerNavigationProp } from '@react-navigation/drawer';
@@ -16,7 +16,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import MapView, {
   LatLng,
@@ -36,27 +36,14 @@ type Navigation = CompositeNavigationProp<
 const MapHomeScreen = () => {
   const inset = useSafeAreaInsets(); // NOTE : 상단의 상태바 높이를 가져옴
   const navigation = useNavigation<Navigation>();
-  const mapRef = React.useRef<MapView | null>(null);
 
   const { userLocation, isUserLocationError } = useUserLocation();
   const markerModal = useModal();
   const [selectLocation, setSelectLocation] = useState<LatLng | null>();
   const [markerId, setMarkerId] = useState<number | null>(null);
   const { data: markers = [] } = useGetMarkers();
-  const { moveLocation } = useLocationStore();
-
+  const { mapRef, moveMapView } = useMoveMapView();
   usePermission('LOCATION');
-
-  const moveMapView = (coordinate: LatLng) => {
-    mapRef.current?.animateToRegion(
-      {
-        ...coordinate,
-        latitudeDelta: 0.0422,
-        longitudeDelta: 0.0421,
-      },
-      300,
-    );
-  };
 
   const handlePressMarker = (id: number, coordinate: LatLng) => {
     setMarkerId(id);
@@ -89,10 +76,6 @@ const MapHomeScreen = () => {
 
     moveMapView(userLocation);
   };
-
-  useEffect(() => {
-    moveLocation && moveMapView(moveLocation);
-  }, [moveLocation]);
 
   return (
     <>
