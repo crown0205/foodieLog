@@ -125,6 +125,7 @@ const colors = {
   FLOAT_BACKGROUND: WHITE,
   DARK_FLOAT_BACKGROUND: INVERSE_GREY_100,
   TRANSPARENT: 'rgba(255,255,255,0.01)',
+  MODAL_BACKGROUND: 'rgba(0, 0, 0, 0.5)',
 };
 
 const colorHex = {
