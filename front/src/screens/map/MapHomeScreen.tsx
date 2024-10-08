@@ -1,6 +1,6 @@
 import CustomMarker from '@/components/common/CustomMarker';
 import MarkerModal from '@/components/map/MarkerModal';
-import { MapNavigations, alerts, colors } from '@/constants';
+import { MapNavigations, alerts, colors, numbers } from '@/constants';
 import useGetMarkers from '@/hooks/queries/useGetMarkers';
 import useModal from '@/hooks/useModal';
 import useMoveMapView from '@/hooks/useMoveMapView';
@@ -91,8 +91,7 @@ const MapHomeScreen = () => {
         onRegionChangeComplete={handleChangeDelta}
         region={{
           ...userLocation,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          ...numbers.INITIAL_DELTA,
         }}
       >
         {markers.map(({ id, color, score, ...coordinate }) => (

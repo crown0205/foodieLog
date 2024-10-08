@@ -1,4 +1,4 @@
-import type { LatLng } from 'react-native-maps';
+import { LatLng } from 'react-native-maps';
 import { create } from 'zustand';
 
 interface LocationStore {
@@ -9,7 +9,7 @@ interface LocationStore {
 const useLocationStore = create<LocationStore>(set => ({
   moveLocation: null,
   setMoveLocation: (moveLocation: LatLng) => {
-    set(state => ({ ...state, moveLocation }));
+    set({ moveLocation });
   },
 }));
 

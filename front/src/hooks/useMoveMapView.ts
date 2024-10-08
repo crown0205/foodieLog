@@ -1,4 +1,4 @@
-import { numbers } from '@/constants/number';
+import { numbers } from '@/constants';
 import useLocationStore from '@/store/useLocationStore';
 import { useEffect, useRef, useState } from 'react';
 import MapView, { LatLng, Region } from 'react-native-maps';
@@ -22,7 +22,6 @@ function useMoveMapView() {
 
   const handleChangeDelta = (region: Region) => {
     const { latitudeDelta, longitudeDelta } = region;
-    console.log({ latitudeDelta, longitudeDelta });
     setRegionDelta({ latitudeDelta, longitudeDelta });
   };
 

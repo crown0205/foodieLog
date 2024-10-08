@@ -35,6 +35,7 @@ type FeedDetailScreenProps = CompositeScreenProps<
 >;
 
 // TODO : preview 이미지 클릭시 메인 사진 변경
+// TODO : 위치보기 버튼 클릭시 zoom level 조정
 
 function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
   const { id } = route.params;
@@ -58,7 +59,7 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
   return (
     <>
       <ScrollView style={styles.container} scrollIndicatorInsets={{ right: 1 }}>
-        <SafeAreaView style={styles.header}>
+        <SafeAreaView style={styles.headerContainer}>
           <View
             style={[
               styles.headerButtonContainer,
@@ -69,7 +70,7 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
               name="arrow-left"
               size={30}
               color={colors.WHITE}
-              style={styles.topButton}
+              style={styles.topButtonShadow}
               onPress={() => navigation.goBack()}
             />
 
@@ -78,14 +79,14 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
                 name="star-fill"
                 size={28}
                 color={colors.WHITE}
-                style={styles.topButton}
+                style={styles.topButtonShadow}
                 onPress={() => {}}
               />
               <Ionicons
                 name="ellipsis-vertical"
                 size={30}
                 color={colors.WHITE}
-                style={styles.topButton}
+                style={styles.topButtonShadow}
                 onPress={() => {}}
               />
             </View>
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
   container: {
     position: 'relative',
   },
-  header: {
+  headerContainer: {
     position: 'absolute',
     width: '100%',
     zIndex: 1,
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 15,
   },
-  topButton: {
+  topButtonShadow: {
     shadowColor: colors.BLACK,
     shadowOffset: {
       width: 1,
