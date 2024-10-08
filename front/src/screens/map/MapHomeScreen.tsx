@@ -42,7 +42,7 @@ const MapHomeScreen = () => {
   const [selectLocation, setSelectLocation] = useState<LatLng | null>();
   const [markerId, setMarkerId] = useState<number | null>(null);
   const { data: markers = [] } = useGetMarkers();
-  const { mapRef, moveMapView } = useMoveMapView();
+  const { mapRef, moveMapView, handleChangeDelta } = useMoveMapView();
   usePermission('LOCATION');
 
   const handlePressMarker = (id: number, coordinate: LatLng) => {
@@ -88,6 +88,7 @@ const MapHomeScreen = () => {
         showsMyLocationButton={false} // NOTE : 내 위치 버튼
         customMapStyle={mapStyle}
         onLongPress={handleLongPressMapView}
+        onRegionChangeComplete={handleChangeDelta}
         region={{
           ...userLocation,
           latitudeDelta: 0.0922,

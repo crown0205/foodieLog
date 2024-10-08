@@ -20,11 +20,17 @@ function useMoveMapView() {
     );
   };
 
+  const handleChangeDelta = (region: Region) => {
+    const { latitudeDelta, longitudeDelta } = region;
+    console.log({ latitudeDelta, longitudeDelta });
+    setRegionDelta({ latitudeDelta, longitudeDelta });
+  };
+
   useEffect(() => {
     moveLocation && moveMapView(moveLocation);
   }, [moveLocation]);
 
-  return { mapRef, moveMapView };
+  return { mapRef, moveMapView, handleChangeDelta };
 }
 
 export default useMoveMapView;
