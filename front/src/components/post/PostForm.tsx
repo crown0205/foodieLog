@@ -30,6 +30,7 @@ import DatePickerOption from './DatePickerOption';
 import ImageInput from './ImageInput';
 import MarkerSelector from './MarkerSelector';
 import ScoreInputSlider from './ScoreInputSlider';
+import useDetailPostStore from '@/store/useDetailPostStore';
 
 interface PostFormProps {
   isEdit?: boolean;
@@ -40,19 +41,30 @@ const PostForm = ({ isEdit = false, location }: PostFormProps) => {
   const navigation = useNavigation<StackNavigationProp<FeedStackParamList>>();
   const descriptionRef = useRef<TextInput | null>(null);
   const createPost = useMutateCreatePost();
+  const { detailPost } = useDetailPostStore();
+  const isEditMode = isEdit && detailPost;
   const address = useGetAddress(location);
   const addPost = useForm({
-    initialValues: { title: '', description: '' },
+    initialValues: {
+      title: isEditMode ? detailPost.title : '',
+      description: isEditMode ? detailPost.description : '',
+    },
     validate: validateAddPost,
   });
-  const [markerColor, setMarkerColor] = useState<MarkerColor>('RED');
-  const [score, serScore] = useState<number>(4);
+  const [markerColor, setMarkerColor] = useState<MarkerColor>(
+    isEditMode ? detailPost.color : 'RED',
+  );
+  const [score, serScore] = useState<number>(isEditMode ? detailPost.score : 4);
 
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(
+    isEditMode ? new Date(String(detailPost.date)) : new Date(),
+  );
   const datePickerModal = useModal();
   const [isDatePicked, setIsDatePicked] = useState<boolean>(false);
 
-  const imagePicker = useImagePicker({ initialImages: [] });
+  const imagePicker = useImagePicker({
+    initialImages: isEditMode ? detailPost.images : [],
+  });
   usePermission('PHOTO');
 
   const handleDateChange = (pickedDate: Date) => {
@@ -115,7 +127,9 @@ const PostForm = ({ isEdit = false, location }: PostFormProps) => {
             size="large"
             variant="outlined"
             label={
-              isDatePicked ? `${getDateWithSeparator(date, '. ')}` : '날짜 선택'
+              isDatePicked || isEditMode
+                ? `${getDateWithSeparator(date, '. ')}`
+                : '날짜 선택'
             }
             onPress={datePickerModal.show}
           />

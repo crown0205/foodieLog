@@ -1,6 +1,8 @@
+import HeaderButton from '@/components/common/HeaderButton';
 import FeedHomeHeaderLeft from '@/components/feed/FeedHomeHeaderLeft';
 import { colors } from '@/constants';
 import { feedNavigations } from '@/constants/navigations';
+import EditPostScreen from '@/screens/feed/EditPostScreen';
 import FeedDetailScreen from '@/screens/feed/FeedDetailScreen';
 import FeedHomeScreen from '@/screens/feed/FeedHomeScreen';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -50,6 +52,14 @@ const FeedStackNavigator = () => {
             backgroundColor: colors.WHITE,
           },
         }}
+      />
+      <Stack.Screen
+        name={feedNavigations.EDIT_POST}
+        component={EditPostScreen}
+        options={({ navigation }) => ({
+          headerTitle: '장소 수정',
+          headerLeftLabelVisible: false,
+        })}
       />
     </Stack.Navigator>
   );
