@@ -12,11 +12,13 @@ import useGetPost from '@/hooks/queries/useGetPost';
 import useModal from '@/hooks/useModal';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { FeedStackParamList } from '@/navigations/stack/FeedStackNavigator';
+import useDetailPostStore from '@/store/useDetailPostStore';
 import useLocationStore from '@/store/useLocationStore';
 import { deviceType, getDateLocaleFormat } from '@/utils';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
+import { useEffect } from 'react';
 import {
   Dimensions,
   Image,
@@ -44,7 +46,12 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
   const { data: post, isPending, isError } = useGetPost(id);
   const insets = useSafeAreaInsets(); // NOTE : 상단바 높이
   const { setMoveLocation } = useLocationStore();
+  const { setDetailPost } = useDetailPostStore();
   const detailOption = useModal();
+
+  useEffect(() => {
+    post && setDetailPost(post);
+  }, [post, setDetailPost]);
 
   if (isPending || isError) {
     return <></>;
