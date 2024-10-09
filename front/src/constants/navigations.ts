@@ -18,6 +18,7 @@ const MapNavigations = {
 const feedNavigations = {
   FEED_HOME: 'FeedHome',
   FEED_DETAIL: 'FeedDetail',
+  EDIT_POST: 'EditPost',
 } as const;
 
 export { authNavigations, MapNavigations, mainNavigations, feedNavigations };

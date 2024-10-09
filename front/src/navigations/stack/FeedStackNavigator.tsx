@@ -5,10 +5,12 @@ import FeedDetailScreen from '@/screens/feed/FeedDetailScreen';
 import FeedHomeScreen from '@/screens/feed/FeedHomeScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
+import { LatLng } from 'react-native-maps';
 
 export type FeedStackParamList = {
   [feedNavigations.FEED_HOME]: undefined;
   [feedNavigations.FEED_DETAIL]: { id: number };
+  [feedNavigations.EDIT_POST]: { location: LatLng };
 };
 
 const Stack = createStackNavigator<FeedStackParamList>();
