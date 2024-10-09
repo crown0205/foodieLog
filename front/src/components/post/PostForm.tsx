@@ -31,6 +31,7 @@ import ImageInput from './ImageInput';
 import MarkerSelector from './MarkerSelector';
 import ScoreInputSlider from './ScoreInputSlider';
 import useDetailPostStore from '@/store/useDetailPostStore';
+import useMutateUpdatePost from '@/hooks/queries/useMutateUpdatePost';
 
 interface PostFormProps {
   isEdit?: boolean;
@@ -41,6 +42,7 @@ const PostForm = ({ isEdit = false, location }: PostFormProps) => {
   const navigation = useNavigation<StackNavigationProp<FeedStackParamList>>();
   const descriptionRef = useRef<TextInput | null>(null);
   const createPost = useMutateCreatePost();
+  const updatePost = useMutateUpdatePost();
   const { detailPost } = useDetailPostStore();
   const isEditMode = isEdit && detailPost;
   const address = useGetAddress(location);
@@ -95,6 +97,21 @@ const PostForm = ({ isEdit = false, location }: PostFormProps) => {
       date,
       ...location,
     };
+
+    if (isEditMode) {
+      updatePost.mutate(
+        {
+          id: detailPost.id,
+          body,
+        },
+        {
+          onSuccess: () => navigation.goBack(),
+          onError: error =>
+            console.log('UPDATE_POST', error.response?.data.message),
+        },
+      );
+      return;
+    }
 
     createPost.mutate(body, {
       onSuccess: () => navigation.goBack(),
