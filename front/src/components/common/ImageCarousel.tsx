@@ -2,11 +2,13 @@ import { colors } from '@/constants';
 import { ImageUrl } from '@/types/domain';
 import { deviceType } from '@/utils';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dimensions,
   FlatList,
   Image,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   Pressable,
   StyleSheet,
   View,
@@ -24,9 +26,15 @@ const deviceWidth = Dimensions.get('window').width;
 const ImageCarousel = ({ images, pressedIndex = 0 }: ImageCarouselProps) => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
-  const [initialIndex, setInitialIndex] = React.useState(pressedIndex);
+  const [currentPage, setPage] = useState(pressedIndex);
+  const [initialIndex, setInitialIndex] = useState(pressedIndex);
 
-  console.log({ deviceWidth });
+  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const newPage = Math.round(e.nativeEvent.contentOffset.x / deviceWidth);
+
+    setPage(newPage);
+  };
+
   return (
     <View style={styles.container}>
       <Pressable
@@ -38,20 +46,6 @@ const ImageCarousel = ({ images, pressedIndex = 0 }: ImageCarouselProps) => {
 
       <FlatList
         data={images}
-        keyExtractor={item => String(item.id)}
-        horizontal
-        pagingEnabled
-        decelerationRate="fast"
-        showsHorizontalScrollIndicator={false}
-        initialScrollIndex={pressedIndex}
-        onScrollToIndexFailed={() => {
-          setInitialIndex(0);
-        }}
-        getItemLayout={(_, index) => ({
-          length: deviceWidth,
-          offset: deviceWidth * index,
-          index,
-        })}
         renderItem={({ item }) => {
           return (
             <View style={styles.imageContainer}>
@@ -69,7 +63,34 @@ const ImageCarousel = ({ images, pressedIndex = 0 }: ImageCarouselProps) => {
             </View>
           );
         }}
+        keyExtractor={item => String(item.id)}
+        horizontal
+        pagingEnabled
+        decelerationRate="fast"
+        showsHorizontalScrollIndicator={false}
+        initialScrollIndex={pressedIndex}
+        onScroll={handleScroll}
+        onScrollToIndexFailed={() => {
+          setInitialIndex(0);
+        }}
+        getItemLayout={(_, index) => ({
+          length: deviceWidth,
+          offset: deviceWidth * index,
+          index,
+        })}
       />
+
+      <View style={[styles.pageContainer, { bottom: insets.bottom + 10 }]}>
+        {Array.from({ length: images.length }, (_, index) => (
+          <View
+            key={index}
+            style={[
+              styles.pageDot,
+              index === currentPage && styles.currentPageDot,
+            ]}
+          />
+        ))}
+      </View>
     </View>
   );
 };
@@ -95,6 +116,22 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
+  },
+  pageContainer: {
+    position: 'absolute',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  pageDot: {
+    width: 8,
+    height: 8,
+    backgroundColor: colors.GREY_300,
+    margin: 4,
+    borderRadius: 4,
+  },
+  currentPageDot: {
+    backgroundColor: colors.BLACK,
   },
 });
 
