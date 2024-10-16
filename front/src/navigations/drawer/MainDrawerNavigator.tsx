@@ -12,6 +12,7 @@ import MapStackNavigator, {
   MapStackParamList,
 } from '../stack/MapStackNavigator';
 import CustomDrawerContent from './CustomDrawerContent';
+import FeedTabNavigator from '../tab/FeedTabNavigator';
 
 export type MainDrawerParamList = {
   [mainNavigations.HOME]: NavigatorScreenParams<MapStackParamList>;
@@ -80,7 +81,7 @@ const MainDrawerNavigator = () => {
       />
       <Drawer.Screen
         name={mainNavigations.FEED}
-        component={FeedStackNavigator}
+        component={FeedTabNavigator}
         options={{ title: '피드' }}
       />
       <Drawer.Screen
