@@ -1,10 +1,10 @@
-import HeaderButton from '@/components/common/HeaderButton';
 import FeedHomeHeaderLeft from '@/components/feed/FeedHomeHeaderLeft';
 import { colors } from '@/constants';
 import { feedNavigations } from '@/constants/navigations';
 import EditPostScreen from '@/screens/feed/EditPostScreen';
 import FeedDetailScreen from '@/screens/feed/FeedDetailScreen';
 import FeedHomeScreen from '@/screens/feed/FeedHomeScreen';
+import ImagesZoomScreen from '@/screens/feed/ImagesZoomScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { LatLng } from 'react-native-maps';
@@ -13,6 +13,7 @@ export type FeedStackParamList = {
   [feedNavigations.FEED_HOME]: undefined;
   [feedNavigations.FEED_DETAIL]: { id: number };
   [feedNavigations.EDIT_POST]: { location: LatLng };
+  [feedNavigations.IMAGE_ZOOM]: { index: number };
 };
 
 const Stack = createStackNavigator<FeedStackParamList>();
@@ -56,10 +57,17 @@ const FeedStackNavigator = () => {
       <Stack.Screen
         name={feedNavigations.EDIT_POST}
         component={EditPostScreen}
-        options={({ navigation }) => ({
+        options={{
           headerTitle: '장소 수정',
           headerLeftLabelVisible: false,
-        })}
+        }}
+      />
+      <Stack.Screen
+        name={feedNavigations.IMAGE_ZOOM}
+        component={ImagesZoomScreen}
+        options={{
+          headerShown: false,
+        }}
       />
     </Stack.Navigator>
   );
