@@ -9,6 +9,7 @@ import {
   mainNavigations,
 } from '@/constants';
 import useGetPost from '@/hooks/queries/useGetPost';
+import useMutateFavoritePost from '@/hooks/queries/useMutateFavoritePost';
 import useModal from '@/hooks/useModal';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { FeedStackParamList } from '@/navigations/stack/FeedStackNavigator';
@@ -44,6 +45,7 @@ type FeedDetailScreenProps = CompositeScreenProps<
 function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
   const { id } = route.params;
   const { data: post, isPending, isError } = useGetPost(id);
+  const favoriteMutation = useMutateFavoritePost();
   const insets = useSafeAreaInsets(); // NOTE : 상단바 높이
   const { setMoveLocation } = useLocationStore();
   const { setDetailPost } = useDetailPostStore();
@@ -66,6 +68,10 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
     });
   };
 
+  const handlePressFavorite = () => {
+    favoriteMutation.mutate(post.id);
+  };
+
   return (
     <>
       <ScrollView style={styles.container} scrollIndicatorInsets={{ right: 1 }}>
@@ -86,12 +92,11 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
 
             <View style={styles.headerTopBarContainer}>
               <Octicons
-                name="heart"
-                // name="heart-fill" // NOTE : 즐겨찾기 누른 경우
+                name={post.isFavorite ? 'heart-fill' : 'heart'}
                 size={28}
-                color={colors.GREY_100}
+                color={post.isFavorite ? colors.RED_500 : colors.GREY_100}
                 style={styles.topButtonShadow}
-                onPress={() => {}}
+                onPress={handlePressFavorite}
               />
               <Ionicons
                 name="ellipsis-vertical"
