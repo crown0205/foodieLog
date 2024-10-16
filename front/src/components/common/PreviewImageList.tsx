@@ -1,6 +1,8 @@
-import { colors } from '@/constants';
+import { colors, feedNavigations } from '@/constants';
+import { FeedStackParamList } from '@/navigations/stack/FeedStackNavigator';
 import { ImageUrl } from '@/types/domain';
 import { deviceType } from '@/utils';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -8,6 +10,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 interface PreviewImageListProps {
   imageUrls: ImageUrl[];
   showOption?: boolean;
+  zoomEnable?: boolean;
   onDelete?: (url: string) => void;
   onChangeOrder?: (startIndex: number, endIndex: number) => void;
 }
@@ -15,16 +18,26 @@ interface PreviewImageListProps {
 function PreviewImageList({
   imageUrls,
   showOption = false,
+  zoomEnable,
   onDelete,
   onChangeOrder,
 }: PreviewImageListProps) {
+  const navigation = useNavigation<NavigationProp<FeedStackParamList>>();
   const [isChangeOrder, setChangeOrder] = useState(false);
+
+  const handlePressImage = (index: number) => {
+    if (zoomEnable) {
+      navigation.navigate(feedNavigations.IMAGE_ZOOM, { index });
+    } else {
+      setChangeOrder(!isChangeOrder);
+    }
+  };
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={true}>
       <View style={styles.container}>
         {imageUrls.map(({ url }, index) => (
           <View key={url} style={styles.imageContainer}>
-            <Pressable onPress={() => setChangeOrder(!isChangeOrder)}>
+            <Pressable onPress={() => handlePressImage(index)}>
               <Image
                 key={index}
                 style={styles.image}

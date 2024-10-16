@@ -170,9 +170,9 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
         </View>
 
         {post.images.length > 0 && (
-          <View style={styles.imagePreviewContainer}>
-            <PreviewImageList imageUrls={post.images} />
-          </View>
+          <Pressable style={styles.imagePreviewContainer} onPress={() => {}}>
+            <PreviewImageList imageUrls={post.images} zoomEnable />
+          </Pressable>
         )}
       </ScrollView>
 
