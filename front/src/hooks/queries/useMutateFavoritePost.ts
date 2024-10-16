@@ -11,17 +11,6 @@ function useMutateFavoritePost(mutationOptions?: UseMutationCustomOptions) {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.POST, queryKeys.GET_POST, updateId],
       });
-
-      // const existingPost = queryClient.getQueryData<ResponseSinglePost>([
-      //   queryKeys.POST,
-      //   queryKeys.GET_POST,
-      //   updateId,
-      // ]) as ResponseSinglePost;
-
-      // queryClient.setQueryData([queryKeys.POST, queryKeys.GET_POST, updateId], {
-      //   ...existingPost,
-      //   isFavorite: !existingPost.isFavorite,
-      // });
     },
     ...mutationOptions,
   });

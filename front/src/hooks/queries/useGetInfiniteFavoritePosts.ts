@@ -8,7 +8,7 @@ import {
   useInfiniteQuery,
 } from '@tanstack/react-query';
 
-function useGetInfiniteFavoritePost(
+function useGetInfiniteFavoritePosts(
   queryOptions?: UseInfiniteQueryOptions<
     ResponsePost[],
     ResponseError,
@@ -34,4 +34,4 @@ function useGetInfiniteFavoritePost(
   });
 }
 
-export default useGetInfiniteFavoritePost;
+export default useGetInfiniteFavoritePosts;
