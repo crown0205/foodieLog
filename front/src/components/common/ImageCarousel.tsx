@@ -68,7 +68,7 @@ const ImageCarousel = ({ images, pressedIndex = 0 }: ImageCarouselProps) => {
         pagingEnabled
         decelerationRate="fast"
         showsHorizontalScrollIndicator={false}
-        initialScrollIndex={pressedIndex}
+        initialScrollIndex={initialIndex}
         onScroll={handleScroll}
         onScrollToIndexFailed={() => {
           setInitialIndex(0);
