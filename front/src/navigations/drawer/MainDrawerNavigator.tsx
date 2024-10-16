@@ -5,18 +5,15 @@ import { NavigatorScreenParams, RouteProp } from '@react-navigation/native';
 import React from 'react';
 import { Dimensions } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import FeedStackNavigator, {
-  FeedStackParamList,
-} from '../stack/FeedStackNavigator';
 import MapStackNavigator, {
   MapStackParamList,
 } from '../stack/MapStackNavigator';
+import FeedTabNavigator, { FeedTabParamList } from '../tab/FeedTabNavigator';
 import CustomDrawerContent from './CustomDrawerContent';
-import FeedTabNavigator from '../tab/FeedTabNavigator';
 
 export type MainDrawerParamList = {
   [mainNavigations.HOME]: NavigatorScreenParams<MapStackParamList>;
-  [mainNavigations.FEED]: NavigatorScreenParams<FeedStackParamList>;
+  [mainNavigations.FEED]: NavigatorScreenParams<FeedTabParamList>;
   [mainNavigations.CALENDAR]: undefined;
 };
 
