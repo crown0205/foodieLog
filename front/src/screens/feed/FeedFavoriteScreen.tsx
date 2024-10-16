@@ -1,11 +1,12 @@
+import FeedFavoriteList from '@/components/feed/FeedFavoriteList';
 import { colors } from '@/constants';
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
 
 const FeedFavoriteScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Text>FeedFavoriteScreen</Text>
+      <FeedFavoriteList />
     </SafeAreaView>
   );
 };

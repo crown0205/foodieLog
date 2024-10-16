@@ -1,4 +1,6 @@
+import FeedHomeHeaderLeft from '@/components/feed/FeedHomeHeaderLeft';
 import { colors, feedNavigations, feedTabNavigations } from '@/constants';
+import FeedFavoriteScreen from '@/screens/feed/FeedFavoriteScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   RouteProp,
@@ -7,8 +9,6 @@ import {
 import { StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeedStackNavigator from '../stack/FeedStackNavigator';
-import FeedFavoriteScreen from '@/screens/feed/FeedFavoriteScreen';
-import FeedHomeHeaderLeft from '@/components/feed/FeedHomeHeaderLeft';
 
 export type FeedTabParamList = {
   [feedTabNavigations.FEED_HOME]: {
@@ -48,17 +48,18 @@ function FeedTabNavigator() {
       screenOptions={({ route }) => ({
         headerStyle: {
           backgroundColor: colors.WHITE,
-          shadowColor: colors.GREY_200,
+          shadowColor: colors.GREY_400,
         },
         headerTitleStyle: {
-          fontSize: 16,
+          fontSize: 15,
         },
         headerTintColor: colors.BLACK,
+
         tabBarShowLabel: false,
         tabBarActiveTintColor: colors.BLUE_500,
         tabBarStyle: {
           backgroundColor: colors.WHITE,
-          borderTopColor: colors.GREY_300,
+          borderTopColor: colors.GREY_200,
           borderTopWidth: 1,
         },
         tabBarIcon: ({ focused }) => TabBarIcons(route, focused),
@@ -96,6 +97,12 @@ function FeedTabNavigator() {
         options={({ navigation }) => ({
           headerTitle: '즐겨찾기',
           headerLeft: () => FeedHomeHeaderLeft(navigation),
+          headerStyle: {
+            backgroundColor: colors.WHITE,
+            borderColor: colors.GREY_100,
+            borderWidth: 1,
+            height: 110,
+          },
         })}
       />
     </Tab.Navigator>
