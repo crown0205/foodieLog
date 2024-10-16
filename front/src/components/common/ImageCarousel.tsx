@@ -66,7 +66,6 @@ const ImageCarousel = ({ images, pressedIndex = 0 }: ImageCarouselProps) => {
         keyExtractor={item => String(item.id)}
         horizontal
         pagingEnabled
-        decelerationRate="fast"
         showsHorizontalScrollIndicator={false}
         initialScrollIndex={initialIndex}
         onScroll={handleScroll}
@@ -120,7 +119,6 @@ const styles = StyleSheet.create({
   pageContainer: {
     position: 'absolute',
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
   },
   pageDot: {

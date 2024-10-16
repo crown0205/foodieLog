@@ -51,7 +51,7 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
 
   useEffect(() => {
     post && setDetailPost(post);
-  }, [post, setDetailPost]);
+  }, [post]);
 
   if (isPending || isError) {
     return <></>;
