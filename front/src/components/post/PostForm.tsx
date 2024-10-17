@@ -107,7 +107,7 @@ const PostForm = ({ isEdit = false, location }: PostFormProps) => {
         {
           onSuccess: () => navigation.goBack(),
           onError: error =>
-            console.log('UPDATE_POST', error.response?.data.message),
+            console.error('UPDATE_POST', error.response?.data.message),
         },
       );
       return;
@@ -116,7 +116,7 @@ const PostForm = ({ isEdit = false, location }: PostFormProps) => {
     createPost.mutate(body, {
       onSuccess: () => navigation.goBack(),
       onError: error =>
-        console.log('CREATE_POST', error.response?.data.message),
+        console.error('CREATE_POST', error.response?.data.message),
     });
   };
 

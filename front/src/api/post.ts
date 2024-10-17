@@ -59,6 +59,17 @@ const updateFavoritePost = async (id: number): Promise<number> => {
   return data;
 };
 
+const getSearchPosts = async (
+  page = 1,
+  query: string,
+): Promise<ResponsePost[]> => {
+  const { data } = await axiosInstance.get(
+    `/posts/search?query=${query}&page=${page}`,
+  );
+
+  return data;
+};
+
 export {
   createPost,
   deletePost,
@@ -67,6 +78,7 @@ export {
   updatePost,
   getFavoritePosts,
   updateFavoritePost,
+  getSearchPosts,
 };
 export type {
   RequestCreatePost,

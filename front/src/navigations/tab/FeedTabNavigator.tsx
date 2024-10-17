@@ -9,6 +9,7 @@ import {
 import { StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeedStackNavigator from '../stack/FeedStackNavigator';
+import FeedSearchScreen from '@/screens/feed/FeedSearchScreen';
 
 export type FeedTabParamList = {
   [feedTabNavigations.FEED_HOME]: {
@@ -17,6 +18,7 @@ export type FeedTabParamList = {
     initial: boolean;
   };
   [feedTabNavigations.FEED_FAVORITE]: undefined;
+  [feedTabNavigations.FEED_SEARCH]: undefined;
 };
 
 const Tab = createBottomTabNavigator<FeedTabParamList>();
@@ -30,6 +32,9 @@ function TabBarIcons(route: RouteProp<FeedTabParamList>, focused: boolean) {
       break;
     case feedTabNavigations.FEED_FAVORITE:
       iconName = focused ? 'star' : 'star-outline';
+      break;
+    case feedTabNavigations.FEED_SEARCH:
+      iconName = focused ? 'search' : 'search-outline';
       break;
   }
 
@@ -103,6 +108,15 @@ function FeedTabNavigator() {
             borderWidth: 1,
             height: 110,
           },
+        })}
+      />
+      <Tab.Screen
+        name={feedTabNavigations.FEED_SEARCH}
+        component={FeedSearchScreen}
+        options={({ navigation }) => ({
+          headerTitle: '검색',
+          headerShown: false,
+          headerLeft: () => FeedHomeHeaderLeft(navigation),
         })}
       />
     </Tab.Navigator>
