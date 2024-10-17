@@ -1,7 +1,10 @@
 import useGetInfiniteFavoritePosts from '@/hooks/queries/useGetInfiniteFavoritePosts';
 import { useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import FeedItem from './FeedItem';
+import { deviceType } from '@/utils';
+
+const deviceWidth = Dimensions.get('window').width;
 
 function FeedFavoriteList() {
   const {
@@ -39,6 +42,18 @@ function FeedFavoriteList() {
       onRefresh={handleRefresh}
       scrollIndicatorInsets={{ right: 1 }}
       indicatorStyle="black"
+      ListEmptyComponent={
+        <View
+          style={{
+            height: deviceWidth,
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Text style={{ fontSize: 16 }}>즐겨찾기한 피드가 없습니다.</Text>
+        </View>
+      }
     />
   );
 }
