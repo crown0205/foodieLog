@@ -3,13 +3,14 @@ import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 
 interface DateBoxProps {
   date: number;
+  isToday: boolean;
   selectedDate: number;
   onPressDate: (date: number) => void;
 }
 
 const deviceWidth = Dimensions.get('window').width;
 
-function DateBox({ date, selectedDate, onPressDate }: DateBoxProps) {
+function DateBox({ date, isToday, selectedDate, onPressDate }: DateBoxProps) {
   return (
     <Pressable style={styles.container} onPress={() => onPressDate(date)}>
       {date > 0 && (
@@ -17,13 +18,17 @@ function DateBox({ date, selectedDate, onPressDate }: DateBoxProps) {
           <View
             style={[
               styles.dateContainer,
+              isToday && styles.todayContainer,
               selectedDate === date && styles.selectedContainer,
+              selectedDate === date && isToday && styles.selectedTodayContainer,
             ]}
           >
             <Text
               style={[
                 styles.dateText,
+                isToday && styles.todayText,
                 selectedDate === date && styles.selectedDateText,
+                selectedDate === date && isToday && styles.selectedTodayText,
               ]}
             >
               {date}
@@ -52,15 +57,29 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     backgroundColor: colors.WHITE,
   },
-  selectedContainer: {
-    backgroundColor: colors.BLUE_500,
-  },
   dateText: {
     fontSize: 17,
     color: colors.BLACK,
   },
+  selectedContainer: {
+    backgroundColor: colors.BLUE_500,
+  },
   selectedDateText: {
     color: colors.WHITE,
+    fontWeight: 'bold',
+  },
+  selectedTodayContainer: {
+    backgroundColor: colors.BLUE_500,
+  },
+  selectedTodayText: {
+    color: colors.WHITE,
+    fontWeight: 'bold',
+  },
+  todayContainer: {
+    backgroundColor: colors.BLUE_100,
+  },
+  todayText: {
+    color: colors.BLUE_500,
     fontWeight: 'bold',
   },
 });

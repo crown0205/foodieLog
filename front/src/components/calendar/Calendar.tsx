@@ -5,7 +5,7 @@ import { View, Text } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import DayOfWeeks from './DayOfWeeks';
-import { MonthYear } from '@/utils';
+import { MonthYear, isSameAsCurrentDate } from '@/utils';
 import DateBox from './DateBox';
 
 interface CalendarProps {
@@ -55,6 +55,7 @@ const Calendar = ({
           renderItem={({ item }) => (
             <DateBox
               date={item.date}
+              isToday={isSameAsCurrentDate(year, month, item.date)}
               selectedDate={selectedDate}
               onPressDate={onPressDate}
             />
