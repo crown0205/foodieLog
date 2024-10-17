@@ -1,3 +1,4 @@
+import FeedHomeHeaderLeft from '@/components/feed/FeedHomeHeaderLeft';
 import { colors, mainNavigations } from '@/constants';
 import CalendarHomeScreen from '@/screens/calender/CalendarHomeScreen';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -10,7 +11,6 @@ import MapStackNavigator, {
 } from '../stack/MapStackNavigator';
 import FeedTabNavigator, { FeedTabParamList } from '../tab/FeedTabNavigator';
 import CustomDrawerContent from './CustomDrawerContent';
-import FeedHomeHeaderLeft from '@/components/feed/FeedHomeHeaderLeft';
 
 export type MainDrawerParamList = {
   [mainNavigations.HOME]: NavigatorScreenParams<MapStackParamList>;

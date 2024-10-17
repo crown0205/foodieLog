@@ -1,24 +1,35 @@
 import { colors } from '@/constants';
 import React from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { FlatList, Pressable, StyleSheet } from 'react-native';
 import { View, Text } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import DayOfWeeks from './DayOfWeeks';
 import { MonthYear } from '@/utils';
+import DateBox from './DateBox';
 
 interface CalendarProps {
   monthYear: MonthYear;
+  selectedDate: number;
+  onPressDate: (date: number) => void;
   onChangeMonth: (increment: number) => void;
 }
 
-const Calendar = ({ monthYear, onChangeMonth }: CalendarProps) => {
+const Calendar = ({
+  monthYear,
+  selectedDate,
+  onChangeMonth,
+  onPressDate,
+}: CalendarProps) => {
   const { firstDOW, lastDate, month, year } = monthYear;
 
   return (
     <>
       <View style={styles.headerContainer}>
-        <Pressable style={styles.monthButtonContainer} onPress={() => {}}>
+        <Pressable
+          style={styles.monthButtonContainer}
+          onPress={() => onChangeMonth(-1)}
+        >
           <Ionicons name="arrow-back" size={25} color={colors.BLACK} />
         </Pressable>
         <Pressable style={styles.monthYearContainer}>
@@ -26,12 +37,32 @@ const Calendar = ({ monthYear, onChangeMonth }: CalendarProps) => {
             {year}년 {month}월
           </Text>
         </Pressable>
-        <Pressable style={styles.monthButtonContainer}>
+        <Pressable
+          style={styles.monthButtonContainer}
+          onPress={() => onChangeMonth(+1)}
+        >
           <Ionicons name="arrow-forward" size={25} color={colors.BLACK} />
         </Pressable>
       </View>
 
       <DayOfWeeks />
+      <View style={styles.bodyContainer}>
+        <FlatList
+          data={Array.from({ length: lastDate + firstDOW }, (_, i) => ({
+            id: i,
+            date: i - firstDOW + 1,
+          }))}
+          renderItem={({ item }) => (
+            <DateBox
+              date={item.date}
+              selectedDate={selectedDate}
+              onPressDate={onPressDate}
+            />
+          )}
+          keyExtractor={item => String(item.id)}
+          numColumns={7}
+        />
+      </View>
     </>
   );
 };
@@ -56,6 +87,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: colors.BLACK,
+  },
+  bodyContainer: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.GREY_300,
+    backgroundColor: colors.WHITE,
   },
 });
 
