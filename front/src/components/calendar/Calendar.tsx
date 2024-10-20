@@ -1,11 +1,13 @@
 import { colors } from '@/constants';
+import useModal from '@/hooks/useModal';
 import { MonthYear, isSameAsCurrentDate } from '@/utils';
-import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import CalderaHomeHeaderRight from './CalendarHomeHeaderRight';
 import DateBox from './DateBox';
 import DayOfWeeks from './DayOfWeeks';
-import useModal from '@/hooks/useModal';
 import YearSelector from './YearSelector';
 
 interface CalendarProps<T> {
@@ -14,6 +16,7 @@ interface CalendarProps<T> {
   schedules: Record<number, T[]>;
   onPressDate: (date: number) => void;
   onChangeMonth: (increment: number) => void;
+  moveToToday: () => void;
 }
 
 const Calendar = <T,>({
@@ -22,14 +25,22 @@ const Calendar = <T,>({
   schedules,
   onChangeMonth,
   onPressDate,
+  moveToToday,
 }: CalendarProps<T>) => {
   const { firstDOW, lastDate, month, year } = monthYear;
+  const navigation = useNavigation();
   const yearSelector = useModal();
 
   const handleChangeYear = (selectYear: number) => {
     onChangeMonth((selectYear - year) * 12);
     yearSelector.hide();
   };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => CalderaHomeHeaderRight(moveToToday),
+    });
+  }, [moveToToday, navigation]);
 
   return (
     <>
