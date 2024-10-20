@@ -1,6 +1,7 @@
 import { colors, numbers } from '@/constants';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
 
 interface YearSelectorProps {
   isVisible: boolean;
@@ -15,6 +16,20 @@ function YearSelector({
   onChangeYear,
   onHide,
 }: YearSelectorProps) {
+  const [scrollY, setScrollY] = useState<number>(0);
+
+  useEffect(() => {
+    const yearIndex = currentYear - numbers.MIN_CALENDAR_YEAR;
+    const currentRow = Math.floor(
+      yearIndex / numbers.CALENDAR_YEAR_SELECTOR_COLUMN,
+    );
+    const scrollToY = currentRow * 50;
+
+    console.log({ yearIndex, currentRow, scrollToY });
+
+    setScrollY(scrollToY);
+  }, [isVisible, currentYear]);
+
   return (
     <>
       {isVisible && (
@@ -23,6 +38,7 @@ function YearSelector({
             <FlatList
               style={styles.scrollContainer}
               showsVerticalScrollIndicator={false}
+              contentOffset={{ x: 0, y: scrollY }}
               initialNumToRender={currentYear - numbers.MIN_CALENDAR_YEAR}
               data={Array.from(
                 {
@@ -40,13 +56,13 @@ function YearSelector({
                   onPress={() => onChangeYear(item.num)}
                   style={[
                     styles.yearButton,
-                    currentYear === item.num && styles.selectedYearButton,
+                    currentYear === item.num && styles.currentYearButton,
                   ]}
                 >
                   <Text
                     style={[
                       styles.yearText,
-                      currentYear === item.num && styles.currenYearText,
+                      currentYear === item.num && styles.currentYearText,
                     ]}
                   >
                     {item.num}
@@ -57,8 +73,9 @@ function YearSelector({
               numColumns={numbers.CALENDAR_YEAR_SELECTOR_COLUMN}
             />
           </View>
-          <Pressable>
-            <Text>닫기</Text>
+
+          <Pressable style={styles.closeButton} onPress={onHide}>
+            <Text style={styles.closeText}>닫기</Text>
             <MaterialIcons
               name="keyboard-arrow-up"
               size={25}
@@ -74,34 +91,55 @@ function YearSelector({
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 0,
     width: '100%',
-    backgroundColor: colors.WHITE,
-    borderTopWidth: 1,
-    borderTopColor: colors.GREY_300,
   },
   yearsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.WHITE,
   },
   scrollContainer: {
-    width: '100%',
+    maxHeight: 300,
+    backgroundColor: colors.WHITE,
   },
   yearButton: {
-    width: '25%',
-    height: 50,
-    justifyContent: 'center',
+    width: 80,
+    height: 40,
+    padding: 10,
+    margin: 5,
+    borderWidth: 1,
+    borderColor: colors.GREY_500,
+    borderRadius: 2,
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  selectedYearButton: {
-    backgroundColor: colors.GREY_100,
+  currentYearButton: {
+    backgroundColor: colors.BLUE_700,
+    borderColor: colors.BLUE_700,
   },
   yearText: {
     fontSize: 16,
-    color: colors.BLACK,
+    fontWeight: '500',
+    color: colors.GREY_700,
   },
-  currenYearText: {
-    fontWeight: 'bold',
+  currentYearText: {
+    color: colors.WHITE,
+    fontWeight: '600',
+  },
+  closeButton: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: colors.WHITE,
+    padding: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: colors.GREY_500,
+  },
+  closeText: {
+    color: colors.BLACK,
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
