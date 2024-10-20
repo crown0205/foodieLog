@@ -1,6 +1,7 @@
 import { MapNavigations } from '@/constants/navigations';
 import AddPostScreen from '@/screens/map/AddPostScreen';
 import MapHomeScreen from '@/screens/map/MapHomeScreen';
+import SearchLocationScreen from '@/screens/map/SearchLocationScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { LatLng } from 'react-native-maps';
@@ -8,6 +9,7 @@ import { LatLng } from 'react-native-maps';
 export type MapStackParamList = {
   [MapNavigations.MAP_HOME]: undefined;
   [MapNavigations.ADD_POST]: { location: LatLng };
+  [MapNavigations.SEARCH_LOCATION]: undefined;
 };
 
 const Stack = createStackNavigator<MapStackParamList>();
@@ -40,6 +42,13 @@ const MapStackNavigator = () => {
         component={AddPostScreen}
         options={{
           headerTitle: '장소 추가',
+        }}
+      />
+      <Stack.Screen
+        name={MapNavigations.SEARCH_LOCATION}
+        component={SearchLocationScreen}
+        options={{
+          headerTitle: '장소 검색',
         }}
       />
     </Stack.Navigator>
