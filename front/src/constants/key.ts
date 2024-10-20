@@ -10,6 +10,7 @@ const queryKeys = {
   GET_FAVORITE_POSTS: 'getFavoritePosts',
   FAVORITE: 'favorite',
   GET_SEARCH_POSTS: 'getSearchPosts',
+  GET_CALENDAR_POSTS: 'getCalendarPosts',
 } as const;
 
 const storageKeys = {
