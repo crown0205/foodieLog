@@ -80,8 +80,8 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     flexDirection: 'row',
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#E5E5E5',
+    borderBottomWidth: 1,
+    borderColor: '#E5E5E5',
   },
   itemHeader: {
     width: 6,
