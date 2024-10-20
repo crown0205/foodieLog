@@ -5,6 +5,8 @@ import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DateBox from './DateBox';
 import DayOfWeeks from './DayOfWeeks';
+import useModal from '@/hooks/useModal';
+import YearSelector from './YearSelector';
 
 interface CalendarProps<T> {
   monthYear: MonthYear;
@@ -22,6 +24,12 @@ const Calendar = <T,>({
   onPressDate,
 }: CalendarProps<T>) => {
   const { firstDOW, lastDate, month, year } = monthYear;
+  const yearSelector = useModal();
+
+  const handleChangeYear = (selectYear: number) => {
+    onChangeMonth((selectYear - year) * 12);
+    yearSelector.hide();
+  };
 
   return (
     <>
@@ -32,7 +40,10 @@ const Calendar = <T,>({
         >
           <Ionicons name="arrow-back" size={25} color={colors.BLACK} />
         </Pressable>
-        <Pressable style={styles.monthYearContainer}>
+        <Pressable
+          style={styles.monthYearContainer}
+          onPress={yearSelector.show}
+        >
           <Text style={styles.titleText}>
             {year}년 {month}월
           </Text>
@@ -66,6 +77,13 @@ const Calendar = <T,>({
           numColumns={7}
         />
       </View>
+
+      <YearSelector
+        isVisible={yearSelector.isVisible}
+        currentYear={year}
+        onChangeYear={handleChangeYear}
+        onHide={yearSelector.hide}
+      />
     </>
   );
 };
