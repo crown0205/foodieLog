@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Alert } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import useMutateImages from './queries/useMutateImages';
+import Toast from 'react-native-toast-message';
 
 interface UseImagePickerProps {
   initialImages: ImageUrl[];
@@ -55,7 +56,12 @@ function useImagePicker({ initialImages = [] }: UseImagePickerProps) {
       })
       .catch(error => {
         if (error.code !== 'E_PICKER_CANCELLED') {
-          // TODO : 에러 메시지 표시
+          Toast.show({
+            type: 'error',
+            text1: '갤러리를 열 수 없어요.',
+            text2: '권한을 허용 했는지 확인해주세요.',
+            position: 'bottom',
+          });
         }
       });
   };
