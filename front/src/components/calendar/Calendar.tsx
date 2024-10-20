@@ -1,26 +1,26 @@
 import { colors } from '@/constants';
-import React from 'react';
-import { FlatList, Pressable, StyleSheet } from 'react-native';
-import { View, Text } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import DayOfWeeks from './DayOfWeeks';
 import { MonthYear, isSameAsCurrentDate } from '@/utils';
+import React from 'react';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import DateBox from './DateBox';
+import DayOfWeeks from './DayOfWeeks';
 
-interface CalendarProps {
+interface CalendarProps<T> {
   monthYear: MonthYear;
   selectedDate: number;
+  schedules: Record<number, T[]>;
   onPressDate: (date: number) => void;
   onChangeMonth: (increment: number) => void;
 }
 
-const Calendar = ({
+const Calendar = <T,>({
   monthYear,
   selectedDate,
+  schedules,
   onChangeMonth,
   onPressDate,
-}: CalendarProps) => {
+}: CalendarProps<T>) => {
   const { firstDOW, lastDate, month, year } = monthYear;
 
   return (
@@ -55,6 +55,7 @@ const Calendar = ({
           renderItem={({ item }) => (
             <DateBox
               date={item.date}
+              hasSchedule={Boolean(schedules[item.date])}
               isToday={isSameAsCurrentDate(year, month, item.date)}
               selectedDate={selectedDate}
               onPressDate={onPressDate}

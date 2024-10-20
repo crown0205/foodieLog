@@ -105,4 +105,6 @@ export type {
   ResponsePost,
   ResponseSinglePost,
   RequestUpdatePost,
+  CalendarPost,
+  ResponseCalendarPost,
 };

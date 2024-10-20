@@ -1,4 +1,4 @@
-import { getCalendarPosts } from '@/api';
+import { ResponseCalendarPost, getCalendarPosts } from '@/api';
 import { queryKeys } from '@/constants';
 import { UseQueryCustomOptions } from '@/types/common';
 import { useQuery } from '@tanstack/react-query';
@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 function useGetCalendarPosts(
   year: number,
   month: number,
-  queryOptions?: UseQueryCustomOptions,
+  queryOptions?: UseQueryCustomOptions<ResponseCalendarPost>,
 ) {
   return useQuery({
     queryFn: () => getCalendarPosts(year, month),
