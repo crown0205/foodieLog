@@ -46,6 +46,7 @@ const Calendar = <T,>({
       </View>
 
       <DayOfWeeks />
+
       <View style={styles.bodyContainer}>
         <FlatList
           data={Array.from({ length: lastDate + firstDOW }, (_, i) => ({
@@ -55,9 +56,9 @@ const Calendar = <T,>({
           renderItem={({ item }) => (
             <DateBox
               date={item.date}
+              selectedDate={selectedDate}
               hasSchedule={Boolean(schedules[item.date])}
               isToday={isSameAsCurrentDate(year, month, item.date)}
-              selectedDate={selectedDate}
               onPressDate={onPressDate}
             />
           )}

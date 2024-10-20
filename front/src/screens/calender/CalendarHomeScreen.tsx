@@ -1,4 +1,5 @@
 import Calendar from '@/components/calendar/Calendar';
+import EventList from '@/components/calendar/EventList';
 import { colors } from '@/constants';
 import useGetCalendarPosts from '@/hooks/queries/useGetCalendarPosts';
 import { MonthYear, getMonthYearDetails, getNewMonthYear } from '@/utils';
@@ -14,8 +15,6 @@ const CalendarHomeScreen = () => {
     isPending,
     isError,
   } = useGetCalendarPosts(monthYear.year, monthYear.month);
-
-  console.log({ isError, isPending, posts });
 
   if (isPending || isError) {
     return <></>;
@@ -39,6 +38,7 @@ const CalendarHomeScreen = () => {
         onChangeMonth={handleUpdateMonth}
         onPressDate={handlePressDate}
       />
+      <EventList posts={posts[selectedDate]} />
     </SafeAreaView>
   );
 };

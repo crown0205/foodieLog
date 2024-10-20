@@ -83,7 +83,7 @@ const getCalendarPosts = async (
   month: number,
 ): Promise<ResponseCalendarPost> => {
   const { data } = await axiosInstance.get(
-    `/posts/calendar?year=${year}&month=${month}`,
+    `/posts?year=${year}&month=${month}`,
   );
 
   return data;

@@ -38,8 +38,6 @@ function FeedSearchList() {
     setKeyword(searchKeyword);
   };
 
-  console.log({ posts });
-
   return (
     <FlatList
       data={posts?.pages.flat()}
