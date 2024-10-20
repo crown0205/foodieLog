@@ -46,25 +46,35 @@ const EventList = ({ posts }: EventListProps) => {
       <View
         style={(styles.innerContainer, { marginBottom: insets.bottom + 30 })}
       >
-        {posts?.map(post => (
-          <Pressable
-            key={post.id}
-            style={styles.itemContainer}
-            onPress={() => handlePressItem(post.id)}
-          >
-            <View style={styles.itemHeader} />
-            <View style={styles.infoContainer}>
-              <Text
-                style={styles.addressText}
-                numberOfLines={1}
-                ellipsizeMode="tail"
-              >
-                {post.address}
-              </Text>
-              <Text style={styles.titleText}>{post.title}</Text>
-            </View>
-          </Pressable>
-        ))}
+        {posts?.map(post => {
+          return (
+            <Pressable
+              key={post.id}
+              style={styles.itemContainer}
+              onPress={() => handlePressItem(post.id)}
+            >
+              <View
+                style={[
+                  styles.itemHeader,
+                  {
+                    backgroundColor:
+                      colors[`${post.color}_100`] ?? colors.BLUE_100,
+                  },
+                ]}
+              />
+              <View style={styles.infoContainer}>
+                <Text
+                  style={styles.addressText}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {post.address}
+                </Text>
+                <Text style={styles.titleText}>{post.title}</Text>
+              </View>
+            </Pressable>
+          );
+        })}
       </View>
     </ScrollView>
   );
@@ -86,7 +96,6 @@ const styles = StyleSheet.create({
   itemHeader: {
     width: 6,
     height: 60,
-    backgroundColor: colors.BLUE_100,
     marginRight: 10,
     borderRadius: 20,
   },

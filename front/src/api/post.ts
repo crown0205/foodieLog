@@ -1,4 +1,4 @@
-import { ImageUrl, Post } from '@/types/domain';
+import { ImageUrl, MarkerColor, Post } from '@/types/domain';
 import axiosInstance from './axios';
 
 type RequestCreatePost = Omit<Post, 'id'> & { imageUrls: ImageUrl[] };
@@ -74,6 +74,7 @@ type CalendarPost = {
   id: number;
   title: string;
   address: string;
+  color: MarkerColor;
 };
 
 type ResponseCalendarPost = Record<number, CalendarPost[]>;

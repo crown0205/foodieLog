@@ -25,8 +25,6 @@ function YearSelector({
     );
     const scrollToY = currentRow * 50;
 
-    console.log({ yearIndex, currentRow, scrollToY });
-
     setScrollY(scrollToY);
   }, [isVisible, currentYear]);
 
