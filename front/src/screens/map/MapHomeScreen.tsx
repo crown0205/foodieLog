@@ -8,8 +8,8 @@ import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { MapStackParamList } from '@/navigations/stack/MapStackNavigator';
+import useLocationStore from '@/store/useLocationStore';
 import mapStyle from '@/style/mapStyle';
-
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import {
   CompositeNavigationProp,
@@ -39,8 +39,8 @@ const MapHomeScreen = () => {
   const navigation = useNavigation<Navigation>();
 
   const { userLocation, isUserLocationError } = useUserLocation();
+  const { selectLocation, setSelectLocation } = useLocationStore();
   const markerModal = useModal();
-  const [selectLocation, setSelectLocation] = useState<LatLng | null>();
   const [markerId, setMarkerId] = useState<number | null>(null);
   const { data: markers = [] } = useGetMarkers();
   const { mapRef, moveMapView, handleChangeDelta } = useMoveMapView();

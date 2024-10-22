@@ -4,7 +4,6 @@ import useLocationStore from '@/store/useLocationStore';
 import { useNavigation } from '@react-navigation/native';
 import {
   Dimensions,
-  Keyboard,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -20,7 +19,7 @@ interface SearchReginResultProps {
 
 function SearchReginResult({ regionInfo }: SearchReginResultProps) {
   const navigation = useNavigation();
-  const { setMoveLocation } = useLocationStore();
+  const { setMoveLocation, setSelectLocation } = useLocationStore();
 
   const handlePressRegionInfo = (latitude: string, longitude: string) => {
     const regionLocation = {
@@ -33,13 +32,14 @@ function SearchReginResult({ regionInfo }: SearchReginResultProps) {
 
   const moveToMapScreen = (regionLocation: LatLng) => {
     navigation.goBack();
+
     setMoveLocation(regionLocation);
+    setSelectLocation(regionLocation);
   };
 
   return (
     <View style={styles.container}>
       <ScrollView
-        onTouchStart={() => Keyboard.dismiss()}
         showsVerticalScrollIndicator
         indicatorStyle="black"
         contentContainerStyle={styles.scrollContainer}
@@ -64,7 +64,9 @@ function SearchReginResult({ regionInfo }: SearchReginResultProps) {
               </Text>
             </View>
             <View style={styles.categoryContainer}>
-              <Text style={styles.distanceText}>{info.distance}</Text>
+              <Text style={styles.distanceText}>
+                {(Number(info.distance) / 1000).toFixed(1)}Km
+              </Text>
               <Text style={styles.subInfoText}>{info.category_name}</Text>
             </View>
             <Text style={styles.subInfoText}>{info.road_address_name}</Text>
