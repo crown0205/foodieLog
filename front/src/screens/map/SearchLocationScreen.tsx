@@ -1,3 +1,4 @@
+import Pagination from '@/components/common/Pagination';
 import SearchInput from '@/components/common/SearchInput';
 import SearchReginResult from '@/components/map/SearchRegionResult';
 import useSearchLocation from '@/hooks/useSearchLocation';
@@ -8,7 +9,8 @@ import { Keyboard, StyleSheet, View } from 'react-native';
 const SearchLocationScreen = () => {
   const [keyword, setKeyword] = useState('');
   const { userLocation } = useUserLocation();
-  const { regionInfo } = useSearchLocation(keyword, userLocation);
+  const { regionInfo, pageParam, hasNextPage, fetchNextPage, fetchPrevPage } =
+    useSearchLocation(keyword, userLocation);
 
   const handleChangeKeyword = (text: string) => {
     setKeyword(text);
@@ -27,6 +29,13 @@ const SearchLocationScreen = () => {
       />
 
       <SearchReginResult regionInfo={regionInfo} />
+      <Pagination
+        pageParam={pageParam}
+        hasNextPage={hasNextPage}
+        fetchNextPage={fetchNextPage}
+        fetchPrevPage={fetchPrevPage}
+        totalLength={regionInfo.length}
+      />
     </View>
   );
 };
