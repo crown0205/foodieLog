@@ -1,10 +1,31 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import SearchInput from '@/components/common/SearchInput';
+import useSearchLocation from '@/hooks/useSearchLocation';
+import useUserLocation from '@/hooks/useUserLocation';
+import React, { useState } from 'react';
+import { Keyboard, StyleSheet, View } from 'react-native';
 
 const SearchLocationScreen = () => {
+  const [keyword, setKeyword] = useState('');
+  const { userLocation } = useUserLocation();
+  const { regionInfo } = useSearchLocation(keyword, userLocation);
+
+  const handleChangeKeyword = (text: string) => {
+    setKeyword(text);
+  };
+
+  console.log({ regionInfo });
+
   return (
     <View style={styles.container}>
-      <Text>SearchLocationScreen</Text>
+      <SearchInput
+        autoFocus
+        value={keyword}
+        onChangeText={handleChangeKeyword}
+        placeholder="검색할 장소를 입력해주세요."
+        onSubmit={() => {
+          Keyboard.dismiss();
+        }}
+      />
     </View>
   );
 };
