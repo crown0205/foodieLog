@@ -1,4 +1,5 @@
 import SearchInput from '@/components/common/SearchInput';
+import SearchReginResult from '@/components/map/SearchRegionResult';
 import useSearchLocation from '@/hooks/useSearchLocation';
 import useUserLocation from '@/hooks/useUserLocation';
 import React, { useState } from 'react';
@@ -13,8 +14,6 @@ const SearchLocationScreen = () => {
     setKeyword(text);
   };
 
-  console.log({ regionInfo });
-
   return (
     <View style={styles.container}>
       <SearchInput
@@ -26,6 +25,8 @@ const SearchLocationScreen = () => {
           Keyboard.dismiss();
         }}
       />
+
+      <SearchReginResult regionInfo={regionInfo} />
     </View>
   );
 };
