@@ -1,18 +1,25 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {
   Dimensions,
   Pressable,
   PressableProps,
+  StyleProp,
   StyleSheet,
   Text,
+  TextStyle,
+  ViewStyle,
 } from 'react-native';
 import { colors } from '../../constants';
+import { View } from 'react-native';
 
 interface CustomButtonProps extends PressableProps {
   label: string;
   variant?: 'filled' | 'outlined';
   size?: 'small' | 'medium' | 'large' | 'full';
   inValid?: boolean;
+  style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
+  icon?: ReactNode;
 }
 
 const deviceHeight = Dimensions.get('screen').height;
@@ -22,6 +29,9 @@ const CustomButton = ({
   variant = 'filled',
   size = 'large',
   inValid = false,
+  style = null,
+  textStyle = null,
+  icon = null,
   ...props
 }: CustomButtonProps) => {
   return (
@@ -32,10 +42,16 @@ const CustomButton = ({
         styles[size],
         pressed ? styles[`${variant}Pressed`] : styles[variant],
         inValid && styles.inValid,
+        style,
       ]}
       {...props}
     >
-      <Text style={[styles[`${variant}Text`], styles.text]}>{label}</Text>
+      <View style={styles.innerContainer}>
+        {icon}
+        <Text style={[styles[`${variant}Text`], styles.text, textStyle]}>
+          {label}
+        </Text>
+      </View>
     </Pressable>
   );
 };
@@ -46,6 +62,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  innerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
   },
   filled: {
     backgroundColor: colors.BLUE_500,

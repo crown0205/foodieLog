@@ -10,6 +10,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 type AuthHomeScreenProps = StackScreenProps<
   AuthStackParamList,
@@ -27,6 +28,18 @@ const AuthHomeScreen = ({ navigation }: AuthHomeScreenProps) => {
         />
       </View>
       <View style={styles.buttonContainer}>
+        <CustomButton
+          label="카카오 로그인하기"
+          variant="filled"
+          size="large"
+          onPress={() => navigation.navigate(authNavigations.KAKAO)}
+          style={styles.kakaoButtonContainer}
+          textStyle={styles.kakaoButtonText}
+          icon={
+            <Ionicons name="chatbubble-sharp" color={'#181600'} size={16} />
+          }
+        />
+
         <CustomButton
           label="로그인화면으로 이동"
           onPress={() => navigation.navigate(authNavigations.LOGIN)}
@@ -65,5 +78,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 10,
     marginBottom: 40,
+  },
+  kakaoButtonContainer: {
+    backgroundColor: '#fee503',
+  },
+  kakaoButtonText: {
+    color: '#181600',
   },
 });

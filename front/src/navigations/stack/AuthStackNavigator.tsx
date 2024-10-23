@@ -1,14 +1,15 @@
-import {authNavigations} from '@/constants/navigations';
+import { authNavigations } from '@/constants/navigations';
 import AuthHomeScreen from '@/screens/auth/AuthHomeScreen';
 import LoginScreen from '@/screens/auth/LoginScreen';
 import SignUpScreen from '@/screens/auth/SignUpScreen';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
 export type AuthStackParamList = {
   [authNavigations.AUTH_HOME]: undefined;
   [authNavigations.LOGIN]: undefined;
   [authNavigations.SIGNUP]: undefined;
+  [authNavigations.KAKAO]: undefined;
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -17,7 +18,7 @@ const AuthStackNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        cardStyle: {backgroundColor: 'white'},
+        cardStyle: { backgroundColor: 'white' },
         headerStyle: {
           backgroundColor: 'white',
           shadowColor: 'gray',
@@ -26,7 +27,8 @@ const AuthStackNavigator = () => {
           fontSize: 15,
         },
         headerTintColor: 'black',
-      }}>
+      }}
+    >
       <Stack.Screen
         name={authNavigations.AUTH_HOME}
         component={AuthHomeScreen}
