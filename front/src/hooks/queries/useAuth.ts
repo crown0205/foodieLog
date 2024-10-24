@@ -1,6 +1,7 @@
 import {
   ResponseProfile,
   ResponseToken,
+  appleLogin,
   getAccessToken,
   getProfile,
   kakaoLogin,
@@ -62,6 +63,10 @@ function useKakaoLogin(mutationOption?: UseMutationCustomOptions) {
   return useLogin(kakaoLogin, mutationOption);
 }
 
+function useAppleLogin(mutationOption?: UseMutationCustomOptions) {
+  return useLogin(appleLogin, mutationOption);
+}
+
 function useGetRefreshToken() {
   const { data, isSuccess, isError } = useQuery({
     queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
@@ -119,6 +124,7 @@ function useAuth() {
   const isLogin = getProfileQuery.isSuccess;
   const loginMutation = useEmailLogin();
   const kakaoLoginMutation = useKakaoLogin();
+  const appleLoginMutation = useAppleLogin();
   const logoutMutation = useLogout();
 
   return {
@@ -129,6 +135,7 @@ function useAuth() {
     loginMutation,
     logoutMutation,
     kakaoLoginMutation,
+    appleLoginMutation,
   };
 }
 
