@@ -18,6 +18,7 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import Config from 'react-native-config';
 import MapView, {
   LatLng,
   LongPressEvent,
