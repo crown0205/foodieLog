@@ -1,4 +1,4 @@
-import { Profile, Category } from '../types/domain';
+import { Category, Profile } from '../types/domain';
 import { getEncryptStorage } from '../utils';
 import axiosInstance from './axios';
 
@@ -78,6 +78,17 @@ const getProfile = async (): Promise<ResponseProfile> => {
   return data;
 };
 
+type RequestProfile = Omit<
+  Profile,
+  'id' | 'email' | 'kakaoImageUrl' | 'loginType'
+>;
+
+const editProfile = async (body: RequestProfile): Promise<ResponseProfile> => {
+  const { data } = await axiosInstance.patch('/auth/me', body);
+
+  return data;
+};
+
 // NOTE : 엑세스 토큰 갱신 API
 const getAccessToken = async (): Promise<ResponseToken> => {
   const refreshToken = await getEncryptStorage('refreshToken');
@@ -96,12 +107,19 @@ const logout = async (): Promise<void> => {
 };
 
 export {
-  postSignup,
-  postLogin,
-  getProfile,
-  getAccessToken,
-  logout,
-  kakaoLogin,
   appleLogin,
+  editProfile,
+  getAccessToken,
+  getProfile,
+  kakaoLogin,
+  logout,
+  postLogin,
+  postSignup,
 };
-export type { RequestUser, ResponseToken, ResponseProfile };
+export type {
+  RequestAppleIdentity,
+  RequestProfile,
+  RequestUser,
+  ResponseProfile,
+  ResponseToken,
+};
