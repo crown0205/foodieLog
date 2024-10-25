@@ -106,6 +106,10 @@ const logout = async (): Promise<void> => {
   await axiosInstance.post('/auth/logout');
 };
 
+const deleteAccount = async (): Promise<void> => {
+  await axiosInstance.delete('/auth/me');
+};
+
 export {
   appleLogin,
   editProfile,
@@ -115,6 +119,7 @@ export {
   logout,
   postLogin,
   postSignup,
+  deleteAccount,
 };
 export type {
   RequestAppleIdentity,
