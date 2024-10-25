@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/api/axios';
 import { colors, mainNavigations, settingNavigations } from '@/constants';
 import useAuth from '@/hooks/queries/useAuth';
 import { deviceType } from '@/utils';
@@ -53,10 +54,18 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
                 />
               )}
             {imageUrl === null && !!kakaoImageUrl && (
-              <Image source={{ uri: kakaoImageUrl }} style={styles.userImage} />
+              <Image
+                source={{ uri: `${kakaoImageUrl}` }}
+                style={styles.userImage}
+              />
             )}
             {imageUrl !== null && (
-              <Image source={{ uri: imageUrl }} style={styles.userImage} />
+              <Image
+                source={{
+                  uri: `${BASE_URL}${imageUrl}`,
+                }}
+                style={styles.userImage}
+              />
             )}
           </Pressable>
 

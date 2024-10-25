@@ -40,6 +40,9 @@ const SettingStackNavigator = () => {
         component={EditProfileScreen}
         options={{
           headerTitle: '프로필 수정',
+          cardStyle: {
+            backgroundColor: colors.WHITE,
+          },
         }}
       />
     </Stack.Navigator>

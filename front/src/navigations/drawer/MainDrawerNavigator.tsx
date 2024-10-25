@@ -104,6 +104,9 @@ const MainDrawerNavigator = () => {
         component={SettingStackNavigator}
         options={{
           title: '설정',
+          drawerItemStyle: {
+            height: 0,
+          },
         }}
       />
     </Drawer.Navigator>

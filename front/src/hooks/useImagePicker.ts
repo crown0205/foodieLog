@@ -3,14 +3,20 @@ import { getFormDataImages } from '@/utils';
 import { useState } from 'react';
 import { Alert } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import useMutateImages from './queries/useMutateImages';
 import Toast from 'react-native-toast-message';
+import useMutateImages from './queries/useMutateImages';
 
 interface UseImagePickerProps {
   initialImages: ImageUrl[];
+  mode?: 'multiple' | 'single';
+  onSettled?: () => void;
 }
 
-function useImagePicker({ initialImages = [] }: UseImagePickerProps) {
+function useImagePicker({
+  initialImages = [],
+  mode = 'multiple',
+  onSettled,
+}: UseImagePickerProps) {
   const [imageUrls, setImageUrls] = useState(initialImages);
   const uploadImages = useMutateImages();
 
@@ -24,6 +30,15 @@ function useImagePicker({ initialImages = [] }: UseImagePickerProps) {
     }
 
     setImageUrls(prev => [...prev, ...urls.map(url => ({ url: url }))]);
+  };
+
+  const replaceImageUrl = (urls: string[]) => {
+    if (urls.length > 1) {
+      Alert.alert('이미지 개수 초과', '이미지는 1개만 업로드 가능합니다.');
+      return;
+    }
+
+    setImageUrls([...urls.map(url => ({ url: url }))]);
   };
 
   const deleteImage = (url: string) => {
@@ -43,7 +58,7 @@ function useImagePicker({ initialImages = [] }: UseImagePickerProps) {
       mediaType: 'photo',
       multiple: true,
       includeBase64: true,
-      maxFiles: 5,
+      maxFiles: mode === 'multiple' ? 5 : 1,
       cropperChooseText: '완료',
       cropperCancelText: '취소',
     })
@@ -51,7 +66,9 @@ function useImagePicker({ initialImages = [] }: UseImagePickerProps) {
         const formData = getFormDataImages('images', images);
 
         uploadImages.mutate(formData, {
-          onSuccess: data => addImageUrls(data),
+          onSuccess: data =>
+            mode === 'multiple' ? addImageUrls(data) : replaceImageUrl(data),
+          onSettled: () => onSettled && onSettled(),
         });
       })
       .catch(error => {
