@@ -1,4 +1,4 @@
-import { colors } from '@/constants';
+import { colors, mainNavigations, settingNavigations } from '@/constants';
 import useAuth from '@/hooks/queries/useAuth';
 import { deviceType } from '@/utils';
 import {
@@ -15,14 +15,17 @@ import {
   Text,
   View,
 } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
-  const { getProfileQuery, logoutMutation } = useAuth();
+  const { getProfileQuery } = useAuth();
   const { email, nickname, imageUrl, kakaoImageUrl } =
     getProfileQuery.data || {};
 
-  const handleLogout = () => {
-    logoutMutation.mutate(null);
+  const handlePressSetting = () => {
+    props.navigation.navigate(mainNavigations.SETTING, {
+      screen: settingNavigations.SETTING_HOME,
+    });
   };
 
   return (
@@ -62,9 +65,13 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
 
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
-      <Pressable style={styles.logoutButton} onPress={handleLogout}>
-        <Text>로그아웃</Text>
-      </Pressable>
+
+      <View style={styles.bottomContainer}>
+        <Pressable style={styles.bottomMenu} onPress={handlePressSetting}>
+          <MaterialIcons name="settings" size={18} color={colors.GREY_700} />
+          <Text style={styles.bottomMenuText}>설정</Text>
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 }
@@ -96,10 +103,23 @@ const styles = StyleSheet.create({
   nameText: {
     color: colors.BLACK,
   },
-  // 로그아웃 버튼
-  logoutButton: {
-    alignItems: 'flex-end',
-    padding: 15,
+  bottomContainer: {
+    flexDirection: 'row',
+    borderTopWidth: 1,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    gap: 20,
+    borderTopColor: colors.GREY_200,
+  },
+  bottomMenu: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  bottomMenuText: {
+    color: colors.BLACK,
+    fontSize: 16,
   },
 });
 
