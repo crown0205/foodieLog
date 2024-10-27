@@ -160,6 +160,7 @@ function useAuth() {
     kakaoLoginMutation,
     appleLoginMutation,
     profileMutation,
+    deleteAccountMutation,
   };
 }
 

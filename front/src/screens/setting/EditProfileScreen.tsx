@@ -1,6 +1,6 @@
 import { BASE_URL } from '@/api/axios';
 import InputField from '@/components/common/InputField';
-import { colors, errorMessages } from '@/constants';
+import { colors, errorMessages, settingNavigations } from '@/constants';
 import useAuth from '@/hooks/queries/useAuth';
 import useForm from '@/hooks/useForm';
 import useImagePicker from '@/hooks/useImagePicker';
@@ -20,8 +20,8 @@ import {
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import EditProfileHeaderRight from './EditProfileHeaderRight';
-import EditProfileImageOption from './EditProfileImageOption';
+import EditProfileHeaderRight from '../../components/setting/EditProfileHeaderRight';
+import EditProfileImageOption from '../../components/setting/EditProfileImageOption';
 
 type EditProfileScreenProps = StackScreenProps<SettingStackParamList>;
 
@@ -140,7 +140,10 @@ function EditProfileScreen({ navigation }: EditProfileScreenProps) {
         placeholder="닉네임을 입력해주세요."
       />
 
-      <Pressable style={styles.deleteAccountContainer}>
+      <Pressable
+        style={styles.deleteAccountContainer}
+        onPress={() => navigation.navigate(settingNavigations.DELETE_ACCOUNT)}
+      >
         <Ionicons
           name="lock-closed-outline"
           size={18}
