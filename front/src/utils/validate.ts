@@ -1,3 +1,5 @@
+import { Category } from '@/types/domain';
+
 type UseInformation = {
   email: string;
   password: string;
@@ -73,4 +75,22 @@ function validateEditProfile(value: { nickname: string }) {
   return error;
 }
 
-export { validateLogin, validateSignUp, validateAddPost, validateEditProfile };
+function validateEditCategory(values: Category) {
+  const errors = {
+    RED: '',
+    YELLOW: '',
+    GREEN: '',
+    BLUE: '',
+    PURPLE: '',
+  };
+
+  return errors;
+}
+
+export {
+  validateLogin,
+  validateSignUp,
+  validateAddPost,
+  validateEditProfile,
+  validateEditCategory,
+};

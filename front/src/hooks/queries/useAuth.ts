@@ -3,6 +3,7 @@ import {
   ResponseToken,
   appleLogin,
   deleteAccount,
+  editCategory,
   editProfile,
   getAccessToken,
   getProfile,
@@ -150,7 +151,7 @@ function useMutateDeleteAccount(mutationOptions?: UseMutationCustomOptions) {
 
 function useMutateCategory(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
-    mutationFn: editProfile,
+    mutationFn: editCategory,
     onSuccess: newProfile => {
       queryClient.setQueryData(
         [queryKeys.AUTH, queryKeys.GET_PROFILE],
