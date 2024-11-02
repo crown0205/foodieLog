@@ -64,9 +64,8 @@ const getSearchPosts = async (
   query: string,
 ): Promise<ResponsePost[]> => {
   const { data } = await axiosInstance.get(
-    `/posts/search?query=${query}&page=${page}`,
+    `/posts/my/search?query=${query}&page=${page}`,
   );
-
   return data;
 };
 
