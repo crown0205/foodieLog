@@ -3,7 +3,7 @@ import {
   UseMutationOptions,
   UseQueryOptions,
 } from '@tanstack/react-query';
-import {AxiosError} from 'axios';
+import { AxiosError } from 'axios';
 
 type ResponseError = AxiosError<{
   statusCode: number;
@@ -21,4 +21,11 @@ type UseQueryCustomOptions<TQueryFnData = unknown, TDate = TQueryFnData> = Omit<
   'queryKey'
 >;
 
-export type {ResponseError, UseMutationCustomOptions, UseQueryCustomOptions};
+type ThemeMode = 'light' | 'dark';
+
+export type {
+  ResponseError,
+  UseMutationCustomOptions,
+  UseQueryCustomOptions,
+  ThemeMode,
+};
