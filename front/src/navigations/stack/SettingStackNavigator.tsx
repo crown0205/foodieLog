@@ -1,6 +1,7 @@
 import EditCategoryScreen from '@/components/setting/EditCategoryScreen';
 import SettingHeaderLeft from '@/components/setting/SettingHeaderLeft';
 import { colors, settingNavigations } from '@/constants';
+import useThemeStorage from '@/hooks/useThemeStorage';
 import DeleteAccountScreen from '@/screens/setting/DeleteAccountScreen';
 import EditProfileScreen from '@/screens/setting/EditProfileScreen';
 import SettingHomeScreen from '@/screens/setting/SettingHomeScreen';
@@ -17,18 +18,19 @@ export type SettingStackParamList = {
 const Stack = createStackNavigator<SettingStackParamList>();
 
 const SettingStackNavigator = () => {
+  const { theme } = useThemeStorage();
   return (
     <Stack.Navigator
       screenOptions={{
-        cardStyle: { backgroundColor: colors.GREY_100 },
+        cardStyle: { backgroundColor: colors[theme].GREY_100 },
         headerStyle: {
-          backgroundColor: 'white',
-          shadowColor: 'gray',
+          backgroundColor: colors[theme].WHITE,
+          shadowColor: colors[theme].GREY_300,
         },
         headerTitleStyle: {
           fontSize: 15,
         },
-        headerTintColor: 'black',
+        headerTintColor: colors[theme].BLACK,
       }}
     >
       <Stack.Screen
@@ -45,7 +47,7 @@ const SettingStackNavigator = () => {
         options={{
           headerTitle: '프로필 수정',
           cardStyle: {
-            backgroundColor: colors.WHITE,
+            backgroundColor: colors[theme].WHITE,
           },
         }}
       />
@@ -55,7 +57,7 @@ const SettingStackNavigator = () => {
         options={{
           headerTitle: '카테고리 설정',
           cardStyle: {
-            backgroundColor: colors.WHITE,
+            backgroundColor: colors[theme].WHITE,
           },
         }}
       />
@@ -65,7 +67,7 @@ const SettingStackNavigator = () => {
         options={{
           headerTitle: '회원탈퇴',
           cardStyle: {
-            backgroundColor: colors.WHITE,
+            backgroundColor: colors[theme].WHITE,
           },
         }}
       />

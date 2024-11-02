@@ -1,4 +1,6 @@
 import { colors } from '@/constants';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import { ThemeMode } from '@/types';
 import React from 'react';
 import {
   Modal,
@@ -23,12 +25,16 @@ const DatePickerOption = ({
   onChangeDate,
   onConfirmDate,
 }: DatePickerOptionProps) => {
+  const { theme } = useThemeStorage();
+  const styles = styling(theme);
+
   return (
     <Modal visible={isVisible} transparent={true} animationType="fade">
       <SafeAreaView style={[styles.optionBackground, styles.dimmed]}>
         <View style={styles.optionContainer}>
           <View style={styles.pickerContainer}>
             <DatePicker
+              theme={theme}
               mode="date"
               date={date}
               onDateChange={onChangeDate}
@@ -46,36 +52,38 @@ const DatePickerOption = ({
   );
 };
 
-const styles = StyleSheet.create({
-  optionBackground: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  dimmed: {
-    backgroundColor: colors.GREY_OPACITY_300,
-  },
-  optionContainer: {
-    borderRadius: 16,
-    marginHorizontal: 16,
-    marginBottom: 10,
-    backgroundColor: colors.WHITE,
-    overflow: 'hidden',
-  },
-  pickerContainer: {
-    alignItems: 'center',
-  },
-  optionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 56,
-    gap: 8,
-  },
-  optionText: {
-    fontSize: 17,
-    color: colors.BLUE_500,
-    fontWeight: 'bold',
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    optionBackground: {
+      flex: 1,
+      justifyContent: 'flex-end',
+    },
+    dimmed: {
+      backgroundColor: colors[theme].GREY_OPACITY_300,
+    },
+    optionContainer: {
+      borderRadius: 16,
+      marginHorizontal: 16,
+      marginBottom: 10,
+      backgroundColor: colors[theme].WHITE,
+      overflow: 'hidden',
+    },
+    pickerContainer: {
+      alignItems: 'center',
+      color: colors[theme].BLACK,
+    },
+    optionButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: 56,
+      gap: 8,
+    },
+    optionText: {
+      fontSize: 17,
+      color: colors[theme].BLUE_500,
+      fontWeight: 'bold',
+    },
+  });
 
 export default DatePickerOption;

@@ -2,11 +2,15 @@ import Calendar from '@/components/calendar/Calendar';
 import EventList from '@/components/calendar/EventList';
 import { colors } from '@/constants';
 import useGetCalendarPosts from '@/hooks/queries/useGetCalendarPosts';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import { ThemeMode } from '@/types';
 import { MonthYear, getMonthYearDetails, getNewMonthYear } from '@/utils';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 
 const CalendarHomeScreen = () => {
+  const { theme } = useThemeStorage();
+  const styles = styling(theme);
   const currentMonthYear = getMonthYearDetails(new Date());
   const [monthYear, setMonthYear] = useState<MonthYear>(currentMonthYear);
   const [selectedDate, setSelectedDate] = useState<number>(0);
@@ -53,11 +57,12 @@ const CalendarHomeScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.WHITE,
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors[theme].WHITE,
+    },
+  });
 
 export default CalendarHomeScreen;

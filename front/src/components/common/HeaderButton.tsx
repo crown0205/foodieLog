@@ -1,4 +1,6 @@
 import { colors } from '@/constants';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 import React, { ReactNode } from 'react';
 import {
   View,
@@ -20,6 +22,9 @@ const HeaderButton = ({
   hasError = false,
   ...props
 }: HeaderButtonProps) => {
+  const { theme } = useThemeStore();
+  const styles = styling(theme);
+
   return (
     <Pressable disabled={hasError} style={styles.container} {...props}>
       {!labelText && icon}
@@ -32,22 +37,23 @@ const HeaderButton = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-  },
-  text: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: colors.BLUE_500,
-  },
-  textError: {
-    color: colors.GREY_400,
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      height: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: 10,
+    },
+    text: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: colors[theme].BLUE_500,
+    },
+    textError: {
+      color: colors[theme].GREY_400,
+    },
+  });
 
 export default HeaderButton;

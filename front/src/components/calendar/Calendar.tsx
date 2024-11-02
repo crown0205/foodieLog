@@ -1,5 +1,7 @@
 import { colors } from '@/constants';
 import useModal from '@/hooks/useModal';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import { ThemeMode } from '@/types';
 import { MonthYear, isSameAsCurrentDate } from '@/utils';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
@@ -27,6 +29,8 @@ const Calendar = <T,>({
   onPressDate,
   moveToToday,
 }: CalendarProps<T>) => {
+  const { theme } = useThemeStorage();
+  const styles = styling(theme);
   const { firstDOW, lastDate, month, year } = monthYear;
   const navigation = useNavigation();
   const yearSelector = useModal();
@@ -49,7 +53,7 @@ const Calendar = <T,>({
           style={styles.monthButtonContainer}
           onPress={() => onChangeMonth(-1)}
         >
-          <Ionicons name="arrow-back" size={25} color={colors.BLACK} />
+          <Ionicons name="arrow-back" size={25} color={colors[theme].BLACK} />
         </Pressable>
         <Pressable
           style={styles.monthYearContainer}
@@ -63,7 +67,11 @@ const Calendar = <T,>({
           style={styles.monthButtonContainer}
           onPress={() => onChangeMonth(+1)}
         >
-          <Ionicons name="arrow-forward" size={25} color={colors.BLACK} />
+          <Ionicons
+            name="arrow-forward"
+            size={25}
+            color={colors[theme].BLACK}
+          />
         </Pressable>
       </View>
 
@@ -99,32 +107,33 @@ const Calendar = <T,>({
   );
 };
 
-const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginHorizontal: 25,
-    marginVertical: 16,
-  },
-  monthButtonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-  },
-  monthYearContainer: {
-    padding: 10,
-  },
-  titleText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: colors.BLACK,
-  },
-  bodyContainer: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.GREY_300,
-    backgroundColor: colors.WHITE,
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    headerContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginHorizontal: 25,
+      marginVertical: 16,
+    },
+    monthButtonContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 10,
+    },
+    monthYearContainer: {
+      padding: 10,
+    },
+    titleText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: colors[theme].BLACK,
+    },
+    bodyContainer: {
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomColor: colors[theme].GREY_300,
+      backgroundColor: colors[theme].WHITE,
+    },
+  });
 
 export default Calendar;

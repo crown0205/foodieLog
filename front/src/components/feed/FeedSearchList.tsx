@@ -8,9 +8,13 @@ import { FlatList, Keyboard, Pressable, StyleSheet, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchInput from '../common/SearchInput';
 import FeedItem from './FeedItem';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import { ThemeMode } from '@/types';
 
-// TODO : search api 수정 필요
+// TODO : 디바운스 적용
 function FeedSearchList() {
+  const { theme } = useThemeStorage();
+  const styles = styling(theme);
   const navigation = useNavigation<DrawerNavigationProp<MainDrawerParamList>>();
   const [keyword, setKeyword] = useState<string>('');
   const {
@@ -46,6 +50,7 @@ function FeedSearchList() {
       numColumns={2} // NOTE: 2개의 열로 표시
       scrollIndicatorInsets={{ right: 1 }} // NOTE: 스크롤바 위치 조정
       contentContainerStyle={styles.contentContainer} // NOTE: 스크롤뷰 컨텐츠의 스타일을 지정
+      columnWrapperStyle={styles.column} // NOTE: 열 스타일 지정
       indicatorStyle={'black'} // NOTE: 스크롤바 색상
       ListHeaderComponent={
         <View style={styles.headerContainer}>
@@ -53,7 +58,7 @@ function FeedSearchList() {
             style={styles.drawerIconContainer}
             onPress={() => navigation.openDrawer()}
           >
-            <Ionicons name={'menu'} color={colors.BLACK} size={25} />
+            <Ionicons name={'menu'} color={colors[theme].BLACK} size={25} />
           </Pressable>
           <View style={styles.inputContainer}>
             <SearchInput
@@ -76,29 +81,35 @@ function FeedSearchList() {
   );
 }
 
-const styles = StyleSheet.create({
-  contentContainer: {
-    paddingVertical: 10,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    padding: 10,
-    backgroundColor: colors.WHITE,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.GREY_300,
-    alignItems: 'center',
-    gap: 10,
-  },
-  drawerIconContainer: {
-    marginRight: 10,
-    borderWidth: 1,
-    borderColor: colors.GREY_300,
-    padding: 6,
-    borderRadius: 5,
-  },
-  inputContainer: {
-    flex: 1,
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    contentContainer: {
+      paddingVertical: 10,
+    },
+    headerContainer: {
+      flexDirection: 'row',
+      padding: 10,
+      backgroundColor: colors[theme].WHITE,
+      borderBottomWidth: 1,
+      borderBottomColor: colors[theme].GREY_300,
+      alignItems: 'center',
+      gap: 10,
+    },
+    drawerIconContainer: {
+      marginRight: 10,
+      borderWidth: 1,
+      borderColor: colors[theme].GREY_300,
+      padding: 6,
+      borderRadius: 5,
+    },
+    inputContainer: {
+      flex: 1,
+    },
+    column: {
+      justifyContent: 'flex-start',
+      paddingHorizontal: 15,
+      gap: 10,
+    },
+  });
 
 export default FeedSearchList;

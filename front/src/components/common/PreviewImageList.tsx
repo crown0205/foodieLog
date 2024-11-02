@@ -1,5 +1,7 @@
 import { colors, feedNavigations } from '@/constants';
 import { FeedStackParamList } from '@/navigations/stack/FeedStackNavigator';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 import { ImageUrl } from '@/types/domain';
 import { deviceType } from '@/utils';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -22,6 +24,8 @@ function PreviewImageList({
   onDelete,
   onChangeOrder,
 }: PreviewImageListProps) {
+  const { theme } = useThemeStore();
+  const styles = styling(theme);
   const navigation = useNavigation<NavigationProp<FeedStackParamList>>();
   const [isChangeOrder, setChangeOrder] = useState(false);
 
@@ -59,7 +63,11 @@ function PreviewImageList({
                     style={[styles.imageButton, styles.deleteButton]}
                     onPress={() => onDelete && onDelete(url)}
                   >
-                    <Ionicons name="close" size={16} color={colors.BLACK} />
+                    <Ionicons
+                      name="close"
+                      size={16}
+                      color={colors[theme].BLACK}
+                    />
                   </Pressable>
                 )}
 
@@ -73,7 +81,7 @@ function PreviewImageList({
                     <Ionicons
                       name={'arrow-back-outline'}
                       size={16}
-                      color={colors.BLACK}
+                      color={colors[theme].BLACK}
                     />
                   </Pressable>
                 )}
@@ -88,7 +96,7 @@ function PreviewImageList({
                     <Ionicons
                       name={'arrow-forward-outline'}
                       size={16}
-                      color={colors.BLACK}
+                      color={colors[theme].BLACK}
                     />
                   </Pressable>
                 )}
@@ -101,47 +109,48 @@ function PreviewImageList({
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  imageContainer: {
-    width: 80,
-    height: 80,
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 6,
-  },
-  imageButton: {
-    position: 'absolute',
-    borderRadius: 10,
-    zIndex: 1,
-    backgroundColor: colors.WHITE,
-  },
-  deleteButton: {
-    top: 5,
-    right: 5,
-    width: 20,
-    height: 20,
-    shadowColor: colors.BLACK,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5, // NOTE : Android only
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  moveLeftButton: {
-    left: 5,
-    bottom: 5,
-  },
-  moveRightButton: {
-    right: 5,
-    bottom: 5,
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      gap: 10,
+    },
+    imageContainer: {
+      width: 80,
+      height: 80,
+    },
+    image: {
+      width: '100%',
+      height: '100%',
+      borderRadius: 6,
+    },
+    imageButton: {
+      position: 'absolute',
+      borderRadius: 10,
+      zIndex: 1,
+      backgroundColor: colors[theme].WHITE,
+    },
+    deleteButton: {
+      top: 5,
+      right: 5,
+      width: 20,
+      height: 20,
+      shadowColor: colors[theme].BLACK,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5, // NOTE : Android only
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    moveLeftButton: {
+      left: 5,
+      bottom: 5,
+    },
+    moveRightButton: {
+      right: 5,
+      bottom: 5,
+    },
+  });
 
 export default PreviewImageList;

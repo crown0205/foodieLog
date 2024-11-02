@@ -5,6 +5,7 @@ import EditPostScreen from '@/screens/feed/EditPostScreen';
 import FeedDetailScreen from '@/screens/feed/FeedDetailScreen';
 import FeedHomeScreen from '@/screens/feed/FeedHomeScreen';
 import ImagesZoomScreen from '@/screens/feed/ImagesZoomScreen';
+import useThemeStore from '@/store/useThemeStore';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { LatLng } from 'react-native-maps';
@@ -19,18 +20,20 @@ export type FeedStackParamList = {
 const Stack = createStackNavigator<FeedStackParamList>();
 
 const FeedStackNavigator = () => {
+  const { theme } = useThemeStore();
+
   return (
     <Stack.Navigator
       screenOptions={{
-        cardStyle: { backgroundColor: colors.WHITE },
+        cardStyle: { backgroundColor: colors[theme].WHITE },
         headerStyle: {
-          backgroundColor: colors.WHITE,
-          shadowColor: colors.GREY_400,
+          backgroundColor: colors[theme].WHITE,
+          shadowColor: colors[theme].GREY_400,
         },
         headerTitleStyle: {
           fontSize: 15,
         },
-        headerTintColor: colors.BLACK,
+        headerTintColor: colors[theme].BLACK,
       }}
     >
       <Stack.Screen
@@ -39,8 +42,11 @@ const FeedStackNavigator = () => {
         options={({ navigation }) => ({
           headerTitle: '피드',
           headerLeft: () => FeedHomeHeaderLeft(navigation),
+          headerStyle: {
+            backgroundColor: colors[theme].WHITE,
+          },
           cardStyle: {
-            backgroundColor: colors.WHITE,
+            backgroundColor: colors[theme].WHITE,
           },
         })}
       />
@@ -50,7 +56,7 @@ const FeedStackNavigator = () => {
         options={{
           headerShown: false,
           cardStyle: {
-            backgroundColor: colors.WHITE,
+            backgroundColor: colors[theme].WHITE,
           },
         }}
       />

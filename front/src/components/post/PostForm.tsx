@@ -32,6 +32,8 @@ import MarkerSelector from './MarkerSelector';
 import ScoreInputSlider from './ScoreInputSlider';
 import useDetailPostStore from '@/store/useDetailPostStore';
 import useMutateUpdatePost from '@/hooks/queries/useMutateUpdatePost';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 
 interface PostFormProps {
   isEdit?: boolean;
@@ -39,6 +41,8 @@ interface PostFormProps {
 }
 
 const PostForm = ({ isEdit = false, location }: PostFormProps) => {
+  const { theme } = useThemeStore();
+  const styles = styling(theme);
   const navigation = useNavigation<StackNavigationProp<FeedStackParamList>>();
   const descriptionRef = useRef<TextInput | null>(null);
   const createPost = useMutateCreatePost();
@@ -137,7 +141,11 @@ const PostForm = ({ isEdit = false, location }: PostFormProps) => {
             value={address}
             disabled
             icon={
-              <Octicons name="location" size={16} color={colors.GREY_500} />
+              <Octicons
+                name="location"
+                size={16}
+                color={colors[theme].GREY_500}
+              />
             }
           />
           <CustomButton
@@ -204,29 +212,30 @@ const PostForm = ({ isEdit = false, location }: PostFormProps) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  contentContainer: {
-    flex: 1,
-    padding: 20,
-    marginBottom: 10,
-  },
-  inputContainer: {
-    gap: 20,
-    marginBottom: 20,
-  },
-  imagesViewer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  notice: {
-    fontSize: 13,
-    color: colors.GREY_500,
-    textAlign: 'left',
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    contentContainer: {
+      flex: 1,
+      padding: 20,
+      marginBottom: 10,
+    },
+    inputContainer: {
+      gap: 20,
+      marginBottom: 20,
+    },
+    imagesViewer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+    },
+    notice: {
+      fontSize: 13,
+      color: colors[theme].GREY_500,
+      textAlign: 'left',
+    },
+  });
 
 export default PostForm;

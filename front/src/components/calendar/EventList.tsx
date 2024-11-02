@@ -5,8 +5,10 @@ import {
   feedTabNavigations,
   mainNavigations,
 } from '@/constants';
+import useThemeStorage from '@/hooks/useThemeStorage';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { FeedTabParamList } from '@/navigations/tab/FeedTabNavigator';
+import { ThemeMode } from '@/types';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import {
@@ -27,6 +29,8 @@ type Navigation = CompositeNavigationProp<
 >;
 
 const EventList = ({ posts }: EventListProps) => {
+  const { theme } = useThemeStorage();
+  const styles = styling(theme);
   const navigation = useNavigation<Navigation>();
   const insets = useSafeAreaInsets();
 
@@ -58,7 +62,8 @@ const EventList = ({ posts }: EventListProps) => {
                   styles.itemHeader,
                   {
                     backgroundColor:
-                      colors[`${post.color}_100`] ?? colors.BLUE_100,
+                      colors[theme][`${post.color}_100`] ??
+                      colors[theme].BLUE_100,
                   },
                 ]}
               />
@@ -80,37 +85,38 @@ const EventList = ({ posts }: EventListProps) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.WHITE,
-    padding: 20,
-  },
-  innerContainer: {
-    gap: 20,
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: '#E5E5E5',
-  },
-  itemHeader: {
-    width: 6,
-    height: 60,
-    marginRight: 10,
-    borderRadius: 20,
-  },
-  infoContainer: {
-    justifyContent: 'space-evenly',
-  },
-  addressText: {
-    fontSize: 14,
-    color: colors.GREY_500,
-  },
-  titleText: {
-    fontSize: 16,
-    color: colors.BLACK,
-    fontWeight: '600',
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: colors[theme].WHITE,
+      padding: 20,
+    },
+    innerContainer: {
+      gap: 20,
+    },
+    itemContainer: {
+      flexDirection: 'row',
+      borderBottomWidth: 1,
+      borderColor: '#E5E5E5',
+    },
+    itemHeader: {
+      width: 6,
+      height: 60,
+      marginRight: 10,
+      borderRadius: 20,
+    },
+    infoContainer: {
+      justifyContent: 'space-evenly',
+    },
+    addressText: {
+      fontSize: 14,
+      color: colors[theme].GREY_500,
+    },
+    titleText: {
+      fontSize: 16,
+      color: colors[theme].BLACK,
+      fontWeight: '600',
+    },
+  });
 
 export default EventList;

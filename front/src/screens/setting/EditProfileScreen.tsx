@@ -22,10 +22,14 @@ import Toast from 'react-native-toast-message';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EditProfileHeaderRight from '../../components/setting/EditProfileHeaderRight';
 import EditProfileImageOption from '../../components/setting/EditProfileImageOption';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import { ThemeMode } from '@/types';
 
 type EditProfileScreenProps = StackScreenProps<SettingStackParamList>;
 
 function EditProfileScreen({ navigation }: EditProfileScreenProps) {
+  const { theme } = useThemeStorage();
+  const styles = styling(theme);
   const { getProfileQuery, profileMutation } = useAuth();
   const { nickname, imageUrl, kakaoImageUrl } = getProfileQuery.data || {};
   const imageOption = useModal();
@@ -98,7 +102,7 @@ function EditProfileScreen({ navigation }: EditProfileScreenProps) {
   }, [handleSubmit, navigation]);
 
   if (imagePicker.isUploading) {
-    return <ActivityIndicator size="large" color={colors.BLUE_500} />;
+    return <ActivityIndicator size="large" color={colors[theme].BLUE_500} />;
   }
 
   return (
@@ -109,13 +113,17 @@ function EditProfileScreen({ navigation }: EditProfileScreenProps) {
           onPress={handlePressImage}
         >
           {imagePicker.imageUrls.length === 0 && !kakaoImageUrl && (
-            <Ionicons name="camera-outline" size={30} color={colors.GREY_500} />
+            <Ionicons
+              name="camera-outline"
+              size={30}
+              color={colors[theme].GREY_500}
+            />
           )}
           {imagePicker.imageUrls.length === 0 && kakaoImageUrl && (
             <>
               <Image style={styles.item} source={{ uri: kakaoImageUrl }} />
               <View style={styles.cameraButton}>
-                <Ionicons name="camera" size={18} color={colors.WHITE} />
+                <Ionicons name="camera" size={18} color={colors[theme].WHITE} />
               </View>
             </>
           )}
@@ -126,7 +134,7 @@ function EditProfileScreen({ navigation }: EditProfileScreenProps) {
                 source={{ uri: `${BASE_URL}${imagePicker.imageUrls[0].url}` }}
               />
               <View style={styles.cameraButton}>
-                <Ionicons name="camera" size={18} color={colors.WHITE} />
+                <Ionicons name="camera" size={18} color={colors[theme].WHITE} />
               </View>
             </>
           )}
@@ -147,7 +155,7 @@ function EditProfileScreen({ navigation }: EditProfileScreenProps) {
         <Ionicons
           name="lock-closed-outline"
           size={18}
-          color={colors.GREY_500}
+          color={colors[theme].GREY_500}
         />
         <Text style={styles.deleteAccountText}>회원탈퇴</Text>
       </Pressable>
@@ -161,61 +169,62 @@ function EditProfileScreen({ navigation }: EditProfileScreenProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
-  profileContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-    marginBottom: 40,
-  },
-  imageContainer: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: colors.WHITE,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  emptyImageContainer: {
-    borderWidth: 1,
-    borderColor: colors.GREY_200,
-  },
-  item: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 50,
-  },
-  cameraButton: {
-    position: 'absolute',
-    bottom: 1,
-    right: 1,
-    backgroundColor: colors.BLUE_500,
-    padding: 5,
-    borderRadius: 50,
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  deleteAccountContainer: {
-    position: 'absolute',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 5,
-    right: 20,
-    bottom: 30,
-    borderRadius: 10,
-    padding: 10,
-  },
-  deleteAccountText: {
-    marginLeft: 10,
-    color: colors.GREY_500,
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 20,
+    },
+    profileContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 20,
+      marginBottom: 40,
+    },
+    imageContainer: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      backgroundColor: colors[theme].WHITE,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    emptyImageContainer: {
+      borderWidth: 1,
+      borderColor: colors[theme].GREY_200,
+    },
+    item: {
+      width: '100%',
+      height: '100%',
+      borderRadius: 50,
+    },
+    cameraButton: {
+      position: 'absolute',
+      bottom: 1,
+      right: 1,
+      backgroundColor: colors[theme].BLUE_500,
+      padding: 5,
+      borderRadius: 50,
+      width: 30,
+      height: 30,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    deleteAccountContainer: {
+      position: 'absolute',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 5,
+      right: 20,
+      bottom: 30,
+      borderRadius: 10,
+      padding: 10,
+    },
+    deleteAccountText: {
+      marginLeft: 10,
+      color: colors[theme].GREY_500,
+    },
+  });
 
 export default EditProfileScreen;

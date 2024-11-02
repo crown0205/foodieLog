@@ -1,4 +1,4 @@
-import useThemeStorage from '@/hooks/useTemeStorage';
+import useThemeStorage from '@/hooks/useThemeStorage';
 import { CompoundOption } from '../common/CompoundOption';
 import { useColorScheme } from 'react-native';
 

@@ -10,6 +10,8 @@ import {
   View,
 } from 'react-native';
 import CustomMarker from '../common/CustomMarker';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 
 interface MarkerSelectorProps extends PressableProps {
   markerColor: MarkerColor;
@@ -30,6 +32,9 @@ const MarkerSelector = ({
   score = 5,
   onPressMarker,
 }: MarkerSelectorProps) => {
+  const { theme } = useThemeStore();
+  const styles = styling(theme);
+
   return (
     <View style={styles.container}>
       <Text style={styles.markerLabel}>마커 선택</Text>
@@ -53,34 +58,35 @@ const MarkerSelector = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 15,
-    borderWidth: 1,
-    borderColor: colors.GREY_200,
-    borderRadius: 6,
-  },
-  markerLabel: {
-    marginBottom: 15,
-    color: colors.GREY_700,
-    fontSize: 14,
-  },
-  markerInputScroll: {
-    flexDirection: 'row',
-    gap: 20,
-  },
-  markerBox: {
-    width: 50,
-    height: 50,
-    borderRadius: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.GREY_OPACITY_100,
-  },
-  pressedMarker: {
-    borderWidth: 2,
-    borderColor: colors.BLUE_300,
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    container: {
+      padding: 15,
+      borderWidth: 1,
+      borderColor: colors[theme].GREY_200,
+      borderRadius: 6,
+    },
+    markerLabel: {
+      marginBottom: 15,
+      color: colors[theme].GREY_700,
+      fontSize: 14,
+    },
+    markerInputScroll: {
+      flexDirection: 'row',
+      gap: 20,
+    },
+    markerBox: {
+      width: 50,
+      height: 50,
+      borderRadius: 6,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors[theme].GREY_OPACITY_100,
+    },
+    pressedMarker: {
+      borderWidth: 2,
+      borderColor: colors[theme].BLUE_300,
+    },
+  });
 
 export default MarkerSelector;

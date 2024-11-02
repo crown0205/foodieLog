@@ -1,4 +1,6 @@
 import { colors } from '@/constants';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 import { PropsWithChildren, ReactNode, createContext, useContext } from 'react';
 import {
   GestureResponderEvent,
@@ -56,6 +58,9 @@ function OptionMain({
 
 function Background({ children }: PropsWithChildren) {
   const optionContext = useContext(OptionContext);
+  const { theme } = useThemeStore();
+  const styles = styling(theme);
+
   return (
     <SafeAreaView
       style={styles.optionBackground}
@@ -67,12 +72,18 @@ function Background({ children }: PropsWithChildren) {
 }
 
 function Container({ children }: PropsWithChildren) {
+  const { theme } = useThemeStore();
+  const styles = styling(theme);
+
   return (
     <View style={[styles.optionContainer, styles.shadow]}>{children}</View>
   );
 }
 
 function Title({ children }: PropsWithChildren) {
+  const { theme } = useThemeStore();
+  const styles = styling(theme);
+
   return (
     <View style={styles.titleContainer}>
       <Text style={styles.titleText}>{children}</Text>
@@ -92,6 +103,9 @@ function Button({
   isChecked = false,
   ...props
 }: ButtonProps) {
+  const { theme } = useThemeStore();
+  const styles = styling(theme);
+
   return (
     <Pressable
       style={({ pressed }) => [
@@ -105,13 +119,16 @@ function Button({
       </Text>
 
       {isChecked && (
-        <Ionicons name="checkmark" size={20} color={colors.BLUE_500} />
+        <Ionicons name="checkmark" size={20} color={colors[theme].BLUE_500} />
       )}
     </Pressable>
   );
 }
 
 function Divider() {
+  const { theme } = useThemeStore();
+  const styles = styling(theme);
+
   return <View style={styles.border} />;
 }
 
@@ -123,58 +140,60 @@ export const CompoundOption = Object.assign(OptionMain, {
   Divider,
 });
 
-const styles = StyleSheet.create({
-  optionBackground: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: colors.MODAL_BACKGROUND,
-  },
-  optionContainer: {
-    borderRadius: 15,
-    marginHorizontal: 10,
-    marginBottom: 10,
-    backgroundColor: colors.GREY_100,
-    overflow: 'hidden',
-  },
-  titleContainer: {
-    padding: 15,
-    alignItems: 'center',
-  },
-  titleText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.BLACK,
-  },
-  optionButton: {
-    padding: 15,
-    height: 'auto',
-    alignItems: 'center',
-    justifyContent: 'center',
-    // flexDirection: 'row',
-  },
-  optionButtonPressed: {
-    backgroundColor: colors.GREY_200,
-  },
-  optionText: {
-    fontSize: 17,
-    fontWeight: '500',
-    color: colors.BLUE_500,
-    paddingVertical: 2,
-  },
-  dangerText: {
-    color: colors.RED_500,
-  },
-  border: {
-    height: 1,
-    backgroundColor: colors.GREY_300,
-  },
-  shadow: {
-    shadowColor: colors.BLACK,
-    shadowOffset: {
-      width: 1,
-      height: 1,
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    optionBackground: {
+      flex: 1,
+      justifyContent: 'flex-end',
+      backgroundColor: colors[theme].MODAL_BACKGROUND,
     },
-    shadowOpacity: 0.5,
-    elevation: 5,
-  },
-});
+    optionContainer: {
+      borderRadius: 15,
+      marginHorizontal: 10,
+      marginBottom: 10,
+      backgroundColor: colors[theme].GREY_100,
+      overflow: 'hidden',
+    },
+    titleContainer: {
+      padding: 15,
+      alignItems: 'center',
+    },
+    titleText: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: colors[theme].BLACK,
+    },
+    optionButton: {
+      padding: 15,
+      height: 'auto',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'row',
+      gap: 10,
+    },
+    optionButtonPressed: {
+      backgroundColor: colors[theme].GREY_200,
+    },
+    optionText: {
+      fontSize: 17,
+      fontWeight: '500',
+      color: colors[theme].BLUE_500,
+      paddingVertical: 2,
+    },
+    dangerText: {
+      color: colors[theme].RED_500,
+    },
+    border: {
+      height: 1,
+      backgroundColor: colors[theme].GREY_300,
+    },
+    shadow: {
+      shadowColor: colors[theme].BLACK,
+      shadowOffset: {
+        width: 1,
+        height: 1,
+      },
+      shadowOpacity: 0.5,
+      elevation: 5,
+    },
+  });

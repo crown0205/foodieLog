@@ -1,6 +1,9 @@
 import FeedHomeHeaderLeft from '@/components/feed/FeedHomeHeaderLeft';
 import { colors, feedNavigations, feedTabNavigations } from '@/constants';
 import FeedFavoriteScreen from '@/screens/feed/FeedFavoriteScreen';
+import FeedSearchScreen from '@/screens/feed/FeedSearchScreen';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   RouteProp,
@@ -9,7 +12,6 @@ import {
 import { StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeedStackNavigator from '../stack/FeedStackNavigator';
-import FeedSearchScreen from '@/screens/feed/FeedSearchScreen';
 
 export type FeedTabParamList = {
   [feedTabNavigations.FEED_HOME]: {
@@ -23,7 +25,11 @@ export type FeedTabParamList = {
 
 const Tab = createBottomTabNavigator<FeedTabParamList>();
 
-function TabBarIcons(route: RouteProp<FeedTabParamList>, focused: boolean) {
+function TabBarIcons(
+  route: RouteProp<FeedTabParamList>,
+  focused: boolean,
+  theme: ThemeMode,
+) {
   let iconName = '';
 
   switch (route.name) {
@@ -41,33 +47,34 @@ function TabBarIcons(route: RouteProp<FeedTabParamList>, focused: boolean) {
   return (
     <Ionicons
       name={iconName}
-      color={focused ? colors.BLUE_500 : colors.GREY_500}
+      color={focused ? colors[theme].BLUE_500 : colors[theme].GREY_500}
       size={25}
     />
   );
 }
 
 function FeedTabNavigator() {
+  const { theme } = useThemeStore();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerStyle: {
-          backgroundColor: colors.WHITE,
-          shadowColor: colors.GREY_400,
+          backgroundColor: colors[theme].WHITE,
+          shadowColor: colors[theme].GREY_400,
         },
         headerTitleStyle: {
           fontSize: 15,
         },
-        headerTintColor: colors.BLACK,
+        headerTintColor: colors[theme].BLACK,
 
         tabBarShowLabel: false,
-        tabBarActiveTintColor: colors.BLUE_500,
+        tabBarActiveTintColor: colors[theme].BLUE_500,
         tabBarStyle: {
-          backgroundColor: colors.WHITE,
-          borderTopColor: colors.GREY_200,
+          backgroundColor: colors[theme].WHITE,
+          borderTopColor: colors[theme].GREY_200,
           borderTopWidth: 1,
         },
-        tabBarIcon: ({ focused }) => TabBarIcons(route, focused),
+        tabBarIcon: ({ focused }) => TabBarIcons(route, focused, theme),
       })}
     >
       <Tab.Screen
@@ -89,8 +96,8 @@ function FeedTabNavigator() {
             }
 
             return {
-              backgroundColor: colors.WHITE,
-              borderTopColor: colors.GREY_300,
+              backgroundColor: colors[theme].WHITE,
+              borderTopColor: colors[theme].GREY_300,
               borderTopWidth: StyleSheet.hairlineWidth,
             };
           })(route),
@@ -103,10 +110,8 @@ function FeedTabNavigator() {
           headerTitle: '즐겨찾기',
           headerLeft: () => FeedHomeHeaderLeft(navigation),
           headerStyle: {
-            backgroundColor: colors.WHITE,
-            borderColor: colors.GREY_100,
-            borderWidth: 1,
-            height: 110,
+            backgroundColor: colors[theme].WHITE,
+            height: 100,
           },
         })}
       />
@@ -117,6 +122,9 @@ function FeedTabNavigator() {
           headerTitle: '검색',
           headerShown: false,
           headerLeft: () => FeedHomeHeaderLeft(navigation),
+          headerStyle: {
+            backgroundColor: colors[theme].WHITE,
+          },
         })}
       />
     </Tab.Navigator>

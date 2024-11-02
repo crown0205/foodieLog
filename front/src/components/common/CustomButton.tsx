@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import { colors } from '../../constants';
 import { View } from 'react-native';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 
 interface CustomButtonProps extends PressableProps {
   label: string;
@@ -34,6 +36,9 @@ const CustomButton = ({
   icon = null,
   ...props
 }: CustomButtonProps) => {
+  const { theme } = useThemeStore();
+  const styles = styling(theme);
+
   return (
     <Pressable
       disabled={inValid}
@@ -56,67 +61,68 @@ const CustomButton = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  innerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 5,
-  },
-  filled: {
-    backgroundColor: colors.BLUE_500,
-  },
-  outlined: {
-    borderColor: colors.BLUE_500,
-    borderWidth: 1,
-  },
-  filledPressed: {
-    backgroundColor: colors.BLUE_300,
-  },
-  outlinedPressed: {
-    borderColor: colors.BLUE_300,
-    borderWidth: 1,
-  },
-  small: {
-    width: 'auto',
-    paddingVertical: deviceHeight > 700 ? 5 : 4,
-    paddingHorizontal: 10,
-  },
-  medium: {
-    width: '50%',
-    paddingVertical: deviceHeight > 700 ? 10 : 8,
-    paddingHorizontal: 15,
-  },
-  large: {
-    width: '100%',
-    paddingVertical: deviceHeight > 700 ? 15 : 12,
-    paddingHorizontal: 20,
-  },
-  full: {
-    width: '100%',
-    height: '100%',
-    paddingVertical: deviceHeight > 700 ? 15 : 12,
-    paddingHorizontal: 20,
-  },
-  filledText: {
-    color: 'white',
-  },
-  outlinedText: {
-    color: colors.BLUE_500,
-  },
-  text: {
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  inValid: {
-    opacity: 0.5,
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    container: {
+      padding: 10,
+      borderRadius: 5,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    innerContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 5,
+    },
+    filled: {
+      backgroundColor: colors[theme].BLUE_500,
+    },
+    outlined: {
+      borderColor: colors[theme].BLUE_500,
+      borderWidth: 1,
+    },
+    filledPressed: {
+      backgroundColor: colors[theme].BLUE_300,
+    },
+    outlinedPressed: {
+      borderColor: colors[theme].BLUE_300,
+      borderWidth: 1,
+    },
+    small: {
+      width: 'auto',
+      paddingVertical: deviceHeight > 700 ? 5 : 4,
+      paddingHorizontal: 10,
+    },
+    medium: {
+      width: '50%',
+      paddingVertical: deviceHeight > 700 ? 10 : 8,
+      paddingHorizontal: 15,
+    },
+    large: {
+      width: '100%',
+      paddingVertical: deviceHeight > 700 ? 15 : 12,
+      paddingHorizontal: 20,
+    },
+    full: {
+      width: '100%',
+      height: '100%',
+      paddingVertical: deviceHeight > 700 ? 15 : 12,
+      paddingHorizontal: 20,
+    },
+    filledText: {
+      color: 'white',
+    },
+    outlinedText: {
+      color: colors[theme].BLUE_500,
+    },
+    text: {
+      fontSize: 16,
+      fontWeight: '700',
+    },
+    inValid: {
+      opacity: 0.5,
+    },
+  });
 
 export default CustomButton;

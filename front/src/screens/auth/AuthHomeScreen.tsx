@@ -1,7 +1,10 @@
 import CustomButton from '@/components/common/CustomButton';
+import { colors } from '@/constants';
 import { authNavigations } from '@/constants/navigations';
 import useAuth from '@/hooks/queries/useAuth';
 import { AuthStackParamList } from '@/navigations/stack/AuthStackNavigator';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 import { deviceType } from '@/utils';
 import appleAuth, {
   AppleButton,
@@ -24,7 +27,10 @@ type AuthHomeScreenProps = StackScreenProps<
 >;
 
 const AuthHomeScreen = ({ navigation }: AuthHomeScreenProps) => {
+  const { theme } = useThemeStore();
+  const styles = styling(theme);
   const { appleLoginMutation } = useAuth();
+
   const handlePressAppleLogin = async () => {
     try {
       const { identityToken, fullName } = await appleAuth.performRequest({
@@ -76,7 +82,11 @@ const AuthHomeScreen = ({ navigation }: AuthHomeScreenProps) => {
           style={styles.kakaoButtonContainer}
           textStyle={styles.kakaoButtonText}
           icon={
-            <Ionicons name="chatbubble-sharp" color={'#181600'} size={16} />
+            <Ionicons
+              name="chatbubble-sharp"
+              color={colors[theme].BLACK}
+              size={16}
+            />
           }
         />
 
@@ -96,38 +106,39 @@ const AuthHomeScreen = ({ navigation }: AuthHomeScreenProps) => {
 
 export default AuthHomeScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 20,
-  },
-  logoContainer: {
-    flex: 1,
-    marginTop: 50,
-    width: Dimensions.get('screen').width / 1.8,
-  },
-  logo: {
-    width: '100%',
-    height: '100%',
-  },
-  buttonContainer: {
-    flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    gap: 10,
-    marginBottom: 40,
-  },
-  kakaoButtonContainer: {
-    backgroundColor: '#fee503',
-  },
-  kakaoButtonText: {
-    color: '#181600',
-  },
-  appleButton: {
-    width: Dimensions.get('screen').width - 40,
-    height: 45,
-    paddingVertical: 25,
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginHorizontal: 20,
+    },
+    logoContainer: {
+      flex: 1,
+      marginTop: 50,
+      width: Dimensions.get('screen').width / 1.8,
+    },
+    logo: {
+      width: '100%',
+      height: '100%',
+    },
+    buttonContainer: {
+      flex: 1,
+      width: '100%',
+      justifyContent: 'center',
+      gap: 10,
+      marginBottom: 40,
+    },
+    kakaoButtonContainer: {
+      backgroundColor: '#fee503',
+    },
+    kakaoButtonText: {
+      color: colors[theme].BLACK,
+    },
+    appleButton: {
+      width: Dimensions.get('screen').width - 40,
+      height: 45,
+      paddingVertical: 25,
+    },
+  });

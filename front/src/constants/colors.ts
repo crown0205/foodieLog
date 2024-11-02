@@ -74,6 +74,8 @@ const common = {
   GREEN_700: '#008a50',
   GREEN_800: '#007544',
   GREEN_900: '#005c36',
+  UNCHANGE_WHITE: '#ffffff',
+  UNCHANGE_BLACK: '#000000',
 };
 
 const colors = {
@@ -153,7 +155,7 @@ const colors = {
     GREY_OPACITY_200: 'rgba(3, 18, 40, 0.7)',
     GREY_OPACITY_100: 'rgba(0, 12, 30, 0.8)',
     GREY_OPACITY_50: 'rgba(2, 9, 19, 0.91)',
-    WHITE: '#000000',
+    WHITE: '#17171c',
     BLACK: '#ffffff',
     WHITE_OPACITY_900: 'rgba(209, 209, 253, 0.05)',
     WHITE_OPACITY_800: 'rgba(217, 217, 255, 0.11)',

@@ -1,6 +1,8 @@
 import { colors } from '@/constants';
 import { RegionInfo } from '@/hooks/useSearchLocation';
 import useLocationStore from '@/store/useLocationStore';
+import useThemeStore from '@/store/useThemeStore';
+import { ThemeMode } from '@/types';
 import { useNavigation } from '@react-navigation/native';
 import {
   Dimensions,
@@ -18,6 +20,8 @@ interface SearchReginResultProps {
 }
 
 function SearchReginResult({ regionInfo }: SearchReginResultProps) {
+  const { theme } = useThemeStore();
+  const styles = styling(theme);
   const navigation = useNavigation();
   const { setMoveLocation, setSelectLocation } = useLocationStore();
 
@@ -54,7 +58,11 @@ function SearchReginResult({ regionInfo }: SearchReginResultProps) {
             ]}
           >
             <View style={styles.placeNameContainer}>
-              <Octicons name="location" size={15} color={colors.BLUE_700} />
+              <Octicons
+                name="location"
+                size={15}
+                color={colors[theme].BLUE_700}
+              />
               <Text
                 style={styles.placeText}
                 ellipsizeMode="tail"
@@ -83,56 +91,57 @@ function SearchReginResult({ regionInfo }: SearchReginResultProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: Dimensions.get('window').height / 2,
-    marginTop: 10,
-  },
-  scrollContainer: {
-    padding: 10,
-  },
-  placeNameContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    marginBottom: 5,
-  },
-  placeText: {
-    color: colors.BLACK,
-    flexShrink: 1,
-    fontSize: 16,
-  },
-  categoryContainer: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  distanceText: {
-    color: colors.GREY_500,
-  },
-  subInfoText: {
-    flexShrink: 1,
-    color: colors.GREY_500,
-  },
-  itemBorder: {
-    marginHorizontal: 10,
-    paddingVertical: 10,
-    borderBottomColor: colors.GREY_300,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  noItemBorder: {
-    borderBottomWidth: 0,
-  },
-  noResultContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 50,
-  },
-  noResultText: {
-    color: colors.GREY_500,
-    fontSize: 16,
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    container: {
+      width: '100%',
+      height: Dimensions.get('window').height / 2,
+      marginTop: 10,
+    },
+    scrollContainer: {
+      padding: 10,
+    },
+    placeNameContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 5,
+      marginBottom: 5,
+    },
+    placeText: {
+      color: colors[theme].BLACK,
+      flexShrink: 1,
+      fontSize: 16,
+    },
+    categoryContainer: {
+      flexDirection: 'row',
+      gap: 10,
+    },
+    distanceText: {
+      color: colors[theme].GREY_500,
+    },
+    subInfoText: {
+      flexShrink: 1,
+      color: colors[theme].GREY_500,
+    },
+    itemBorder: {
+      marginHorizontal: 10,
+      paddingVertical: 10,
+      borderBottomColor: colors[theme].GREY_300,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+    },
+    noItemBorder: {
+      borderBottomWidth: 0,
+    },
+    noResultContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 50,
+    },
+    noResultText: {
+      color: colors[theme].GREY_500,
+      fontSize: 16,
+    },
+  });
 
 export default SearchReginResult;

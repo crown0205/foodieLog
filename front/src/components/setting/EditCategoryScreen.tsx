@@ -17,6 +17,8 @@ import {
 import Toast from 'react-native-toast-message';
 import InputField from '../common/InputField';
 import EditCategoryHeaderRight from './EditCategoryHeaderRight';
+import useThemeStorage from '@/hooks/useThemeStorage';
+import { ThemeMode } from '@/types';
 
 const categoryList: MarkerColor[] = [
   'RED',
@@ -37,6 +39,8 @@ const categoryPlaceholder = [
 type EditCategoryScreenProps = StackScreenProps<SettingStackParamList>;
 
 function EditCategoryScreen({ navigation }: EditCategoryScreenProps) {
+  const { theme } = useThemeStorage();
+  const styles = styling(theme);
   const refArray = useRef<(TextInput | null)[]>([]);
   const { getProfileQuery, categoryMutation } = useAuth();
   const { categories } = getProfileQuery.data || {};
@@ -121,49 +125,50 @@ function EditCategoryScreen({ navigation }: EditCategoryScreenProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  contentContainer: {
-    flex: 1,
-    padding: 20,
-    marginBottom: 20,
-  },
-  infoContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 30,
-    borderWidth: 1,
-    borderColor: colors.BLUE_500,
-    borderRadius: 3,
-    padding: 10,
-    gap: 10,
-  },
-  infoText: {
-    fontSize: 16,
-    color: colors.BLUE_500,
-    fontWeight: 'bold',
-  },
-  formContainer: {
-    gap: 10,
-  },
-  categoryContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    marginBottom: 10,
-  },
-  category: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    marginRight: 10,
-    backgroundColor: colors.RED_400,
-  },
-  inputContainer: {
-    flex: 1,
-  },
-});
+const styling = (theme: ThemeMode) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    contentContainer: {
+      flex: 1,
+      padding: 20,
+      marginBottom: 20,
+    },
+    infoContainer: {
+      alignItems: 'center',
+      marginTop: 10,
+      marginBottom: 30,
+      borderWidth: 1,
+      borderColor: colors[theme].BLUE_500,
+      borderRadius: 3,
+      padding: 10,
+      gap: 10,
+    },
+    infoText: {
+      fontSize: 16,
+      color: colors[theme].BLUE_500,
+      fontWeight: 'bold',
+    },
+    formContainer: {
+      gap: 10,
+    },
+    categoryContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+      marginBottom: 10,
+    },
+    category: {
+      width: 20,
+      height: 20,
+      borderRadius: 10,
+      marginRight: 10,
+      backgroundColor: colors[theme].RED_400,
+    },
+    inputContainer: {
+      flex: 1,
+    },
+  });
 
 export default EditCategoryScreen;
