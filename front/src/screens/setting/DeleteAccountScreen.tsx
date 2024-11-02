@@ -17,16 +17,14 @@ function DeleteAccountScreen() {
           style: 'destructive',
           onPress: () => {
             deleteAccountMutation.mutate(null, {
-              onSuccess: () => {
-                logoutMutation.mutate(null);
+              onSuccess: () =>
                 Toast.show({
                   type: 'success',
                   text1: '회원탈퇴가 완료되었습니다.',
                   position: 'bottom',
                   visibilityTime: 2000,
-                });
-              },
-              onError: error => {
+                }),
+              onError: error =>
                 Toast.show({
                   type: 'error',
                   text1:
@@ -34,8 +32,7 @@ function DeleteAccountScreen() {
                     errorMessages.UNEXPECTED_ERROR,
                   position: 'bottom',
                   visibilityTime: 2000,
-                });
-              },
+                }),
             });
           },
         },
@@ -57,12 +54,7 @@ function DeleteAccountScreen() {
           저장된 장소가 남아있다면 삭제해주세요.
         </Text>
       </View>
-      <CustomButton
-        label="회원탈퇴"
-        variant="filled"
-        size="large"
-        onPress={handlePressDeleteAccount}
-      />
+      <CustomButton label="회원탈퇴" onPress={handlePressDeleteAccount} />
     </View>
   );
 }

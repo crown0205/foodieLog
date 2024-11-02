@@ -17,7 +17,7 @@ const alerts = {
   },
   DELETE_ACCOUNT: {
     TITLE: '정말 탈퇴하시겠습니까?',
-    DESCRIPTION: '회원 정보는 탈퇴 즉시 삭제되며, 복구되지 않습니다.',
+    DESCRIPTION: '회원 정보는 탈퇴 즉시 삭제되며, 복구 할 수 없습니다.',
   },
 };
 

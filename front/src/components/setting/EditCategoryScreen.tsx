@@ -5,7 +5,7 @@ import { SettingStackParamList } from '@/navigations/stack/SettingStackNavigator
 import { MarkerColor } from '@/types/domain';
 import { validateEditCategory } from '@/utils';
 import { StackScreenProps } from '@react-navigation/stack';
-import React, { useCallback, useLayoutEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -51,7 +51,7 @@ function EditCategoryScreen({ navigation }: EditCategoryScreenProps) {
     validate: validateEditCategory,
   });
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = () => {
     categoryMutation.mutate(category.values, {
       onSuccess: () => {
         Toast.show({
@@ -69,9 +69,9 @@ function EditCategoryScreen({ navigation }: EditCategoryScreenProps) {
         });
       },
     });
-  }, [category.values, categoryMutation]);
+  };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     navigation.setOptions({
       headerRight: () => EditCategoryHeaderRight(handleSubmit),
     });
@@ -94,11 +94,10 @@ function EditCategoryScreen({ navigation }: EditCategoryScreenProps) {
 
         <View style={styles.formContainer}>
           {categoryList.map((color, idx) => (
-            <View style={styles.categoryContainer}>
+            <View key={idx} style={styles.categoryContainer}>
               <View
                 style={[styles.category, { backgroundColor: colorHex[color] }]}
               />
-
               <View style={styles.inputContainer}>
                 <InputField
                   {...category.getTextInputProps(color)}
