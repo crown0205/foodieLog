@@ -1,18 +1,18 @@
+import { colors } from '@/constants';
+import useThemeStorage from '@/hooks/useThemeStorage';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
-import { useColorScheme } from 'react-native';
+import { StatusBar } from 'react-native';
 import Toast, { BaseToast, BaseToastProps } from 'react-native-toast-message';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import queryClient from './src/api/queryClient';
 import RootNavigator from './src/navigations/root/RootNavigator';
-import { colors } from '@/constants';
 
 const toastConfig = {
   success: (props: BaseToastProps) => (
     <BaseToast
       {...props}
-      style={{ borderLeftColor: colors.BLUE_500 }}
+      style={{ borderLeftColor: colors['light'].BLUE_500 }}
       text1Style={{
         fontSize: 14,
       }}
@@ -24,7 +24,7 @@ const toastConfig = {
   error: (props: BaseToastProps) => (
     <BaseToast
       {...props}
-      style={{ borderLeftColor: colors.RED_500 }}
+      style={{ borderLeftColor: colors['light'].RED_500 }}
       text1Style={{
         fontSize: 14,
       }}
@@ -36,14 +36,13 @@ const toastConfig = {
 };
 
 function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const { theme } = useThemeStorage();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <StatusBar
+        barStyle={theme === 'light' ? 'dark-content' : 'light-content'}
+      />
       <NavigationContainer>
         <RootNavigator />
         <Toast config={toastConfig} />
