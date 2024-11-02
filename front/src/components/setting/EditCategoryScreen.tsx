@@ -14,9 +14,9 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
 import InputField from '../common/InputField';
 import EditCategoryHeaderRight from './EditCategoryHeaderRight';
-import Toast from 'react-native-toast-message';
 
 const categoryList: MarkerColor[] = [
   'RED',

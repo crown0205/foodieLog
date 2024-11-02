@@ -7,7 +7,9 @@ import {
   colors,
   feedNavigations,
   mainNavigations,
+  settingNavigations,
 } from '@/constants';
+import useAuth from '@/hooks/queries/useAuth';
 import useGetPost from '@/hooks/queries/useGetPost';
 import useMutateFavoritePost from '@/hooks/queries/useMutateFavoritePost';
 import useModal from '@/hooks/useModal';
@@ -45,6 +47,8 @@ type FeedDetailScreenProps = CompositeScreenProps<
 function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
   const { id } = route.params;
   const { data: post, isPending, isError } = useGetPost(id);
+  const { getProfileQuery } = useAuth();
+  const { categories } = getProfileQuery.data || {};
   const favoriteMutation = useMutateFavoritePost();
   const insets = useSafeAreaInsets(); // NOTE : 상단바 높이
   const { setMoveLocation } = useLocationStore();
@@ -70,6 +74,13 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
 
   const handlePressFavorite = () => {
     favoriteMutation.mutate(post.id);
+  };
+
+  const handlePressCategory = () => {
+    navigation.navigate(mainNavigations.SETTING, {
+      screen: settingNavigations.EDIT_CATEGORY,
+      initial: false,
+    });
   };
 
   return (
@@ -167,7 +178,18 @@ function FeedDetailScreen({ route, navigation }: FeedDetailScreenProps) {
               </View>
               <View style={styles.infoColumn}>
                 <Text style={styles.infoColumnKeyText}>카테고리 :</Text>
-                <Text style={styles.infoColumnValueText}>TEST</Text>
+                {categories?.[post.color] ? (
+                  <Text style={styles.infoColumnValueText}>
+                    {categories[post.color]}
+                  </Text>
+                ) : (
+                  <Pressable
+                    style={styles.emptyCategoryContainer}
+                    onPress={handlePressCategory}
+                  >
+                    <Text style={styles.infoColumnKeyText}>미설정</Text>
+                  </Pressable>
+                )}
               </View>
             </View>
           </View>
@@ -251,6 +273,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.GREY_200,
     borderColor: colors.GREY_300,
     borderWidth: 1,
+  },
+  emptyCategoryContainer: {
+    padding: 4,
+    borderRadius: 10,
+    backgroundColor: colors.GREY_200,
   },
   contentsContainer: {
     padding: 16,
