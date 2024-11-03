@@ -1,7 +1,9 @@
 import CustomMarker from '@/components/common/CustomMarker';
+import MapLegend from '@/components/map/MapLegend';
 import MarkerModal from '@/components/map/MarkerModal';
 import { MapNavigations, alerts, colors, numbers } from '@/constants';
 import useGetMarkers from '@/hooks/queries/useGetMarkers';
+import useLegendStorage from '@/hooks/useLegendStorage';
 import useModal from '@/hooks/useModal';
 import useMoveMapView from '@/hooks/useMoveMapView';
 import usePermission from '@/hooks/usePermission';
@@ -48,6 +50,7 @@ const MapHomeScreen = () => {
   const [markerId, setMarkerId] = useState<number | null>(null);
   const { data: markers = [] } = useGetMarkers();
   const { mapRef, moveMapView, handleChangeDelta } = useMoveMapView();
+  const legend = useLegendStorage();
   usePermission('LOCATION');
 
   const handlePressMarker = (id: number, coordinate: LatLng) => {
@@ -145,6 +148,7 @@ const MapHomeScreen = () => {
         isVisible={markerModal.isVisible}
         hide={markerModal.hide}
       />
+      {legend.isVisible && <MapLegend />}
     </>
   );
 };

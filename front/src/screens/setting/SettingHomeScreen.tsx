@@ -1,3 +1,4 @@
+import MapLegendOption from '@/components/map/MapLegendOption';
 import DarkModeOption from '@/components/setting/DarkModeOption';
 import SettingItem from '@/components/setting/SettingItem';
 import { colors, settingNavigations } from '@/constants';
@@ -20,6 +21,7 @@ const SettingHomeScreen = ({ navigation }: SettingHomeScreenProps) => {
   const styles = styling(theme);
   const { logoutMutation } = useAuth();
   const darkModeOption = useModal();
+  const mapLegendOption = useModal();
 
   const handlePressEditProfile = () => {
     navigation.navigate(settingNavigations.EDIT_PROFILE);
@@ -41,6 +43,7 @@ const SettingHomeScreen = ({ navigation }: SettingHomeScreenProps) => {
           title="마커 카테고리 설정"
           onPress={handlePressEditCategory}
         />
+        <SettingItem title="범례 표시" onPress={mapLegendOption.show} />
         <SettingItem title="다크 모드" onPress={darkModeOption.show} />
 
         <View style={styles.space} />
@@ -53,6 +56,10 @@ const SettingHomeScreen = ({ navigation }: SettingHomeScreenProps) => {
           }
         />
 
+        <MapLegendOption
+          isVisible={mapLegendOption.isVisible}
+          hideOption={mapLegendOption.hide}
+        />
         <DarkModeOption
           isVisible={darkModeOption.isVisible}
           hideOption={darkModeOption.hide}
