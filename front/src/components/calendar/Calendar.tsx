@@ -11,6 +11,7 @@ import CalderaHomeHeaderRight from './CalendarHomeHeaderRight';
 import DateBox from './DateBox';
 import DayOfWeeks from './DayOfWeeks';
 import YearSelector from './YearSelector';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 interface CalendarProps<T> {
   monthYear: MonthYear;
@@ -62,6 +63,11 @@ const Calendar = <T,>({
           <Text style={styles.titleText}>
             {year}년 {month}월
           </Text>
+          <MaterialIcons
+            name="keyboard-arrow-down"
+            size={20}
+            color={colors[theme].GREY_500}
+          />
         </Pressable>
         <Pressable
           style={styles.monthButtonContainer}
@@ -123,6 +129,7 @@ const styling = (theme: ThemeMode) =>
     },
     monthYearContainer: {
       padding: 10,
+      alignItems: 'center',
     },
     titleText: {
       fontSize: 18,
