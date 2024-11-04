@@ -5,8 +5,9 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { StyleSheet, Text, View } from 'react-native';
 import CustomButton from './CustomButton';
 import { colors } from '@/constants';
+import { PropsWithChildren } from 'react';
 
-function RetryErrorBoundary() {
+function RetryErrorBoundary({ children }: PropsWithChildren) {
   const { theme } = useThemeStore();
   const styles = styling(theme);
   const { reset } = useQueryErrorResetBoundary();
@@ -27,7 +28,9 @@ function RetryErrorBoundary() {
           />
         </View>
       )}
-    ></ErrorBoundary>
+    >
+      {children}
+    </ErrorBoundary>
   );
 }
 
