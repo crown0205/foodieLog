@@ -5,7 +5,7 @@ import {
   InfiniteData,
   QueryKey,
   UseInfiniteQueryOptions,
-  useInfiniteQuery,
+  useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
 
 function useGetInfiniteSearchPosts(
@@ -19,7 +19,7 @@ function useGetInfiniteSearchPosts(
     number
   >,
 ) {
-  return useInfiniteQuery({
+  return useSuspenseInfiniteQuery({
     queryKey: [queryKeys.POST, queryKeys.GET_SEARCH_POSTS, query],
     queryFn: ({ pageParam }) => getSearchPosts(pageParam, query),
     initialPageParam: 1,
