@@ -1,4 +1,4 @@
-import Indicator from '@/components/common/Indicator';
+import Loader from '@/components/common/Loader';
 import RetryErrorBoundary from '@/components/common/RetryErrorBoundary';
 import FeedList from '@/components/feed/FeedList';
 import React, { Suspense } from 'react';
@@ -8,7 +8,7 @@ const FeedHomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <RetryErrorBoundary>
-        <Suspense fallback={<Indicator />}>
+        <Suspense fallback={<Loader />}>
           <FeedList />
         </Suspense>
       </RetryErrorBoundary>

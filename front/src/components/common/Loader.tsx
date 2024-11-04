@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 
-function Indicator({
+function Loader({
   children,
   size = 'small',
   color = colors.light.GREY_500,
@@ -38,4 +38,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Indicator;
+export default Loader;

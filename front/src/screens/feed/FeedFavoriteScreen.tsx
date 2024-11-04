@@ -1,4 +1,4 @@
-import Indicator from '@/components/common/Indicator';
+import Loader from '@/components/common/Loader';
 import RetryErrorBoundary from '@/components/common/RetryErrorBoundary';
 import FeedFavoriteList from '@/components/feed/FeedFavoriteList';
 import { colors } from '@/constants';
@@ -13,7 +13,7 @@ const FeedFavoriteScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <RetryErrorBoundary>
-        <Suspense fallback={<Indicator />}>
+        <Suspense fallback={<Loader />}>
           <FeedFavoriteList />
         </Suspense>
       </RetryErrorBoundary>
