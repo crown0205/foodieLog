@@ -14,6 +14,7 @@ import {
   View,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 interface OptionContextValue {
   onClickOutSide: (event: GestureResponderEvent) => void;
@@ -132,12 +133,73 @@ function Divider() {
   return <View style={styles.border} />;
 }
 
+interface CheckBoxProps extends PressableProps {
+  children: ReactNode;
+  icon?: ReactNode;
+  isChecked: boolean;
+}
+
+function CheckBox({
+  children,
+  icon,
+  isChecked = false,
+  ...props
+}: CheckBoxProps) {
+  const { theme } = useThemeStore();
+  const styles = styling(theme);
+
+  return (
+    <Pressable
+      style={({ pressed }) => [
+        pressed && styles.optionButtonPressed,
+        styles.checkBoxContainer,
+      ]}
+      {...props}
+    >
+      <Ionicons
+        name={`checkmark-circle${isChecked ? '' : '-outline'}`}
+        size={22}
+        color={colors[theme].BLUE_500}
+      />
+      {icon}
+      <Text style={styles.checkBoxText}>{children}</Text>
+    </Pressable>
+  );
+}
+
+interface FilterProps extends PressableProps {
+  children: ReactNode;
+  isSelected?: boolean;
+}
+
+function Filter({ children, isSelected = false, ...props }: FilterProps) {
+  const { theme } = useThemeStore();
+  const styles = styling(theme);
+
+  return (
+    <Pressable style={styles.filterContainer} {...props}>
+      <Text
+        style={[isSelected ? styles.filterSelectedText : styles.filterText]}
+      >
+        {children}
+      </Text>
+      <MaterialIcons
+        name="keyboard-arrow-down"
+        size={22}
+        color={isSelected ? colors[theme].BLUE_500 : colors[theme].GREY_500}
+      />
+    </Pressable>
+  );
+}
+
 export const CompoundOption = Object.assign(OptionMain, {
   Background,
   Container,
   Title,
   Button,
   Divider,
+  CheckBox,
+  Filter,
 });
 
 const styling = (theme: ThemeMode) =>
@@ -195,5 +257,31 @@ const styling = (theme: ThemeMode) =>
       },
       shadowOpacity: 0.5,
       elevation: 5,
+    },
+    checkBoxContainer: {
+      padding: 15,
+      paddingHorizontal: 20,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+    },
+    checkBoxText: {
+      fontSize: 16,
+      color: colors[theme].BLACK,
+    },
+    filterContainer: {
+      padding: 15,
+      gap: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    filterText: {
+      fontSize: 16,
+      color: colors[theme].GREY_300,
+    },
+    filterSelectedText: {
+      fontSize: 16,
+      color: colors[theme].BLUE_500,
     },
   });
