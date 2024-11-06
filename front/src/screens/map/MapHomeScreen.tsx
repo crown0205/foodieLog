@@ -53,8 +53,6 @@ const MapHomeScreen = () => {
   const { data: markers = [] } = useGetMarkers({
     select: markerFilter.transformFilteredMarker,
   });
-
-  console.log({ markers });
   const { mapRef, moveMapView, handleChangeDelta } = useMoveMapView();
   const legend = useLegendStorage();
   const [markerId, setMarkerId] = useState<number | null>(null);
@@ -98,6 +96,10 @@ const MapHomeScreen = () => {
 
   const handlePressSearchLocation = () => {
     navigation.navigate(MapNavigations.SEARCH_LOCATION);
+  };
+
+  const handlePressMarkerFilter = async () => {
+    //
   };
 
   return (

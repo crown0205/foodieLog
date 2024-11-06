@@ -74,7 +74,7 @@ function useAppleLogin(mutationOption?: UseMutationCustomOptions) {
 }
 
 function useGetRefreshToken() {
-  const { data, isSuccess, isError } = useQuery({
+  const { data, isSuccess, isError, isPending } = useQuery({
     queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
     queryFn: getAccessToken,
     staleTime: 1000 * 60 * 30 - 1000 * 60 * 3, // NOTE : staleTime의 역할은 캐시된 데이터를 얼마나 오래 사용할 것인지를 결정하는 옵션입니다. 이 값을 설정하면 캐시된 데이터를 사용하고, 이 시간이 지나면 새로운 데이터를 가져옵니다.
@@ -97,7 +97,7 @@ function useGetRefreshToken() {
     }
   }, [isError]);
 
-  return { isSuccess, isError };
+  return { isSuccess, isError, isPending };
 }
 
 type ResponseSelectProfile = { categories: Category } & Profile;
@@ -181,6 +181,7 @@ function useAuth() {
     onSuccess: () => logoutMutation.mutate(null),
   });
   const categoryMutation = useMutateCategory();
+  const isLoginLoading = refreshTokenQuery.isPending;
 
   return {
     signupMutation,
@@ -194,6 +195,7 @@ function useAuth() {
     profileMutation,
     deleteAccountMutation,
     categoryMutation,
+    isLoginLoading,
   };
 }
 

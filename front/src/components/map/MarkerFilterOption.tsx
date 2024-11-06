@@ -30,7 +30,6 @@ function MarkerFilterOption({
   const [filterCondition, setFilterCondition] = useState('색상');
   const markerFilter = useMarkerFilterStorage();
 
-  console.log({ categories });
   const handleCondition = (condition: string) => {
     setFilterCondition(condition);
   };

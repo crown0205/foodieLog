@@ -17,6 +17,8 @@ const initialFilters = {
 };
 
 function useMarkerFilterStorage() {
+  // FIX: marker 정보 store로 변경
+
   const [filterItems, setFilterItems] =
     useState<Record<string, boolean>>(initialFilters);
 
