@@ -3,18 +3,18 @@ import useThemeStore from '@/store/useThemeStore';
 import { ThemeMode } from '@/types';
 import { ImageUrl } from '@/types/domain';
 import { deviceType } from '@/utils';
-import { Theme, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
   Dimensions,
   FlatList,
-  Image,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Pressable,
   StyleSheet,
   View,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Octicons from 'react-native-vector-icons/Octicons';
 
@@ -53,7 +53,7 @@ const ImageCarousel = ({ images, pressedIndex = 0 }: ImageCarouselProps) => {
         renderItem={({ item }) => {
           return (
             <View style={styles.imageContainer}>
-              <Image
+              <FastImage
                 style={styles.image}
                 source={{
                   uri: `${
@@ -62,7 +62,7 @@ const ImageCarousel = ({ images, pressedIndex = 0 }: ImageCarouselProps) => {
                       : 'http://10.0.2.2:3030/'
                   }${item.url}`,
                 }}
-                resizeMode="contain"
+                resizeMode={FastImage.resizeMode.cover}
               />
             </View>
           );

@@ -5,25 +5,25 @@ import useAuth from '@/hooks/queries/useAuth';
 import useForm from '@/hooks/useForm';
 import useImagePicker from '@/hooks/useImagePicker';
 import useModal from '@/hooks/useModal';
+import useThemeStorage from '@/hooks/useThemeStorage';
 import { SettingStackParamList } from '@/navigations/stack/SettingStackNavigator';
+import { ThemeMode } from '@/types';
 import { validateEditProfile } from '@/utils';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useEffect } from 'react';
 import {
   ActivityIndicator,
-  Image,
   Keyboard,
   Pressable,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Toast from 'react-native-toast-message';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EditProfileHeaderRight from '../../components/setting/EditProfileHeaderRight';
 import EditProfileImageOption from '../../components/setting/EditProfileImageOption';
-import useThemeStorage from '@/hooks/useThemeStorage';
-import { ThemeMode } from '@/types';
 
 type EditProfileScreenProps = StackScreenProps<SettingStackParamList>;
 
@@ -121,7 +121,7 @@ function EditProfileScreen({ navigation }: EditProfileScreenProps) {
           )}
           {imagePicker.imageUrls.length === 0 && kakaoImageUrl && (
             <>
-              <Image style={styles.item} source={{ uri: kakaoImageUrl }} />
+              <FastImage style={styles.item} source={{ uri: kakaoImageUrl }} />
               <View style={styles.cameraButton}>
                 <Ionicons name="camera" size={18} color={colors[theme].WHITE} />
               </View>
@@ -129,7 +129,7 @@ function EditProfileScreen({ navigation }: EditProfileScreenProps) {
           )}
           {imagePicker.imageUrls.length > 0 && (
             <>
-              <Image
+              <FastImage
                 style={styles.item}
                 source={{ uri: `${BASE_URL}${imagePicker.imageUrls[0].url}` }}
               />

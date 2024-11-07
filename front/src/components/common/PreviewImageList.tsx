@@ -7,6 +7,7 @@ import { deviceType } from '@/utils';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 interface PreviewImageListProps {
@@ -42,7 +43,7 @@ function PreviewImageList({
         {imageUrls.map(({ url }, index) => (
           <View key={url} style={styles.imageContainer}>
             <Pressable onPress={() => handlePressImage(index)}>
-              <Image
+              <FastImage
                 key={index}
                 style={styles.image}
                 source={{
@@ -52,7 +53,7 @@ function PreviewImageList({
                       : 'http://10.0.2.2:3030/'
                   }${url}`,
                 }}
-                resizeMode="cover"
+                resizeMode={FastImage.resizeMode.cover}
               />
             </Pressable>
 

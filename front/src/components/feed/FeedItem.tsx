@@ -7,14 +7,8 @@ import { deviceType } from '@/utils';
 import { getDateWithSeparator } from '@/utils/date';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 interface FeedItemProps {
   post: ResponsePost;
@@ -34,7 +28,7 @@ function FeedItem({ post }: FeedItemProps) {
       <View>
         {post.images.length > 0 && (
           <View key={post.id} style={styles.imageContainer}>
-            <Image
+            <FastImage
               style={styles.image}
               source={{
                 uri: `${
@@ -43,7 +37,7 @@ function FeedItem({ post }: FeedItemProps) {
                     : 'http://10.0.2.2:3030/'
                 }${post.images[0]?.url}`,
               }}
-              resizeMode="cover"
+              resizeMode={FastImage.resizeMode.cover}
             />
           </View>
         )}

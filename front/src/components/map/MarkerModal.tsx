@@ -1,7 +1,9 @@
 import { colors, feedNavigations, mainNavigations } from '@/constants';
 import useGetPost from '@/hooks/queries/useGetPost';
+import useThemeStorage from '@/hooks/useThemeStorage';
 import { MainDrawerParamList } from '@/navigations/drawer/MainDrawerNavigator';
 import { FeedStackParamList } from '@/navigations/stack/FeedStackNavigator';
+import { ThemeMode } from '@/types';
 import { deviceType } from '@/utils';
 import { getDateWithSeparator } from '@/utils/date';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
@@ -12,7 +14,6 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   Dimensions,
-  Image,
   Modal,
   Pressable,
   SafeAreaView,
@@ -20,11 +21,10 @@ import {
   Text,
   View,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import CustomMarker from '../common/CustomMarker';
-import useThemeStorage from '@/hooks/useThemeStorage';
-import { ThemeMode } from '@/types';
 
 interface MarkerModalProps {
   markerId: number | null;
@@ -75,7 +75,7 @@ function MarkerModal({ markerId, isVisible, hide }: MarkerModalProps) {
               <View style={styles.cardAlign}>
                 {post.images.length > 0 && (
                   <View style={styles.imageContainer}>
-                    <Image
+                    <FastImage
                       style={styles.image}
                       source={{
                         uri: `${
@@ -84,7 +84,7 @@ function MarkerModal({ markerId, isVisible, hide }: MarkerModalProps) {
                             : 'http://10.0.2.2:3030/'
                         }${post.images[0].url}`,
                       }}
-                      resizeMode="cover"
+                      resizeMode={FastImage.resizeMode.cover}
                     />
                   </View>
                 )}

@@ -11,13 +11,8 @@ import appleAuth, {
 } from '@invertase/react-native-apple-authentication';
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
-import {
-  Dimensions,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Dimensions, SafeAreaView, StyleSheet, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Toast from 'react-native-toast-message';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -58,7 +53,7 @@ const AuthHomeScreen = ({ navigation }: AuthHomeScreenProps) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
-        <Image
+        <FastImage
           resizeMode="contain"
           style={styles.logo}
           source={require('@/assets/foodiLog.png')}

@@ -11,13 +11,13 @@ import {
 } from '@react-navigation/drawer';
 import {
   Dimensions,
-  Image,
   Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
@@ -52,19 +52,19 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
           <Pressable style={styles.userImageContainer}>
             {imageUrl === null &&
               (kakaoImageUrl === undefined || kakaoImageUrl === null) && (
-                <Image
+                <FastImage
                   source={require('@/assets/user-default.png')}
                   style={styles.userImage}
                 />
               )}
             {imageUrl === null && !!kakaoImageUrl && (
-              <Image
+              <FastImage
                 source={{ uri: `${kakaoImageUrl}` }}
                 style={styles.userImage}
               />
             )}
             {imageUrl !== null && (
-              <Image
+              <FastImage
                 source={{
                   uri: `${BASE_URL}${imageUrl}`,
                 }}
