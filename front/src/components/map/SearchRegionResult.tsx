@@ -49,6 +49,7 @@ function SearchReginResult({ regionInfo }: SearchReginResultProps) {
         indicatorStyle="black"
         contentContainerStyle={styles.scrollContainer}
         onScroll={() => Keyboard.dismiss()}
+        scrollEventThrottle={60}
       >
         {regionInfo.map((info, index) => (
           <Pressable
