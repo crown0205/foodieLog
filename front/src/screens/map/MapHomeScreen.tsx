@@ -24,7 +24,8 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
-import MapView, {
+import MapView from 'react-native-map-clustering';
+import {
   LatLng,
   LongPressEvent,
   Marker,
@@ -98,10 +99,6 @@ const MapHomeScreen = () => {
     navigation.navigate(MapNavigations.SEARCH_LOCATION);
   };
 
-  const handlePressMarkerFilter = async () => {
-    //
-  };
-
   return (
     <>
       <MapView
@@ -114,6 +111,7 @@ const MapHomeScreen = () => {
         customMapStyle={getMapStyle(theme)}
         onLongPress={handleLongPressMapView}
         onRegionChangeComplete={handleChangeDelta}
+        clusterColor={colors[theme].BLUE_500}
         region={{
           ...userLocation,
           ...numbers.INITIAL_DELTA,
