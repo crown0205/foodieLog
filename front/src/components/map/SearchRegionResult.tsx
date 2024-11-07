@@ -6,6 +6,7 @@ import { ThemeMode } from '@/types';
 import { useNavigation } from '@react-navigation/native';
 import {
   Dimensions,
+  Keyboard,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -47,6 +48,7 @@ function SearchReginResult({ regionInfo }: SearchReginResultProps) {
         showsVerticalScrollIndicator
         indicatorStyle="black"
         contentContainerStyle={styles.scrollContainer}
+        onScroll={() => Keyboard.dismiss()}
       >
         {regionInfo.map((info, index) => (
           <Pressable
@@ -95,12 +97,10 @@ const styling = (theme: ThemeMode) =>
   StyleSheet.create({
     container: {
       width: '100%',
-      height: Dimensions.get('window').height / 2,
+      height: Dimensions.get('window').height / 1.5,
       marginTop: 10,
     },
-    scrollContainer: {
-      padding: 10,
-    },
+    scrollContainer: {},
     placeNameContainer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -124,7 +124,6 @@ const styling = (theme: ThemeMode) =>
       color: colors[theme].GREY_500,
     },
     itemBorder: {
-      marginHorizontal: 10,
       paddingVertical: 10,
       borderBottomColor: colors[theme].GREY_300,
       borderBottomWidth: StyleSheet.hairlineWidth,
