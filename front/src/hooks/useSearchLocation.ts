@@ -58,7 +58,7 @@ function useSearchLocation(keyword: string, location: LatLng) {
           `https://dapi.kakao.com/v2/local/search/keyword.json?query=${keyword}&y=${location.latitude}&x=${location.longitude}&page=${pageParam}`,
           {
             headers: {
-              Authorization: `KakaoAK ${Config.REACT_APP_KAKAO_REST_API_KEY}`,
+              Authorization: `KakaoAK ${Config.KAKAO_REST_API_KEY}`,
             },
           },
         );
