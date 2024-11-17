@@ -1,4 +1,3 @@
-import { Post } from 'src/post/post.entity';
 import {
   BaseEntity,
   Column,
@@ -10,25 +9,27 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { Post } from 'src/post/post.entity';
+
 @Entity()
 export class Image extends BaseEntity {
-  @PrimaryGeneratedColumn() // NOTE : 자동 생성되는 ID 필드
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   url: string;
 
   @CreateDateColumn()
-  createAt: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updateAt: Date;
+  updatedAt: Date;
 
   @DeleteDateColumn()
-  deleteAt: Date | null;
+  deletedAt: Date | null;
 
   @ManyToOne(() => Post, (post) => post.images, {
-    onDelete: 'CASCADE', // NOTE : Post가 삭제되면 이미지도 삭제된다.
+    onDelete: 'CASCADE',
   })
   post: Post;
 }

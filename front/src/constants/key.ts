@@ -7,10 +7,18 @@ const queryKeys = {
   POST: 'post',
   GET_POST: 'getPost',
   GET_POSTS: 'getPosts',
+  GET_FAVORITE_POSTS: 'getFavoritePosts',
+  FAVORITE: 'favorite',
+  GET_SEARCH_POSTS: 'getSearchPosts',
+  GET_CALENDAR_POSTS: 'getCalendarPosts',
 } as const;
 
 const storageKeys = {
   REFRESH_TOKEN: 'refreshToken',
+  THEME_MODE: 'themeMode',
+  THEME_SYSTEM: 'themeSystem',
+  SHOW_LEGEND: 'showLegend',
+  MARKER_FILTER: 'markerFilter',
 } as const;
 
 export { queryKeys, storageKeys };

@@ -1,5 +1,3 @@
-import { ColumnNumericTransformer } from 'src/@common/transformers/numeric.transformer';
-import { User } from 'src/auth/user.entity';
 import {
   BaseEntity,
   Column,
@@ -11,8 +9,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { User } from 'src/auth/user.entity';
 import { MarkerColor } from './marker-color.enum';
+import { ColumnNumericTransformer } from 'src/@common/transformers/numeric.transformer';
 import { Image } from 'src/image/image.entity';
+import { Favorite } from 'src/favorite/favorite.entity';
 
 @Entity()
 export class Post extends BaseEntity {
@@ -53,17 +55,20 @@ export class Post extends BaseEntity {
   score: number;
 
   @CreateDateColumn()
-  createAt: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updateAt: Date;
+  updatedAt: Date;
 
   @DeleteDateColumn()
-  deleteAt: Date | null;
+  deletedAt: Date | null;
 
   @ManyToOne(() => User, (user) => user.post, { eager: false })
   user: User;
 
   @OneToMany(() => Image, (image) => image.post)
   images: Image[];
+
+  @OneToMany(() => Favorite, (favorite) => favorite.post)
+  favorites: Favorite[];
 }

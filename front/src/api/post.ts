@@ -1,4 +1,4 @@
-import { ImageUrl, Post } from '@/types/domain';
+import { ImageUrl, MarkerColor, Post } from '@/types/domain';
 import axiosInstance from './axios';
 
 type RequestCreatePost = Omit<Post, 'id'> & { imageUrls: ImageUrl[] };
@@ -47,5 +47,64 @@ const updatePost = async ({
   return data;
 };
 
-export { createPost, deletePost, getPost, getPosts, updatePost };
-export type { RequestCreatePost, ResponsePost, ResponseSinglePost };
+const getFavoritePosts = async (page = 1): Promise<ResponsePost[]> => {
+  const { data } = await axiosInstance.get(`/favorites/my?page=${page}`);
+
+  return data;
+};
+
+const updateFavoritePost = async (id: number): Promise<number> => {
+  const { data } = await axiosInstance.post(`/favorites/${id}`);
+
+  return data;
+};
+
+const getSearchPosts = async (
+  page = 1,
+  query: string,
+): Promise<ResponsePost[]> => {
+  const { data } = await axiosInstance.get(
+    `/posts/my/search?query=${query}&page=${page}`,
+  );
+  return data;
+};
+
+type CalendarPost = {
+  id: number;
+  title: string;
+  address: string;
+  color: MarkerColor;
+};
+
+type ResponseCalendarPost = Record<number, CalendarPost[]>;
+
+const getCalendarPosts = async (
+  year: number,
+  month: number,
+): Promise<ResponseCalendarPost> => {
+  const { data } = await axiosInstance.get(
+    `/posts?year=${year}&month=${month}`,
+  );
+
+  return data;
+};
+
+export {
+  createPost,
+  deletePost,
+  getPost,
+  getPosts,
+  updatePost,
+  getFavoritePosts,
+  updateFavoritePost,
+  getSearchPosts,
+  getCalendarPosts,
+};
+export type {
+  RequestCreatePost,
+  ResponsePost,
+  ResponseSinglePost,
+  RequestUpdatePost,
+  CalendarPost,
+  ResponseCalendarPost,
+};

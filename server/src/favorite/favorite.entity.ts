@@ -1,5 +1,3 @@
-import { User } from 'src/auth/user.entity';
-import { Post } from 'src/post/post.entity';
 import {
   BaseEntity,
   Column,
@@ -12,12 +10,15 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { User } from 'src/auth/user.entity';
+import { Post } from 'src/post/post.entity';
+
 @Entity()
 export class Favorite extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false })
   postId: number;
 
   @Column()
@@ -32,11 +33,11 @@ export class Favorite extends BaseEntity {
   user: User;
 
   @CreateDateColumn()
-  createAt: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updateAt: Date;
+  updatedAt: Date;
 
   @DeleteDateColumn()
-  deletedAt: Date;
+  deletedAt: Date | null;
 }

@@ -12,6 +12,14 @@ function useMutateCreatePost(mutationOptions?: UseMutationCustomOptions) {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.POST, queryKeys.GET_POSTS],
       });
+      queryClient.invalidateQueries({
+        queryKey: [
+          queryKeys.POST,
+          queryKeys.GET_CALENDAR_POSTS,
+          new Date(newPost.date).getFullYear(),
+          new Date(newPost.date).getMonth() + 1,
+        ],
+      });
 
       // NOTE : 기존의 marker 데이터를 가져와서 새로운 marker 데이터를 추가 ( 불필요한 API 요청을 줄이기 위함 )
       queryClient.setQueryData<Marker[]>(

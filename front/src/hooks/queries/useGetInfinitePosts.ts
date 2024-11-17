@@ -5,7 +5,7 @@ import {
   InfiniteData,
   QueryKey,
   UseInfiniteQueryOptions,
-  useInfiniteQuery,
+  useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
 
 function useGetInfinitePosts(
@@ -18,7 +18,7 @@ function useGetInfinitePosts(
     number // NOTE : TPageParam은 페이지 파라미터 타입
   >,
 ) {
-  return useInfiniteQuery({
+  return useSuspenseInfiniteQuery({
     queryKey: [queryKeys.POST, queryKeys.GET_POSTS],
     queryFn: ({ pageParam }) => getPosts(pageParam),
     initialPageParam: 1,

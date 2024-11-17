@@ -1,3 +1,4 @@
+import axios from 'axios';
 import appleSignin from 'apple-signin-auth';
 import {
   BadRequestException,
@@ -8,16 +9,16 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcryptjs';
-import { MarkerColor } from 'src/post/marker-color.enum';
 import { Repository } from 'typeorm';
-import { AuthDto } from './dto/auth.dto';
-import { EditProfileDto } from './dto/edit-profile.dto';
+import * as bcrypt from 'bcryptjs';
+
 import { User } from './user.entity';
-import axios from 'axios';
+import { AuthCredentialsDto } from './dto/auth-credential.dto';
+import { EditProfileDto } from './dto/edit-profile.dto';
+import { MarkerColor } from 'src/post/marker-color.enum';
 
 @Injectable()
 export class AuthService {
@@ -28,41 +29,8 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  // note : getTokens 함수는 사용자의 이메일을 받아서 accessToken과 refreshToken을 반환하는 함수이다.
-  private async getTokens(payload: { email: string }) {
-    const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(payload, {
-        secret: this.configService.get('JWT_SECRET'),
-        expiresIn: this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION'),
-      }),
-      this.jwtService.sign(payload, {
-        secret: this.configService.get('JWT_SECRET'),
-        expiresIn: this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION'),
-      }),
-    ]);
-
-    return { accessToken, refreshToken };
-  }
-
-  // note : updateHashedRefreshToken 함수는 사용자의 id와 refreshToken을 받아서 해당 사용자의 hashedRefreshToken을 업데이트하는 함수이다.
-  private async updateHashedRefreshToken(id: number, refreshToken: string) {
-    const salt = await bcrypt.genSalt();
-    const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
-
-    try {
-      await this.userRepository.update(id, {
-        hashedRefreshToken,
-      });
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException(
-        '리프레시 토큰 업데이트 도중 에러가 발생했습니다.',
-      );
-    }
-  }
-
-  async signup(authDto: AuthDto) {
-    const { email, password } = authDto;
+  async signup(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+    const { email, password } = authCredentialsDto;
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -76,21 +44,22 @@ export class AuthService {
       await this.userRepository.save(user);
     } catch (error) {
       console.log(error);
+
       if (error.code === '23505') {
         throw new ConflictException('이미 존재하는 이메일입니다.');
       }
 
       throw new InternalServerErrorException(
-        '회원가입 도중 에거가 발생했습니다.',
+        '회원가입 도중 에러가 발생했습니다.',
       );
     }
-
-    return { message: '회원가입 성공' };
   }
 
-  async signin(authDto: AuthDto) {
-    const { email, password } = authDto;
-    const user = await this.userRepository.findOneBy({ email }); // note : fineOneBy의 역활은 DB에서 해당하는 데이터를 찾아오는 역활을 한다.
+  async signin(
+    authCredentialsDto: AuthCredentialsDto,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    const { email, password } = authCredentialsDto;
+    const user = await this.userRepository.findOneBy({ email });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException(
@@ -104,10 +73,15 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  // note : refreshToken 함수는 사용자의 정보를 받아서 refreshToken을 업데이트하고 새로운 accessToken과 refreshToken을 반환하는 함수이다.
-  async refreshToken(user: User) {
+  async refreshToken(user: User): Promise<{
+    accessToken: string;
+    refreshToken: string;
+  }> {
     const { email } = user;
+    console.log('리프래시 토근 api', { user, test: email });
     const { accessToken, refreshToken } = await this.getTokens({ email });
+
+    console.log('토큰 조회 성공', { accessToken, refreshToken });
 
     if (!user.hashedRefreshToken) {
       throw new ForbiddenException();
@@ -118,18 +92,6 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async deleteRefreshToken(user: User) {
-    try {
-      await this.userRepository.update(user.id, { hashedRefreshToken: null });
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException(
-        '로그아웃 도중 에러가 발생했습니다.',
-      );
-    }
-  }
-
-  // note : getProfile 함수는 사용자의 정보를 받아서 password와 hashedRefreshToken을 제외한 정보를 반환하는 함수이다.
   getProfile(user: User) {
     const { password, hashedRefreshToken, ...rest } = user;
 
@@ -143,11 +105,7 @@ export class AuthService {
       .getOne();
 
     if (!profile) {
-      throw new NotFoundException('프로필을 찾을 수 없습니다.');
-    }
-
-    if (user.nickname === editProfileDto.nickname) {
-      throw new BadRequestException('이미 사용중인 닉네임입니다.');
+      throw new NotFoundException('존재하지 않는 사용자입니다.');
     }
 
     const { nickname, imageUrl } = editProfileDto;
@@ -159,38 +117,80 @@ export class AuthService {
     } catch (error) {
       console.log(error);
       throw new InternalServerErrorException(
-        '프로필 업데이트 도중 에러가 발생했습니다.',
+        '프로필 수정 도중 에러가 발생했습니다.',
       );
     }
 
-    return { message: '프로필 업데이트 성공' };
+    const { password, hashedRefreshToken, ...rest } = profile;
+
+    return { ...rest };
   }
 
-  async deleteAccount(user: User) {
+  async deleteRefreshToken(id: number) {
+    try {
+      await this.userRepository.update(id, { hashedRefreshToken: null });
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  private async updateHashedRefreshToken(id: number, refreshToken: string) {
+    const salt = await bcrypt.genSalt();
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
+
+    try {
+      await this.userRepository.update(id, { hashedRefreshToken });
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  private async getTokens(payload: { email: string }) {
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(payload, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+        expiresIn: this.configService.get<string>(
+          'JWT_ACCRESS_TOKEN_EXPIRATION',
+        ),
+      }),
+      this.jwtService.signAsync(payload, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+        expiresIn: this.configService.get<string>(
+          'JWT_REFRESH_TOKEN_EXPIRATION',
+        ),
+      }),
+    ]);
+
+    return { accessToken, refreshToken };
+  }
+
+  async deleteAccount(user: User): Promise<void> {
     try {
       await this.userRepository
         .createQueryBuilder('user')
         .delete()
         .from(User)
         .where('id = :id', { id: user.id })
-        .execute(); // NOTE : execute() 함수를 호출해야 실제로 쿼리가 실행된다.
+        .execute();
     } catch (error) {
       console.log(error);
-      throw new BadRequestException('계정 삭제 도중 에러가 발생했습니다.');
+      throw new BadRequestException(
+        '탈퇴할 수 없습니다. 남은 데이터가 존재하는지 확인해주세요.',
+      );
     }
-
-    return { message: '계정 삭제 성공' };
   }
 
   async updateCategory(
     categories: Record<keyof MarkerColor, string>,
     user: User,
   ) {
-    const { BLUE, GREEN, PURPLE, RED, YELLOW } = MarkerColor;
+    const { RED, YELLOW, BLUE, GREEN, PURPLE } = MarkerColor;
 
     if (
       !Object.keys(categories).every((color: MarkerColor) =>
-        [RED, YELLOW, GREEN, BLUE, PURPLE].includes(color),
+        [RED, YELLOW, BLUE, GREEN, PURPLE].includes(color),
       )
     ) {
       throw new BadRequestException('유효하지 않은 카테고리입니다.');
@@ -207,7 +207,7 @@ export class AuthService {
     } catch (error) {
       console.log(error);
       throw new InternalServerErrorException(
-        '카테고리 업데이트 도중 에러가 발생했습니다.',
+        '카테고리 수정 도중 에러가 발생했습니다.',
       );
     }
 
@@ -217,18 +217,18 @@ export class AuthService {
   }
 
   async kakaoLogin(kakaoToken: { token: string }) {
-    const url = `https://kapi.kakao.com/v2/user/me`;
+    const url = 'https://kapi.kakao.com/v2/user/me';
     const headers = {
       Authorization: `Bearer ${kakaoToken.token}`,
-      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
     };
 
     try {
       const response = await axios.get(url, { headers });
       const userData = response.data;
       const { id: kakaoId, kakao_account } = userData;
-      const nickname = kakao_account.profile.nickname;
-      const imageUrl = kakao_account.profile.thumbnail_image_url.replace(
+      const nickname = kakao_account?.profile.nickname;
+      const imageUrl = kakao_account?.profile.thumbnail_image_url?.replace(
         /^http:/,
         'https:',
       );
@@ -250,7 +250,7 @@ export class AuthService {
         email: kakaoId,
         password: nickname ?? '',
         nickname,
-        kakaoProfileImageUrl: imageUrl ?? null,
+        kakaoImageUrl: imageUrl ?? null,
         loginType: 'kakao',
       });
 
@@ -258,22 +258,18 @@ export class AuthService {
         await this.userRepository.save(newUser);
       } catch (error) {
         console.log(error);
-        throw new InternalServerErrorException(
-          '카카오로 회원가입 도중 에러가 발생했습니다.',
-        );
+        throw new InternalServerErrorException();
       }
 
       const { accessToken, refreshToken } = await this.getTokens({
         email: newUser.email,
       });
-      await this.updateHashedRefreshToken(newUser.id, refreshToken);
 
+      await this.updateHashedRefreshToken(newUser.id, refreshToken);
       return { accessToken, refreshToken };
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException(
-        '카카오 로그인 도중 에러가 발생했습니다.',
-      );
+      throw new InternalServerErrorException('Kakao 서버 에러가 발생했습니다.');
     }
   }
 
@@ -282,7 +278,7 @@ export class AuthService {
     appId: string;
     nickname: string | null;
   }) {
-    const { appId, identityToken, nickname } = appleIdentity;
+    const { identityToken, appId, nickname } = appleIdentity;
 
     try {
       const { sub: userAppleId } = await appleSignin.verifyIdToken(
@@ -317,9 +313,7 @@ export class AuthService {
         await this.userRepository.save(newUser);
       } catch (error) {
         console.log(error);
-        throw new InternalServerErrorException(
-          'Apple로 회원가입 도중 에러가 발생했습니다.',
-        );
+        throw new InternalServerErrorException();
       }
 
       const { accessToken, refreshToken } = await this.getTokens({
@@ -329,9 +323,9 @@ export class AuthService {
       await this.updateHashedRefreshToken(newUser.id, refreshToken);
       return { accessToken, refreshToken };
     } catch (error) {
-      console.log(error);
+      console.log('error', error);
       throw new InternalServerErrorException(
-        'Apple 로그인 도중 에러가 발생했습니다.',
+        'Apple 로그인 도중 문제가 발생했습니다.',
       );
     }
   }

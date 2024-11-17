@@ -1,0 +1,14 @@
+diff --git a/node_modules/react-native-map-clustering/lib/ClusteredMapView.js b/node_modules/react-native-map-clustering/lib/ClusteredMapView.js
+index 9e44320..6fe23ff 100644
+--- a/node_modules/react-native-map-clustering/lib/ClusteredMapView.js
++++ b/node_modules/react-native-map-clustering/lib/ClusteredMapView.js
+@@ -133,9 +133,6 @@ const ClusteredMapView = forwardRef(
+         const bBox = calculateBBox(region);
+         const zoom = returnMapZoom(region, bBox, minZoom);
+         const markers = superCluster.getClusters(bBox, zoom);
+-        if (animationEnabled && Platform.OS === "ios") {
+-          LayoutAnimation.configureNext(layoutAnimationConf);
+-        }
+         if (zoom >= 18 && markers.length > 0 && clusterChildren) {
+           if (spiralEnabled) updateSpiderfier(true);
+         } else {

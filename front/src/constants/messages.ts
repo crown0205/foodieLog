@@ -15,10 +15,15 @@ const alerts = {
     TITLE: '게시물을 삭제하시겠습니까?',
     DESCRIPTION: '피드와 지도에서 모두 삭제됩니다.',
   },
+  DELETE_ACCOUNT: {
+    TITLE: '정말 탈퇴하시겠습니까?',
+    DESCRIPTION: '회원 정보는 탈퇴 즉시 삭제되며, 복구 할 수 없습니다.',
+  },
 };
 
 const errorMessages = {
   CANNOT_GET_ADDRESS: '주소를 알 수 없습니다.',
-};
+  UNEXPECTED_ERROR: '예상치 못한 오류가 발생했습니다.',
+} as const;
 
 export { alerts, errorMessages };

@@ -1,12 +1,11 @@
 import {
   IsArray,
-  IsDate,
   IsDateString,
-  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsString,
 } from 'class-validator';
+
 import { MarkerColor } from '../marker-color.enum';
 
 export class CreatePostDto {
@@ -22,7 +21,7 @@ export class CreatePostDto {
   @IsString()
   address: string;
 
-  @IsString()
+  @IsNotEmpty()
   title: string;
 
   @IsString()

@@ -11,6 +11,7 @@ function useGetPost(
     queryKey: [queryKeys.POST, queryKeys.GET_POST, id],
     queryFn: () => getPost(Number(id)),
     enabled: Boolean(id),
+    throwOnError: true,
     ...queryOptions,
   });
 }

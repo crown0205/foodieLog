@@ -1,5 +1,5 @@
-import {Profile, Category} from '../types/domain';
-import {getEncryptStorage} from '../utils';
+import { Category, Profile } from '../types/domain';
+import { getEncryptStorage } from '../utils';
 import axiosInstance from './axios';
 
 type RequestUser = {
@@ -23,7 +23,10 @@ const postSignup = async ({
   email,
   password,
 }: RequestUser): Promise<CommonResponse | ErrorCommonResponse> => {
-  const {data} = await axiosInstance.post('/auth/signup', {email, password});
+  const { data } = await axiosInstance.post('/auth/signup', {
+    email,
+    password,
+  });
 
   return data;
 };
@@ -38,7 +41,30 @@ const postLogin = async ({
   email,
   password,
 }: RequestUser): Promise<ResponseToken> => {
-  const {data} = await axiosInstance.post('/auth/signin', {email, password});
+  const { data } = await axiosInstance.post('/auth/signin', {
+    email,
+    password,
+  });
+
+  return data;
+};
+
+const kakaoLogin = async (token: string): Promise<ResponseToken> => {
+  const { data } = await axiosInstance.post('/auth/oauth/kakao', { token });
+
+  return data;
+};
+
+type RequestAppleIdentity = {
+  identityToken: string;
+  appId: string;
+  nickname: string | null;
+};
+
+const appleLogin = async (
+  body: RequestAppleIdentity,
+): Promise<ResponseToken> => {
+  const { data } = await axiosInstance.post('/auth/oauth/apple', body);
 
   return data;
 };
@@ -47,7 +73,18 @@ type ResponseProfile = Profile & Category;
 
 // NOTE : 프로필 조회 API
 const getProfile = async (): Promise<ResponseProfile> => {
-  const {data} = await axiosInstance.get('/auth/me');
+  const { data } = await axiosInstance.get('/auth/me');
+
+  return data;
+};
+
+type RequestProfile = Omit<
+  Profile,
+  'id' | 'email' | 'kakaoImageUrl' | 'loginType'
+>;
+
+const editProfile = async (body: RequestProfile): Promise<ResponseProfile> => {
+  const { data } = await axiosInstance.patch('/auth/me', body);
 
   return data;
 };
@@ -56,7 +93,7 @@ const getProfile = async (): Promise<ResponseProfile> => {
 const getAccessToken = async (): Promise<ResponseToken> => {
   const refreshToken = await getEncryptStorage('refreshToken');
 
-  const {data} = await axiosInstance.get('/auth/refresh', {
+  const { data } = await axiosInstance.get('/auth/refresh', {
     headers: {
       Authorization: `Bearer ${refreshToken}`,
     },
@@ -69,5 +106,32 @@ const logout = async (): Promise<void> => {
   await axiosInstance.post('/auth/logout');
 };
 
-export {postSignup, postLogin, getProfile, getAccessToken, logout};
-export type {RequestUser, ResponseToken, ResponseProfile};
+const deleteAccount = async (): Promise<void> => {
+  await axiosInstance.delete('/auth/me');
+};
+
+const editCategory = async (body: Category): Promise<ResponseProfile> => {
+  const { data } = await axiosInstance.patch('/auth/category', body);
+
+  return data;
+};
+
+export {
+  appleLogin,
+  editProfile,
+  getAccessToken,
+  getProfile,
+  kakaoLogin,
+  logout,
+  postLogin,
+  postSignup,
+  deleteAccount,
+  editCategory,
+};
+export type {
+  RequestAppleIdentity,
+  RequestProfile,
+  RequestUser,
+  ResponseProfile,
+  ResponseToken,
+};
