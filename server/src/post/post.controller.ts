@@ -13,26 +13,40 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/@common/decorators/get-user.decorator';
-import { User } from 'src/auth/user.entity';
-import { CreatePostDto } from './dto/create-post.dto';
-import { PostService } from './post.service';
 
-// NOTE : 요청을 처리하고 응답을 리턴하는 역할을 한다.
+import { CreatePostDto } from './dto/create-post.dto';
+import { Post as PostEntity } from './post.entity';
+import { PostService } from './post.service';
+import { User } from 'src/auth/user.entity';
+import { GetUser } from 'src/@common/decorators/get-user.decorator';
 
 @Controller()
 @UseGuards(AuthGuard())
 export class PostController {
   constructor(private postService: PostService) {}
 
-  @Get('/markers')
-  getAllMarkers(@GetUser() user: User) {
-    return this.postService.getAllMarkers(user);
+  @Get('/markers/my')
+  getAllMyMarkers(
+    @GetUser() user: User,
+  ): Promise<
+    Pick<PostEntity, 'id' | 'latitude' | 'longitude' | 'color' | 'score'>[]
+  > {
+    return this.postService.getMyMarkers(user);
   }
 
-  @Get('/posts')
-  getPosts(@Query('page') page: number, @GetUser() user: User) {
-    return this.postService.getPosts(page, user);
+  @Get('/posts/my')
+  getMyPosts(@Query('page') page: number, @GetUser() user: User) {
+    return this.postService.getMyPosts(page, user);
+  }
+
+  @Get('/posts/my/search')
+  searchMyPostsByTitleAndAddress(
+    @Query('query') query: string,
+    @Query('page') page: number,
+    @GetUser() user: User,
+  ) {
+    console.log({ query, page });
+    return this.postService.searchMyPostsByTitleAndAddress(query, page, user);
   }
 
   @Get('/posts/:id')
@@ -41,10 +55,17 @@ export class PostController {
   }
 
   @Post('/posts')
-  @UsePipes(ValidationPipe) // NOTE : ValidationPipe는 요청의 유효성을 검사하는 파이프이다.
+  @UsePipes(ValidationPipe)
   createPost(@Body() createPostDto: CreatePostDto, @GetUser() user: User) {
-    console.log({ createPostDto });
     return this.postService.createPost(createPostDto, user);
+  }
+
+  @Delete('/posts/:id')
+  deletePost(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<number> {
+    return this.postService.deletePost(id, user);
   }
 
   @Patch('/posts/:id')
@@ -58,8 +79,12 @@ export class PostController {
     return this.postService.updatePost(id, updatePostDto, user);
   }
 
-  @Delete('/posts/:id')
-  deletePost(@Param('id', ParseIntPipe) id: number, @GetUser() user: User) {
-    return this.postService.deletePost(id, user);
+  @Get('/posts')
+  getPostsByMonth(
+    @Query('year') year: number,
+    @Query('month') month: number,
+    @GetUser() user: User,
+  ) {
+    return this.postService.getPostsByMonth(year, month, user);
   }
 }

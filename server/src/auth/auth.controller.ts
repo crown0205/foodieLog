@@ -5,59 +5,69 @@ import {
   Get,
   Patch,
   Post,
+  Query,
+  SetMetadata,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/@common/decorators/get-user.decorator';
-import { MarkerColor } from 'src/post/marker-color.enum';
+
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto/auth.dto';
-import { EditProfileDto } from './dto/edit-profile.dto';
 import { User } from './user.entity';
+import { AuthCredentialsDto } from './dto/auth-credential.dto';
+import { EditProfileDto } from './dto/edit-profile.dto';
+import { MarkerColor } from 'src/post/marker-color.enum';
+import { GetUser } from 'src/@common/decorators/get-user.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
-  signup(@Body(ValidationPipe) authDto: AuthDto) {
-    return this.authService.signup(authDto);
+  signup(
+    @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
+  ): Promise<void> {
+    return this.authService.signup(authCredentialsDto);
   }
 
   @Post('/signin')
-  signin(@Body(ValidationPipe) authDto: AuthDto) {
-    return this.authService.signin(authDto);
-  }
-
-  @Patch('/logout')
-  @UseGuards(AuthGuard())
-  logout(@GetUser() user: User) {
-    return this.authService.deleteRefreshToken(user);
+  signin(
+    @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    return this.authService.signin(authCredentialsDto);
   }
 
   @Get('/refresh')
-  @UseGuards(AuthGuard()) // NOTE : 인증된 사용자만 접근 가능하도록 설정한다.
-  refresh(user: User) {
+  @UseGuards(AuthGuard())
+  refresh(@GetUser() user: User): Promise<{
+    accessToken: string;
+    refreshToken: string;
+  }> {
     return this.authService.refreshToken(user);
   }
 
   @Get('/me')
   @UseGuards(AuthGuard())
   getProfile(@GetUser() user: User) {
-    return this, this.authService.getProfile(user);
+    return this.authService.getProfile(user);
   }
 
   @Patch('/me')
   @UseGuards(AuthGuard())
   editProfile(@Body() editProfileDto: EditProfileDto, @GetUser() user: User) {
-    return this, this.authService.editProfile(editProfileDto, user);
+    return this.authService.editProfile(editProfileDto, user);
+  }
+
+  @Post('/logout')
+  @UseGuards(AuthGuard())
+  logout(@GetUser() user: User) {
+    return this.authService.deleteRefreshToken(user.id);
   }
 
   @Delete('/me')
   @UseGuards(AuthGuard())
   deleteAccount(@GetUser() user: User) {
-    return this, this.authService.deleteAccount(user);
+    return this.authService.deleteAccount(user);
   }
 
   @Patch('/category')
@@ -80,7 +90,7 @@ export class AuthController {
     appleIdentity: {
       identityToken: string;
       appId: string;
-      nickname: string;
+      nickname: string | null;
     },
   ) {
     return this.authService.appleLogin(appleIdentity);
